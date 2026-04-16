@@ -20,12 +20,12 @@ void performPolling()
 
 static bool hasEnvSecrets()
 {
-    const char *apiKey = std::getenv(
+    const char *_apiKey = std::getenv(
         application::helper::ArgumentConfiguration::cApiKeyEnvVar.c_str());
-    const char *bearerToken = std::getenv(
+    const char *_bearerToken = std::getenv(
         application::helper::ArgumentConfiguration::cBearerTokenEnvVar.c_str());
-    return (apiKey != nullptr && apiKey[0] != '\0') &&
-           (bearerToken != nullptr && bearerToken[0] != '\0');
+    return (_apiKey != nullptr && _apiKey[0] != '\0') &&
+           (_bearerToken != nullptr && _bearerToken[0] != '\0');
 }
 
 int main(int argc, char *argv[])
@@ -57,12 +57,12 @@ int main(int argc, char *argv[])
 
     std::future<void> _future{std::async(std::launch::async, performPolling)};
 
-    std::getchar();
     if (!_nonInteractive)
     {
+        std::getchar();
         std::system("clear");
+        std::getchar();
     }
-    std::getchar();
 
     int _result{executionManagement->Terminate()};
     running = false;
