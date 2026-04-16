@@ -1,6 +1,7 @@
 #ifndef ARGUMENT_CONFIGURATION_H
 #define ARGUMENT_CONFIGURATION_H
 
+#include <cstdlib>
 #include <map>
 #include <string>
 
@@ -16,6 +17,7 @@ namespace application
 
             bool trySetEchoMode(bool enabled);
             bool tryAskSafely(std::string message, std::string argumentKey);
+            bool tryLoadFromEnv(std::string envVarName, std::string argumentKey);
 
         public:
             /// @brief Execution manifest filename argument key
@@ -30,6 +32,10 @@ namespace application
             static const std::string cApiKeyArgument;
             /// @brief OAuth 2.0 bearer token argument key
             static const std::string cBearerTokenArgument;
+            /// @brief VCC API key environment variable name
+            static const std::string cApiKeyEnvVar;
+            /// @brief OAuth 2.0 bearer token environment variable name
+            static const std::string cBearerTokenEnvVar;
 
             /// @brief Constructor
             /// @param argc Argument count
@@ -51,14 +57,16 @@ namespace application
             /// @return All the parsed and/or set arguments
             const std::map<std::string, std::string> &GetArguments() const noexcept;
 
-            /// @brief Try asking the user to enter the VCC API key safely
-            /// @param message Message to be shown on the console to ask the API key
+            /// @brief Try to load the VCC API key from the environment variable,
+            /// falling back to interactive stdin prompt if not set
+            /// @param message Fallback message to be shown on the console
             /// @return True if the API key is set correctly; otherwise false
             bool TryAskingVccApiKey(
                 std::string message = "Please enter the VCC API key:");
 
-            /// @brief Try asking the user to enter the OAuth 2.0 bearer token safely
-            /// @param message Message to be shown on the console to ask the  bearer token
+            /// @brief Try to load the OAuth 2.0 bearer token from the environment variable,
+            /// falling back to interactive stdin prompt if not set
+            /// @param message Fallback message to be shown on the console
             /// @return True if the bearer token is set correctly; otherwise false
             bool TryAskingBearToken(
                 std::string message = "Please enter the OAuth 2.0 bearer token:");

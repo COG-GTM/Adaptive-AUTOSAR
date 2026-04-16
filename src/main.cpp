@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "./application/helper/argument_configuration.h"
 #include "./application/platform/execution_management.h"
 
@@ -17,9 +18,18 @@ void performPolling()
     }
 }
 
+static bool hasEnvSecrets()
+{
+    const char *apiKey = std::getenv("VCC_API_KEY");
+    const char *bearerToken = std::getenv("BEARER_TOKEN");
+    return (apiKey != nullptr && apiKey[0] != '\0') &&
+           (bearerToken != nullptr && bearerToken[0] != '\0');
+}
+
 int main(int argc, char *argv[])
 {
     application::helper::ArgumentConfiguration _argumentConfiguration(argc, argv);
+    bool _nonInteractive{hasEnvSecrets()};
 
     bool _successful{_argumentConfiguration.TryAskingVccApiKey()};
     if (!_successful)
@@ -28,7 +38,10 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    std::system("clear");
+    if (!_nonInteractive)
+    {
+        std::system("clear");
+    }
     _successful = _argumentConfiguration.TryAskingBearToken();
     if (!_successful)
     {
@@ -43,7 +56,10 @@ int main(int argc, char *argv[])
     std::future<void> _future{std::async(std::launch::async, performPolling)};
 
     std::getchar();
-    std::system("clear");
+    if (!_nonInteractive)
+    {
+        std::system("clear");
+    }
     std::getchar();
 
     int _result{executionManagement->Terminate()};
