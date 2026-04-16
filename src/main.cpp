@@ -20,8 +20,10 @@ void performPolling()
 
 static bool hasEnvSecrets()
 {
-    const char *apiKey = std::getenv("VCC_API_KEY");
-    const char *bearerToken = std::getenv("BEARER_TOKEN");
+    const char *apiKey = std::getenv(
+        application::helper::ArgumentConfiguration::cApiKeyEnvVar.c_str());
+    const char *bearerToken = std::getenv(
+        application::helper::ArgumentConfiguration::cBearerTokenEnvVar.c_str());
     return (apiKey != nullptr && apiKey[0] != '\0') &&
            (bearerToken != nullptr && bearerToken[0] != '\0');
 }
