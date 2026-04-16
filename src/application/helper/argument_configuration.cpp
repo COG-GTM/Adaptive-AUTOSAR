@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <termios.h>
 #include <unistd.h>
 #include <iostream>
@@ -13,6 +14,8 @@ namespace application
         const std::string ArgumentConfiguration::cPhmConfigArgument{"phmconfig"};
         const std::string ArgumentConfiguration::cApiKeyArgument{"vccapikey"};
         const std::string ArgumentConfiguration::cBearerTokenArgument{"bearertoken"};
+        const std::string ArgumentConfiguration::cApiKeyEnvVar{"VCC_API_KEY"};
+        const std::string ArgumentConfiguration::cBearerTokenEnvVar{"BEARER_TOKEN"};
 
         ArgumentConfiguration::ArgumentConfiguration(
             int argc,
@@ -102,6 +105,18 @@ namespace application
             return _result;
         }
 
+        bool ArgumentConfiguration::tryLoadFromEnv(
+            std::string envVarName, std::string argumentKey)
+        {
+            const char *_envValue = std::getenv(envVarName.c_str());
+            if (_envValue != nullptr && std::string(_envValue).length() > 0)
+            {
+                mArguments[argumentKey] = std::string(_envValue);
+                return true;
+            }
+            return false;
+        }
+
         const std::map<std::string, std::string> &ArgumentConfiguration::GetArguments() const noexcept
         {
             return mArguments;
@@ -109,11 +124,23 @@ namespace application
 
         bool ArgumentConfiguration::TryAskingVccApiKey(std::string message)
         {
+            if (tryLoadFromEnv(cApiKeyEnvVar, cApiKeyArgument))
+            {
+                std::cout << "VCC API key loaded from environment variable."
+                          << std::endl;
+                return true;
+            }
             return tryAskSafely(message, cApiKeyArgument);
         }
 
         bool ArgumentConfiguration::TryAskingBearToken(std::string message)
         {
+            if (tryLoadFromEnv(cBearerTokenEnvVar, cBearerTokenArgument))
+            {
+                std::cout << "OAuth 2.0 bearer token loaded from environment variable."
+                          << std::endl;
+                return true;
+            }
             return tryAskSafely(message, cBearerTokenArgument);
         }
     }

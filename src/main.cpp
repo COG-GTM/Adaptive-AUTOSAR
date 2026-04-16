@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include "./application/helper/argument_configuration.h"
 #include "./application/platform/execution_management.h"
 
@@ -17,9 +18,20 @@ void performPolling()
     }
 }
 
+static bool hasEnvSecrets()
+{
+    const char *_apiKey = std::getenv(
+        application::helper::ArgumentConfiguration::cApiKeyEnvVar.c_str());
+    const char *_bearerToken = std::getenv(
+        application::helper::ArgumentConfiguration::cBearerTokenEnvVar.c_str());
+    return (_apiKey != nullptr && _apiKey[0] != '\0') &&
+           (_bearerToken != nullptr && _bearerToken[0] != '\0');
+}
+
 int main(int argc, char *argv[])
 {
     application::helper::ArgumentConfiguration _argumentConfiguration(argc, argv);
+    bool _nonInteractive{hasEnvSecrets()};
 
     bool _successful{_argumentConfiguration.TryAskingVccApiKey()};
     if (!_successful)
@@ -28,7 +40,10 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    std::system("clear");
+    if (!_nonInteractive)
+    {
+        std::system("clear");
+    }
     _successful = _argumentConfiguration.TryAskingBearToken();
     if (!_successful)
     {
@@ -42,9 +57,12 @@ int main(int argc, char *argv[])
 
     std::future<void> _future{std::async(std::launch::async, performPolling)};
 
-    std::getchar();
-    std::system("clear");
-    std::getchar();
+    if (!_nonInteractive)
+    {
+        std::getchar();
+        std::system("clear");
+        std::getchar();
+    }
 
     int _result{executionManagement->Terminate()};
     running = false;
