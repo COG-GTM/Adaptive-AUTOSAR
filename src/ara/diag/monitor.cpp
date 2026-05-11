@@ -171,7 +171,14 @@ namespace ara
         Monitor::~Monitor() noexcept
         {
             delete mDebouncer;
-            mLogger.LogDebug() << "Monitor destroyed";
+
+            try
+            {
+                mLogger.LogDebug() << "Monitor destroyed";
+            }
+            catch (...)
+            {
+            }
         }
     }
 }
