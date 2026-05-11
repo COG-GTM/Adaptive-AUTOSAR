@@ -10,6 +10,7 @@ namespace ara
             std::function<void(InitMonitorReason)> initMonitor) : mSpecifier{specifier},
                                                                   mInitMonitor{initMonitor},
                                                                   mOffered{false},
+                                                                  mDebouncer{nullptr},
                                                                   mEvent{nullptr},
                                                                   mLogger{ara::log::Logger::CreateLogger("DMON", "Diagnostic Monitor", ara::log::LogLevel::kDebug)}
         {
