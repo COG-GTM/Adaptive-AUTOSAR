@@ -10,7 +10,8 @@ namespace ara
             std::function<void(InitMonitorReason)> initMonitor) : mSpecifier{specifier},
                                                                   mInitMonitor{initMonitor},
                                                                   mOffered{false},
-                                                                  mEvent{nullptr}
+                                                                  mEvent{nullptr},
+                                                                  mLogger{ara::log::Logger::CreateLogger("DMON", "Diagnostic Monitor", ara::log::LogLevel::kDebug)}
         {
         }
 
@@ -22,10 +23,15 @@ namespace ara
 
             if (mEvent)
             {
+                mLogger.LogDebug() << "Event status changed, passed: " << passed;
                 mEvent->SetFaultDetectionCounter(passed ? cPassedFdc : cFailedFdc);
                 mEvent->SetEventStatusBits(
                     {{EventStatusBit::kTestFailed, !passed},
                      {EventStatusBit::kTestNotCompletedThisOperationCycle, cTestNotCompleted}});
+            }
+            else
+            {
+                mLogger.LogWarn() << "Event status changed but no event attached";
             }
         }
 
@@ -40,6 +46,8 @@ namespace ara
 
             mDebouncer =
                 new debouncing::CounterBasedDebouncer(_callback, defaultValues);
+
+            mLogger.LogInfo() << "Monitor created with counter-based debouncing for specifier: " << mSpecifier;
         }
 
         Monitor::Monitor(
@@ -53,12 +61,16 @@ namespace ara
 
             mDebouncer =
                 new debouncing::TimerBasedDebouncer(_callback, defaultValues);
+
+            mLogger.LogInfo() << "Monitor created with timer-based debouncing for specifier: " << mSpecifier;
         }
 
         void Monitor::ReportMonitorAction(MonitorAction action)
         {
             if (mOffered)
             {
+                mLogger.LogDebug() << "Monitor action reported: " << static_cast<uint32_t>(action);
+
                 switch (action)
                 {
                 case MonitorAction::kPassed:
@@ -93,20 +105,28 @@ namespace ara
                     break;
 
                 default:
+                    mLogger.LogError() << "Unsupported monitor action reported";
                     throw std::invalid_argument("Reported monitor action is not supported.");
                 }
+            }
+            else
+            {
+                mLogger.LogWarn() << "ReportMonitorAction called but monitor is not offered";
             }
         }
 
         void Monitor::AttachEvent(Event *event)
         {
             mEvent = event;
+            mLogger.LogInfo() << "Event attached to monitor";
         }
 
         core::Result<void> Monitor::Offer()
         {
             if (mOffered)
             {
+                mLogger.LogWarn() << "Monitor already offered";
+
                 core::ErrorDomain *_errorDomain{DiagErrorDomain::GetDiagDomain()};
                 auto _diagErrorDomain{static_cast<DiagErrorDomain *>(_errorDomain)};
                 core::ErrorCode _errorCode{_diagErrorDomain->MakeErrorCode(DiagErrc::kAlreadyOffered)};
@@ -123,6 +143,8 @@ namespace ara
                     mInitMonitor(InitMonitorReason::kReenabled);
                 }
 
+                mLogger.LogInfo() << "Monitor offered successfully";
+
                 return _result;
             }
         }
@@ -137,12 +159,19 @@ namespace ara
                 {
                     mInitMonitor(InitMonitorReason::kDisabled);
                 }
+
+                mLogger.LogInfo() << "Monitor stopped offering";
+            }
+            else
+            {
+                mLogger.LogDebug() << "StopOffer called but monitor was not offering";
             }
         }
 
         Monitor::~Monitor() noexcept
         {
             delete mDebouncer;
+            mLogger.LogDebug() << "Monitor destroyed";
         }
     }
 }

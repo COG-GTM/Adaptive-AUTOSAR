@@ -7,6 +7,7 @@
 #include "./debouncing/counter_based_debouncer.h"
 #include "./debouncing/timer_based_debouncer.h"
 #include "./event.h"
+#include "../log/logger.h"
 
 namespace ara
 {
@@ -44,6 +45,7 @@ namespace ara
             bool mOffered;
             debouncing::Debouncer *mDebouncer;
             Event *mEvent;
+            ara::log::Logger mLogger;
 
             Monitor(
                 const core::InstanceSpecifier &specifier,
