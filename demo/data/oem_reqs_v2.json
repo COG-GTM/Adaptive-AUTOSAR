@@ -1,0 +1,288 @@
+{
+  "meta": {
+    "package": "OEM Platform Requirements Package",
+    "release": "R2026-02 (delivery 2)",
+    "issued": "2026-02-27",
+    "format": "ReqIF export, flattened",
+    "requirements": 17
+  },
+  "oems": [
+    { "id": "bmw", "name": "BMW", "short": "BMW" },
+    { "id": "audi", "name": "Audi", "short": "Audi" },
+    { "id": "gm", "name": "GM", "short": "GM" }
+  ],
+  "requirements": [
+    {
+      "id": "OEM-SD-101",
+      "title": "Service discovery offer timing",
+      "capability": "someip_sd",
+      "asil": "B",
+      "text": "The platform shall announce every provided SOME/IP service instance using an initial offer delay drawn from the configured [100 ms, 200 ms] window, shall enter the repetition phase afterwards, and shall stop offering within one cycle of the service going down.",
+      "anchors": [
+        { "type": "arxml", "value": "SomeIpServiceInstance_0x05" }
+      ],
+      "sources": [
+        "src/ara/com/someip/sd/someip_sd_server.cpp",
+        "src/ara/com/someip/sd/fsm/initial_wait_state.h",
+        "src/ara/com/someip/sd/fsm/repetition_state.h",
+        "src/ara/com/someip/sd/fsm/stopped_state.cpp"
+      ]
+    },
+    {
+      "id": "OEM-SD-104",
+      "title": "Client find behaviour for required services",
+      "capability": "someip_sd",
+      "asil": "QM",
+      "text": "A required service instance shall issue FindService entries until the service is seen, honouring the configured initial find delay.",
+      "anchors": [
+        { "type": "arxml", "value": "DiagnosticManagerEP" }
+      ],
+      "sources": [
+        "src/ara/com/someip/sd/someip_sd_client.cpp",
+        "src/ara/com/someip/sd/fsm/client_initial_wait_state.cpp"
+      ]
+    },
+    {
+      "id": "OEM-COM-210",
+      "title": "Event group multicast distribution",
+      "capability": "someip_pubsub",
+      "asil": "QM",
+      "text": "Notification events shall be distributed to subscribed clients over the configured multicast endpoint 239.0.0.1:5555.",
+      "anchors": [
+        { "type": "arxml", "value": "MulticastUdp" }
+      ],
+      "sources": [
+        "src/ara/com/someip/pubsub/someip_pubsub_server.cpp",
+        "src/ara/com/someip/pubsub/someip_pubsub_client.cpp"
+      ]
+    },
+    {
+      "id": "OEM-COM-230",
+      "title": "RPC transport endpoint",
+      "capability": "someip_rpc",
+      "asil": "QM",
+      "text": "Platform RPC traffic shall use the TCP endpoint declared in the execution manifest (127.0.0.1:8080).",
+      "anchors": [
+        { "type": "arxml", "value": "ServerUnicastTcp" }
+      ],
+      "sources": [
+        "src/ara/com/someip/rpc/socket_rpc_server.cpp",
+        "src/ara/com/someip/rpc/rpc_client.cpp"
+      ]
+    },
+    {
+      "id": "OEM-COM-250",
+      "title": "End-to-end protection of safety-relevant events",
+      "capability": "e2e_protection",
+      "asil": "C",
+      "text": "NEW: Safety-relevant notification events shall be protected with E2E Profile 11, including CRC, counter and data ID checks on the receiver side.",
+      "anchors": [
+        { "type": "arxml", "value": "MulticastUdp" }
+      ],
+      "sources": [
+        "src/ara/com/e2e/profile11.cpp",
+        "src/ara/com/e2e/profile.h"
+      ]
+    },
+    {
+      "id": "OEM-EM-310",
+      "title": "Function group state transitions",
+      "capability": "exec_management",
+      "asil": "B",
+      "text": "Execution Management shall support the MachineFG function group with the states Off and StartUp, and shall reject transitions to undeclared states.",
+      "anchors": [
+        { "type": "arxml", "value": "MachineFG" },
+        { "type": "arxml", "value": "StartUp" }
+      ],
+      "sources": [
+        "src/ara/exec/function_group.cpp",
+        "src/ara/exec/function_group_state.cpp",
+        "src/ara/exec/state_server.cpp"
+      ]
+    },
+    {
+      "id": "OEM-SM-410",
+      "title": "Machine power mode notification",
+      "capability": "state_management",
+      "asil": "B",
+      "text": "State Management shall expose the current power mode to subscribed applications through the notifier interface.",
+      "anchors": [
+        { "type": "arxml", "value": "Off" }
+      ],
+      "sources": [
+        "src/ara/sm/power_mode.h",
+        "src/ara/sm/notifier.h"
+      ]
+    },
+    {
+      "id": "OEM-PHM-510",
+      "title": "Alive supervision of platform processes",
+      "capability": "phm_supervision",
+      "asil": "B",
+      "text": "Platform Health Management shall report a supervision failure when fewer than the expected alive indications are reported within the configured reference cycle.",
+      "anchors": [
+        { "type": "arxml", "value": "AliveSupervision" },
+        { "type": "arxml", "value": "GlobalSupervision" }
+      ],
+      "sources": [
+        "src/ara/phm/supervisors/alive_supervision.cpp",
+        "src/ara/phm/supervisors/global_supervision.cpp"
+      ]
+    },
+    {
+      "id": "OEM-PHM-520",
+      "title": "Deadline supervision between checkpoints",
+      "capability": "phm_supervision",
+      "asil": "C",
+      "text": "NEW: The transition from DeadlineSupervisionSource to DeadlineSupervisionTarget shall be reported as failed when it completes outside the configured [5 ms, 15 ms] window.",
+      "anchors": [
+        { "type": "arxml", "value": "DeadlineSupervisionSource" },
+        { "type": "arxml", "value": "DeadlineSupervisionTarget" }
+      ],
+      "sources": [
+        "src/ara/phm/supervisors/deadline_supervision.cpp",
+        "src/ara/phm/checkpoint_communicator.cpp"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-610",
+      "title": "UDS request routing",
+      "capability": "uds_routing",
+      "asil": "B",
+      "text": "The diagnostic manager shall route an incoming UDS request to the handler registered for its SID and shall answer 0x7F/0x11 when no handler exists.",
+      "anchors": [
+        { "type": "uds", "value": "0x22" }
+      ],
+      "sources": [
+        "src/ara/diag/routing/uds_service_router.cpp",
+        "src/ara/diag/routing/routable_uds_service.cpp"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-620",
+      "title": "Read vehicle data by identifier",
+      "capability": "uds_read_did",
+      "asil": "B",
+      "text": "CHANGED: ReadDataByIdentifier (0x22) shall additionally serve average fuel consumption (0xF55E), engine coolant temperature (0xF505) and odometer value (0xF5A6) with a cache lifetime of at most 5 s.",
+      "anchors": [
+        { "type": "uds", "value": "0x22" },
+        { "type": "did", "value": "0xF50D" },
+        { "type": "did", "value": "0xF52F" },
+        { "type": "did", "value": "0xF546" },
+        { "type": "did", "value": "0xF55E" },
+        { "type": "did", "value": "0xF505" },
+        { "type": "did", "value": "0xF5A6" }
+      ],
+      "sources": [
+        "src/application/helper/read_data_by_identifier.cpp",
+        "src/application/helper/memory_cache.h"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-630",
+      "title": "Security access before privileged services",
+      "capability": "uds_security",
+      "asil": "C",
+      "text": "NEW: SecurityAccess (0x27) seed/key exchange shall gate every privileged diagnostic service, with an attempt-delay timer after three failed key attempts.",
+      "anchors": [
+        { "type": "uds", "value": "0x27" }
+      ],
+      "sources": [
+        "src/ara/diag/security_access.cpp",
+        "src/ara/diag/routing/delay_timer.cpp"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-640",
+      "title": "ECU reset request",
+      "capability": "uds_ecu_reset",
+      "asil": "B",
+      "text": "ECUReset (0x11) shall be accepted only in a non-safety-critical machine state and shall confirm the reset before execution.",
+      "anchors": [
+        { "type": "uds", "value": "0x11" }
+      ],
+      "sources": [
+        "src/ara/diag/ecu_reset_request.cpp"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-660",
+      "title": "Software download and upload over UDS",
+      "capability": "uds_transfer",
+      "asil": "B",
+      "text": "CHANGED: RequestDownload (0x34), RequestUpload (0x35), TransferData (0x36) and RequestTransferExit (0x37) shall implement a block-sequence-counter protected transfer in both directions.",
+      "anchors": [
+        { "type": "uds", "value": "0x34" },
+        { "type": "uds", "value": "0x35" },
+        { "type": "uds", "value": "0x36" },
+        { "type": "uds", "value": "0x37" }
+      ],
+      "sources": [
+        "src/ara/diag/download.cpp",
+        "src/ara/diag/upload.cpp",
+        "src/ara/diag/routing/transfer_data.cpp",
+        "src/ara/diag/routing/request_transfer_exit.cpp"
+      ]
+    },
+    {
+      "id": "OEM-DOIP-710",
+      "title": "Vehicle announcement",
+      "capability": "doip",
+      "asil": "QM",
+      "text": "The DoIP entity shall emit the configured number of vehicle announcement messages after link-up, carrying the configured EID/GID and logical address.",
+      "anchors": [
+        { "type": "arxml", "value": "DoIpInstantiation" }
+      ],
+      "sources": [
+        "src/application/doip/vehicle_id_request_handler.cpp",
+        "src/application/doip/doip_server.cpp"
+      ]
+    },
+    {
+      "id": "OEM-DOIP-730",
+      "title": "OBD request tunnelling over DoIP",
+      "capability": "doip",
+      "asil": "QM",
+      "text": "NEW: Legacy OBD-II mode 0x01 requests shall be converted to UDS 0x22 DID requests and tunnelled over the DoIP diagnostic message channel.",
+      "anchors": [
+        { "type": "arxml", "value": "DoIpInstantiation" },
+        { "type": "uds", "value": "0x22" }
+      ],
+      "sources": [
+        "src/application/doip/obd_to_doip_converter.cpp",
+        "src/application/doip/diag_message_handler.cpp"
+      ]
+    },
+    {
+      "id": "OEM-DTC-810",
+      "title": "Telematics communication loss DTC",
+      "capability": "dtc_reporting",
+      "asil": "B",
+      "text": "Loss of communication with the telematic control module shall set DTC U0198 after the configured debounce time.",
+      "anchors": [
+        { "type": "arxml", "value": "TelematicControlModuleEvent" },
+        { "type": "arxml", "value": "TelematicControlModuleMonitor" }
+      ],
+      "sources": [
+        "src/ara/diag/dtc_information.cpp",
+        "src/ara/diag/debouncing/timer_based_debouncer.cpp"
+      ]
+    }
+  ],
+  "variants": {
+    "bmw": [
+      "someip_sd", "someip_pubsub", "someip_rpc", "e2e_protection", "exec_management",
+      "state_management", "phm_supervision", "uds_routing", "uds_read_did", "uds_security",
+      "uds_ecu_reset", "uds_transfer", "doip", "dtc_reporting", "logging"
+    ],
+    "audi": [
+      "someip_sd", "someip_pubsub", "someip_rpc", "e2e_protection", "exec_management",
+      "state_management", "phm_supervision", "uds_routing", "uds_read_did", "uds_security",
+      "uds_ecu_reset", "doip", "dtc_reporting", "logging"
+    ],
+    "gm": [
+      "someip_sd", "someip_rpc", "exec_management", "state_management", "phm_supervision",
+      "uds_routing", "uds_read_did", "uds_ecu_reset", "dtc_reporting", "logging"
+    ]
+  }
+}
