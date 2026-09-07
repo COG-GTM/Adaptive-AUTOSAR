@@ -271,6 +271,8 @@ ul.bullets b { font-weight: 700; }
   transition: background 200ms ease, color 200ms ease;
 }
 .node:hover { background: var(--lavender); }
+.node.static { cursor: default; color: var(--grey); }
+.node.static:hover { background: var(--neutral); }
 .node .l { font-size: 12.5px; font-weight: 600; line-height: 1.22; }
 .node .s { font-size: 11px; color: var(--grey); margin-top: 1px; word-break: break-word; }
 .node.req { background: var(--lavender); }

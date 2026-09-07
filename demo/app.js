@@ -46,7 +46,8 @@
 
   function esc(text) {
     return String(text == null ? "" : text)
-      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 
   function pct(value) { return Math.round(value * 100) + "%"; }
@@ -76,6 +77,8 @@
 
   function go(index) {
     current = (index + SLIDES.length) % SLIDES.length;
+    closeDrawer();
+    if (location.hash !== "#" + (current + 1)) { location.hash = "#" + (current + 1); }
     buildNav();
     el.title.textContent = SLIDES[current].title;
     el.body.innerHTML = "";
@@ -431,7 +434,7 @@
         return chainRow(chain, states[chain.capability]);
       }).join("") + "</div>";
 
-    Array.prototype.forEach.call(root.querySelectorAll(".node"), function (node) {
+    Array.prototype.forEach.call(root.querySelectorAll(".node:not(.static)"), function (node) {
       node.addEventListener("click", function () {
         openExcerptDrawer(node.dataset.kind, node.dataset.label,
           node.dataset.file ? node.dataset.file + ":" + node.dataset.line : "",
@@ -448,8 +451,7 @@
           : stage[0] === "manifest" ? "no manifest element"
           : stage[0] === "source" ? "no implementation owner" : "not linked";
         var badgeHtml = (stage[0] === "service")
-          ? '<div class="node" data-kind="service" data-label="' + esc(chain.title) +
-            '" data-excerpt="Covered by the module that owns the requirement."><div class="l">—</div>' +
+          ? '<div class="node static"><div class="l">—</div>' +
             '<div class="s">no dedicated service id</div></div>'
           : '<div class="gap-badge">' + gap + "</div>";
         return '<div class="cell empty">' + badgeHtml + "</div>";
@@ -602,6 +604,11 @@
       "Referenced artifact: " + file + " (line " + line + ").";
   }
 
+  function slideFromHash() {
+    var index = parseInt(String(location.hash).replace(/[^0-9]/g, ""), 10) - 1;
+    return index >= 0 && index < SLIDES.length ? index : 0;
+  }
+
   // ------------------------------------------------------- boot
   function loadJson(path) {
     return fetch(path).then(function (response) {
@@ -632,7 +639,11 @@
     })
     .then(function () {
       renderRunBar();
-      go(0);
+      go(slideFromHash());
+      window.addEventListener("hashchange", function () {
+        var index = slideFromHash();
+        if (index !== current) { go(index); }
+      });
     })
     .catch(function (error) {
       el.body.innerHTML = '<div class="panel"><h2>Data not found</h2><p>Run <code>python3 demo/generate_data.py</code> ' +
