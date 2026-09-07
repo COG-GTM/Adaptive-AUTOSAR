@@ -305,6 +305,11 @@ UDS_NAMES = {
 }
 
 
+def excerpt_around(lines, line, before=3, after=8):
+    start = max(0, line - 1 - before)
+    return "\n".join(lines[start:line + after])
+
+
 def collect_uds(sources):
     services = OrderedDict()
     dids = []
@@ -318,7 +323,9 @@ def collect_uds(sources):
                     ("sid", key),
                     ("name", UDS_NAMES.get(key, "UdsService")),
                     ("files", []),
+                    ("file", relative),
                     ("line", number),
+                    ("excerpt", excerpt_around(lines, number)),
                 ]))
                 entry["files"].append(relative)
             did = DID_RE.search(text)
@@ -330,6 +337,7 @@ def collect_uds(sources):
                     ("constant", "c%sDid" % did.group(1)),
                     ("file", relative),
                     ("line", number),
+                    ("excerpt", excerpt_around(lines, number)),
                 ]))
     for entry in services.values():
         entry["files"] = sorted(set(entry["files"]))
@@ -466,8 +474,9 @@ def build_traceability(packages, arxml, sources, uds_services, dids):
                 service_nodes.append(OrderedDict([
                     ("label", "UDS %s %s" % (resolved["sid"], resolved["name"])),
                     ("sub", "ara::diag::routing"),
-                    ("file", resolved["files"][0] if resolved["files"] else None),
+                    ("file", resolved.get("file")),
                     ("line", resolved.get("line", 1)),
+                    ("excerpt", resolved.get("excerpt", "")),
                 ]))
             elif anchor["type"] == "did":
                 service_nodes.append(OrderedDict([
@@ -475,6 +484,7 @@ def build_traceability(packages, arxml, sources, uds_services, dids):
                     ("sub", resolved["name"].strip()),
                     ("file", resolved["file"]),
                     ("line", resolved["line"]),
+                    ("excerpt", resolved.get("excerpt", "")),
                 ]))
 
         source_nodes = []

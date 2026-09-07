@@ -390,7 +390,9 @@
       "files": [
         "src/ara/diag/ecu_reset_request.h"
       ],
+      "file": "src/ara/diag/ecu_reset_request.h",
       "line": 23,
+      "excerpt": "        class EcuResetRequest : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x11};\n\n            std::promise<ResetRequestType> mResetTypePromise;\n            std::future<ResetRequestType> mResetTypeFuture;\n            bool mRapidShutdownEnabled;\n\n            bool TryHandleSubFunction(\n                uint8_t subFunction,\n                const MetaInfo &metaInfo,",
       "tested": true,
       "tests": [
         "test/ara/diag/ecu_reset_request_test.cpp"
@@ -403,7 +405,9 @@
         "src/application/doip/obd_to_doip_converter.h",
         "src/application/helper/read_data_by_identifier.h"
       ],
+      "file": "src/application/doip/obd_to_doip_converter.h",
       "line": 18,
+      "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);",
       "tested": false,
       "tests": []
     },
@@ -413,7 +417,9 @@
       "files": [
         "src/ara/diag/security_access.h"
       ],
+      "file": "src/ara/diag/security_access.h",
       "line": 40,
+      "excerpt": "        class SecurityAccess : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x27};\n            static const uint16_t cInitialSeed{1};\n\n            const size_t cSidIndex{0};\n            const size_t cSubFunctionIndex{1};\n            const size_t cDataRecordOffset{2};\n            const size_t cKeyLength{2};\n\n            const uint8_t cSuppressPosRspMask{0x80};",
       "tested": true,
       "tests": [
         "test/ara/diag/security_access_test.cpp"
@@ -425,7 +431,9 @@
       "files": [
         "src/ara/diag/generic_routine.h"
       ],
+      "file": "src/ara/diag/generic_routine.h",
       "line": 16,
+      "excerpt": "        class GenericRoutine : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x31};\n\n            ReentrancyType mReentrancy;\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancyType Service reentrancy type in a multi-threading contex\n            explicit GenericRoutine(",
       "tested": true,
       "tests": [
         "test/ara/diag/generic_routine_test.cpp"
@@ -437,7 +445,9 @@
       "files": [
         "src/ara/diag/download.h"
       ],
+      "file": "src/ara/diag/download.h",
       "line": 15,
+      "excerpt": "        class DownloadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x34};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kDownload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service",
       "tested": false,
       "tests": []
     },
@@ -447,7 +457,9 @@
       "files": [
         "src/ara/diag/upload.h"
       ],
+      "file": "src/ara/diag/upload.h",
       "line": 15,
+      "excerpt": "        class UploadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x35};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kUpload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service",
       "tested": false,
       "tests": []
     },
@@ -457,7 +469,9 @@
       "files": [
         "src/ara/diag/routing/transfer_data.h"
       ],
+      "file": "src/ara/diag/routing/transfer_data.h",
       "line": 25,
+      "excerpt": "            class TransferData : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x36};\n                static const size_t cMemoryPoolSize{1024};\n                static const uint8_t cInitialBlockSequenceCounter{1};\n\n                const size_t cSequenceCounterIndex{1};\n                const size_t cRequestParameterOffset{2};\n\n                const uint8_t cWrongBlockSequenceCounter{0x73};\n",
       "tested": true,
       "tests": [
         "test/ara/diag/routing/transfer_data_test.cpp"
@@ -469,7 +483,9 @@
       "files": [
         "src/ara/diag/routing/request_transfer_exit.h"
       ],
+      "file": "src/ara/diag/routing/request_transfer_exit.h",
       "line": 16,
+      "excerpt": "            class RequestTransferExit : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x37};\n                TransferData &mTransferData;\n\n            public:\n                /// @brief Constructor\n                /// @param specifier Owner instance specifier\n                /// @param transferData Transfer data service\n                RequestTransferExit(\n                    const core::InstanceSpecifier &specifier,",
       "tested": true,
       "tests": [
         "test/ara/diag/routing/request_transfer_exit_test.cpp"
@@ -482,42 +498,48 @@
       "name": "Engine Coolant Temperature",
       "constant": "cEngineCoolantTemperatureDid",
       "file": "src/application/helper/read_data_by_identifier.h",
-      "line": 22
+      "line": 22,
+      "excerpt": "            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n"
     },
     {
       "did": "0xF50D",
       "name": "Average Speed",
       "constant": "cAverageSpeedDid",
       "file": "src/application/helper/read_data_by_identifier.h",
-      "line": 18
+      "line": 18,
+      "excerpt": "        {\n        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n"
     },
     {
       "did": "0xF52F",
       "name": "Fuel Amount",
       "constant": "cFuelAmountDid",
       "file": "src/application/helper/read_data_by_identifier.h",
-      "line": 19
+      "line": 19,
+      "excerpt": "        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};"
     },
     {
       "did": "0xF546",
       "name": "External Temperature",
       "constant": "cExternalTemperatureDid",
       "file": "src/application/helper/read_data_by_identifier.h",
-      "line": 20
+      "line": 20,
+      "excerpt": "            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};"
     },
     {
       "did": "0xF55E",
       "name": "Average Fuel Consumption",
       "constant": "cAverageFuelConsumptionDid",
       "file": "src/application/helper/read_data_by_identifier.h",
-      "line": 21
+      "line": 21,
+      "excerpt": "            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};"
     },
     {
       "did": "0xF5A6",
       "name": "Odometer Value",
       "constant": "cOdometerValueDid",
       "file": "src/application/helper/read_data_by_identifier.h",
-      "line": 23
+      "line": 23,
+      "excerpt": "            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n\n            const std::string cResourcesUrl;"
     }
   ],
   "dtcs": [
@@ -1844,7 +1866,8 @@
             "label": "UDS 0x22 ReadDataByIdentifier",
             "sub": "ara::diag::routing",
             "file": "src/application/doip/obd_to_doip_converter.h",
-            "line": 18
+            "line": 18,
+            "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);"
           }
         ],
         "source": [
@@ -1898,43 +1921,50 @@
             "label": "UDS 0x22 ReadDataByIdentifier",
             "sub": "ara::diag::routing",
             "file": "src/application/doip/obd_to_doip_converter.h",
-            "line": 18
+            "line": 18,
+            "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);"
           },
           {
             "label": "DID 0xF50D",
             "sub": "Average Speed",
             "file": "src/application/helper/read_data_by_identifier.h",
-            "line": 18
+            "line": 18,
+            "excerpt": "        {\n        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n"
           },
           {
             "label": "DID 0xF52F",
             "sub": "Fuel Amount",
             "file": "src/application/helper/read_data_by_identifier.h",
-            "line": 19
+            "line": 19,
+            "excerpt": "        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};"
           },
           {
             "label": "DID 0xF546",
             "sub": "External Temperature",
             "file": "src/application/helper/read_data_by_identifier.h",
-            "line": 20
+            "line": 20,
+            "excerpt": "            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};"
           },
           {
             "label": "DID 0xF55E",
             "sub": "Average Fuel Consumption",
             "file": "src/application/helper/read_data_by_identifier.h",
-            "line": 21
+            "line": 21,
+            "excerpt": "            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};"
           },
           {
             "label": "DID 0xF505",
             "sub": "Engine Coolant Temperature",
             "file": "src/application/helper/read_data_by_identifier.h",
-            "line": 22
+            "line": 22,
+            "excerpt": "            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n"
           },
           {
             "label": "DID 0xF5A6",
             "sub": "Odometer Value",
             "file": "src/application/helper/read_data_by_identifier.h",
-            "line": 23
+            "line": 23,
+            "excerpt": "            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n\n            const std::string cResourcesUrl;"
           }
         ],
         "source": [
@@ -1981,7 +2011,8 @@
             "label": "UDS 0x27 SecurityAccess",
             "sub": "ara::diag::routing",
             "file": "src/ara/diag/security_access.h",
-            "line": 40
+            "line": 40,
+            "excerpt": "        class SecurityAccess : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x27};\n            static const uint16_t cInitialSeed{1};\n\n            const size_t cSidIndex{0};\n            const size_t cSubFunctionIndex{1};\n            const size_t cDataRecordOffset{2};\n            const size_t cKeyLength{2};\n\n            const uint8_t cSuppressPosRspMask{0x80};"
           }
         ],
         "source": [
@@ -2042,7 +2073,8 @@
             "label": "UDS 0x11 ECUReset",
             "sub": "ara::diag::routing",
             "file": "src/ara/diag/ecu_reset_request.h",
-            "line": 23
+            "line": 23,
+            "excerpt": "        class EcuResetRequest : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x11};\n\n            std::promise<ResetRequestType> mResetTypePromise;\n            std::future<ResetRequestType> mResetTypeFuture;\n            bool mRapidShutdownEnabled;\n\n            bool TryHandleSubFunction(\n                uint8_t subFunction,\n                const MetaInfo &metaInfo,"
           }
         ],
         "source": [
@@ -2089,25 +2121,29 @@
             "label": "UDS 0x34 RequestDownload",
             "sub": "ara::diag::routing",
             "file": "src/ara/diag/download.h",
-            "line": 15
+            "line": 15,
+            "excerpt": "        class DownloadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x34};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kDownload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service"
           },
           {
             "label": "UDS 0x35 RequestUpload",
             "sub": "ara::diag::routing",
             "file": "src/ara/diag/upload.h",
-            "line": 15
+            "line": 15,
+            "excerpt": "        class UploadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x35};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kUpload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service"
           },
           {
             "label": "UDS 0x36 TransferData",
             "sub": "ara::diag::routing",
             "file": "src/ara/diag/routing/transfer_data.h",
-            "line": 25
+            "line": 25,
+            "excerpt": "            class TransferData : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x36};\n                static const size_t cMemoryPoolSize{1024};\n                static const uint8_t cInitialBlockSequenceCounter{1};\n\n                const size_t cSequenceCounterIndex{1};\n                const size_t cRequestParameterOffset{2};\n\n                const uint8_t cWrongBlockSequenceCounter{0x73};\n"
           },
           {
             "label": "UDS 0x37 RequestTransferExit",
             "sub": "ara::diag::routing",
             "file": "src/ara/diag/routing/request_transfer_exit.h",
-            "line": 16
+            "line": 16,
+            "excerpt": "            class RequestTransferExit : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x37};\n                TransferData &mTransferData;\n\n            public:\n                /// @brief Constructor\n                /// @param specifier Owner instance specifier\n                /// @param transferData Transfer data service\n                RequestTransferExit(\n                    const core::InstanceSpecifier &specifier,"
           }
         ],
         "source": [
@@ -2237,7 +2273,8 @@
             "label": "UDS 0x22 ReadDataByIdentifier",
             "sub": "ara::diag::routing",
             "file": "src/application/doip/obd_to_doip_converter.h",
-            "line": 18
+            "line": 18,
+            "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);"
           }
         ],
         "source": [
