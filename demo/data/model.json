@@ -1,0 +1,3108 @@
+{
+  "generatedFrom": "COG-GTM/Adaptive-AUTOSAR",
+  "counts": {
+    "manifests": 4,
+    "manifestElements": 18,
+    "functionGroups": 1,
+    "machineStates": 2,
+    "serviceInstances": 2,
+    "serviceIds": [
+      5
+    ],
+    "checkpoints": 3,
+    "dtcs": 1,
+    "dids": 6,
+    "udsServices": 8,
+    "sourceFiles": 242,
+    "sourceLoc": 21702,
+    "classes": 143,
+    "testFiles": 80,
+    "testCases": 339,
+    "untestedFiles": 121,
+    "coverageRatio": 0.5,
+    "tracedRequirements": 17,
+    "requirementGaps": 10,
+    "changedRequirements": 8
+  },
+  "manifests": [
+    {
+      "file": "configuration/diagnostic_manager_manifest.arxml",
+      "package": "DiagnosticManagerManifest",
+      "lines": 64,
+      "elements": [
+        {
+          "id": "diagnostic_manager_manifest.arxml::DiagnosticManagerEP",
+          "kind": "endpoint",
+          "tag": "NETWORK-ENDPOINT",
+          "shortName": "DiagnosticManagerEP",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 11,
+          "detail": {
+            "ipv4": "239.0.0.1"
+          },
+          "excerpt": "                            <NETWORK-ENDPOINT>\n                                <SHORT-NAME>DiagnosticManagerEP</SHORT-NAME>\n                                <NETWORK-ENDPOINT-ADDRESSES>\n                                    <IPV-4-CONFIGURATION>\n                                        <IPV-4-ADDRESS>239.0.0.1</IPV-4-ADDRESS>\n                                    </IPV-4-CONFIGURATION>\n                                </NETWORK-ENDPOINT-ADDRESSES>\n                            </NETWORK-ENDPOINT>\n                        </NETWORK-ENDPOINTS>\n                    </ETHERNET-PHYSICAL-CHANNEL>\n                </COMMUNICATION-CLUSTER>\n                <ETHERNET-COMMUNICATION-CONNECTOR>"
+        },
+        {
+          "id": "diagnostic_manager_manifest.arxml::MulticastUdp",
+          "kind": "applicationEndpoint",
+          "tag": "AP-APPLICATION-ENDPOINT",
+          "shortName": "MulticastUdp",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 25,
+          "detail": {
+            "port": 5555,
+            "transport": "UDP"
+          },
+          "excerpt": "                        <AP-APPLICATION-ENDPOINT>\n                            <SHORT-NAME>MulticastUdp</SHORT-NAME>\n                            <TP-CONFIGURATION>\n                                <UDP-TP>\n                                    <UDP-TP-PORT>\n                                        <PORT-NUMBER>5555</PORT-NUMBER>\n                                    </UDP-TP-PORT>\n                                </UDP-TP>\n                            </TP-CONFIGURATION>\n                        </AP-APPLICATION-ENDPOINT>\n                    </AP-APPLICATION-ENDPOINTS>\n                </ETHERNET-COMMUNICATION-CONNECTOR>"
+        },
+        {
+          "id": "diagnostic_manager_manifest.arxml::SomeIpServiceInstance_0x05",
+          "kind": "requiredService",
+          "tag": "REQUIRED-SOMEIP-SERVICE-INSTANCE",
+          "shortName": "SomeIpServiceInstance_0x05",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 37,
+          "detail": {
+            "serviceInterfaceId": 5
+          },
+          "excerpt": "                <REQUIRED-SOMEIP-SERVICE-INSTANCE>\n                    <SERVICE-INTERFACE-DEPLOYMENT>\n                        <SERVICE-INTERFACE-ID>5</SERVICE-INTERFACE-ID>\n                    </SERVICE-INTERFACE-DEPLOYMENT>\n                    <SD-CLIENT-CONFIG>\n                        <INITIAL-FIND-BEHAVIOR>\n                            <INITIAL-DELAY-MIN-VALUE>100</INITIAL-DELAY-MIN-VALUE>\n                            <INITIAL-DELAY-MAX-VALUE>200</INITIAL-DELAY-MAX-VALUE>\n                        </INITIAL-FIND-BEHAVIOR>\n                    </SD-CLIENT-CONFIG>\n                </REQUIRED-SOMEIP-SERVICE-INSTANCE>\n                <DIAGNOSTIC-MONITOR-INTERFACE>"
+        },
+        {
+          "id": "diagnostic_manager_manifest.arxml::TelematicControlModuleMonitor",
+          "kind": "diagnosticMonitor",
+          "tag": "DIAGNOSTIC-MONITOR-INTERFACE",
+          "shortName": "TelematicControlModuleMonitor",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 48,
+          "detail": {
+            "time_passed_threshold": 6000,
+            "time_failed_threshold": 6000
+          },
+          "excerpt": "                <DIAGNOSTIC-MONITOR-INTERFACE>\n                    <SHORT-NAME>TelematicControlModuleMonitor</SHORT-NAME>\n                    <DIAG-EVENT-DEBOUNCE-TIME-BASED>\n                        <TIME-PASSED-THRESHOLD>6000</TIME-PASSED-THRESHOLD>\n                        <TIME-FAILED-THRESHOLD>6000</TIME-FAILED-THRESHOLD>\n                    </DIAG-EVENT-DEBOUNCE-TIME-BASED>\n                </DIAGNOSTIC-MONITOR-INTERFACE>\n                <DIAGNOSTIC-EVENT-INTERFACE>\n                    <SHORT-NAME>TelematicControlModuleEvent</SHORT-NAME>\n                    <!-- ISO 15031-6 DTC Format:\n                    U0198 (0xC198) = Lost Communication With Telematic Control Module -->\n                    <DTC-NUMBER>49560</DTC-NUMBER>"
+        },
+        {
+          "id": "diagnostic_manager_manifest.arxml::TelematicControlModuleEvent",
+          "kind": "diagnosticEvent",
+          "tag": "DIAGNOSTIC-EVENT-INTERFACE",
+          "shortName": "TelematicControlModuleEvent",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 55,
+          "detail": {
+            "dtcNumber": 49560,
+            "dtcHex": "0xC198"
+          },
+          "excerpt": "                <DIAGNOSTIC-EVENT-INTERFACE>\n                    <SHORT-NAME>TelematicControlModuleEvent</SHORT-NAME>\n                    <!-- ISO 15031-6 DTC Format:\n                    U0198 (0xC198) = Lost Communication With Telematic Control Module -->\n                    <DTC-NUMBER>49560</DTC-NUMBER>\n                </DIAGNOSTIC-EVENT-INTERFACE>\n            </ELEMENTS>\n        </AR-PACKAGE>\n    </AR-PACKAGES>\n</AUTOSAR>"
+        }
+      ]
+    },
+    {
+      "file": "configuration/execution_manifest.arxml",
+      "package": "ExecutionManifest",
+      "lines": 57,
+      "elements": [
+        {
+          "id": "execution_manifest.arxml::RpcServerEP",
+          "kind": "endpoint",
+          "tag": "NETWORK-ENDPOINT",
+          "shortName": "RpcServerEP",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 11,
+          "detail": {
+            "ipv4": "127.0.0.1"
+          },
+          "excerpt": "                            <NETWORK-ENDPOINT>\n                                <SHORT-NAME>RpcServerEP</SHORT-NAME>\n                                <NETWORK-ENDPOINT-ADDRESSES>\n                                    <IPV-4-CONFIGURATION>\n                                        <IPV-4-ADDRESS>127.0.0.1</IPV-4-ADDRESS>\n                                    </IPV-4-CONFIGURATION>\n                                </NETWORK-ENDPOINT-ADDRESSES>\n                            </NETWORK-ENDPOINT>\n                        </NETWORK-ENDPOINTS>\n                    </ETHERNET-PHYSICAL-CHANNEL>\n                    <PROTOCOL-VERSION>1</PROTOCOL-VERSION>\n                </COMMUNICATION-CLUSTER>"
+        },
+        {
+          "id": "execution_manifest.arxml::ServerUnicastTcp",
+          "kind": "applicationEndpoint",
+          "tag": "AP-APPLICATION-ENDPOINT",
+          "shortName": "ServerUnicastTcp",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 26,
+          "detail": {
+            "port": 8080,
+            "transport": "TCP"
+          },
+          "excerpt": "                        <AP-APPLICATION-ENDPOINT>\n                            <SHORT-NAME>ServerUnicastTcp</SHORT-NAME>\n                            <TP-CONFIGURATION>\n                                <TCP-TP>\n                                    <TCP-TP-PORT>\n                                        <PORT-NUMBER>8080</PORT-NUMBER>\n                                    </TCP-TP-PORT>\n                                </TCP-TP>\n                            </TP-CONFIGURATION>\n                        </AP-APPLICATION-ENDPOINT>\n                    </AP-APPLICATION-ENDPOINTS>\n                </ETHERNET-COMMUNICATION-CONNECTOR>"
+        },
+        {
+          "id": "execution_manifest.arxml::MachineFG",
+          "kind": "functionGroup",
+          "tag": "FUNCTION-GROUP",
+          "shortName": "MachineFG",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 39,
+          "detail": {},
+          "excerpt": "                    <FUNCTION-GROUP>\n                        <SHORT-NAME>MachineFG</SHORT-NAME>\n                        <MODE-DECLARATION-GROUP>\n                            <INITIAL-MODE-REF DEST=\"MODE-DECLARATION\">Off</INITIAL-MODE-REF>\n                            <MODE-DECLARATIONS>\n                                <MODE-DECLARATION>\n                                    <SHORT-NAME>Off</SHORT-NAME>\n                                </MODE-DECLARATION>\n                                <MODE-DECLARATION>\n                                    <SHORT-NAME>StartUp</SHORT-NAME>\n                                </MODE-DECLARATION>\n                            </MODE-DECLARATIONS>"
+        },
+        {
+          "id": "execution_manifest.arxml::Off",
+          "kind": "machineState",
+          "tag": "MODE-DECLARATION",
+          "shortName": "Off",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 44,
+          "detail": {},
+          "excerpt": "                                <MODE-DECLARATION>\n                                    <SHORT-NAME>Off</SHORT-NAME>\n                                </MODE-DECLARATION>\n                                <MODE-DECLARATION>\n                                    <SHORT-NAME>StartUp</SHORT-NAME>\n                                </MODE-DECLARATION>\n                            </MODE-DECLARATIONS>\n                        </MODE-DECLARATION-GROUP>\n                    </FUNCTION-GROUP>\n                </FUNCTION-GROUPS>        \n            </ELEMENTS>\n        </AR-PACKAGE>"
+        },
+        {
+          "id": "execution_manifest.arxml::StartUp",
+          "kind": "machineState",
+          "tag": "MODE-DECLARATION",
+          "shortName": "StartUp",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 47,
+          "detail": {},
+          "excerpt": "                                <MODE-DECLARATION>\n                                    <SHORT-NAME>StartUp</SHORT-NAME>\n                                </MODE-DECLARATION>\n                            </MODE-DECLARATIONS>\n                        </MODE-DECLARATION-GROUP>\n                    </FUNCTION-GROUP>\n                </FUNCTION-GROUPS>        \n            </ELEMENTS>\n        </AR-PACKAGE>\n    </AR-PACKAGES>\n</AUTOSAR>"
+        }
+      ]
+    },
+    {
+      "file": "configuration/extended_vehicle_manifest.arxml",
+      "package": "ExtendedVehicleManifest",
+      "lines": 74,
+      "elements": [
+        {
+          "id": "extended_vehicle_manifest.arxml::DoIpInstantiation",
+          "kind": "doipInstance",
+          "tag": "DO-IP-INSTANTIATION",
+          "shortName": "DoIpInstantiation",
+          "file": "configuration/extended_vehicle_manifest.arxml",
+          "line": 7,
+          "detail": {
+            "eid": 1,
+            "gid": 1,
+            "logical_address": 1,
+            "vehicle_announcement_count": 3
+          },
+          "excerpt": "                <DO-IP-INSTANTIATION>\n                    <EID>1</EID>\n                    <GID>1</GID>\n                    <LOGICAL-ADDRESS>1</LOGICAL-ADDRESS>\n                    <NETWORK-INTERFACES>\n                        <DO-IP-NETWORK-CONFIGURATION>\n                            <MAX-INITIAL-VEHICLE-ANNOUNCEMENT-TIME>0</MAX-INITIAL-VEHICLE-ANNOUNCEMENT-TIME>\n                            <VEHICLE-ANNOUNCEMENT-COUNT>3</VEHICLE-ANNOUNCEMENT-COUNT>\n                            <VEHICLE-ANNOUNCEMENT-INTERVAL>1</VEHICLE-ANNOUNCEMENT-INTERVAL>\n                        </DO-IP-NETWORK-CONFIGURATION>\n                    </NETWORK-INTERFACES>\n                </DO-IP-INSTANTIATION>"
+        },
+        {
+          "id": "extended_vehicle_manifest.arxml::ExtendedVehicleEP",
+          "kind": "endpoint",
+          "tag": "NETWORK-ENDPOINT",
+          "shortName": "ExtendedVehicleEP",
+          "file": "configuration/extended_vehicle_manifest.arxml",
+          "line": 23,
+          "detail": {
+            "ipv4": "127.0.0.1"
+          },
+          "excerpt": "                            <NETWORK-ENDPOINT>\n                                <SHORT-NAME>ExtendedVehicleEP</SHORT-NAME>\n                                <NETWORK-ENDPOINT-ADDRESSES>\n                                    <IPV-4-CONFIGURATION>\n                                        <IPV-4-ADDRESS>127.0.0.1</IPV-4-ADDRESS>\n                                    </IPV-4-CONFIGURATION>\n                                </NETWORK-ENDPOINT-ADDRESSES>\n                            </NETWORK-ENDPOINT>\n                        </NETWORK-ENDPOINTS>\n                    </ETHERNET-PHYSICAL-CHANNEL>\n                </COMMUNICATION-CLUSTER>\n                <ETHERNET-COMMUNICATION-CONNECTOR>"
+        },
+        {
+          "id": "extended_vehicle_manifest.arxml::ServerUnicastTcp",
+          "kind": "applicationEndpoint",
+          "tag": "AP-APPLICATION-ENDPOINT",
+          "shortName": "ServerUnicastTcp",
+          "file": "configuration/extended_vehicle_manifest.arxml",
+          "line": 37,
+          "detail": {
+            "port": 8081,
+            "transport": "TCP"
+          },
+          "excerpt": "                        <AP-APPLICATION-ENDPOINT>\n                            <SHORT-NAME>ServerUnicastTcp</SHORT-NAME>\n                            <TP-CONFIGURATION>\n                                <TCP-TP>\n                                    <TCP-TP-PORT>\n                                        <PORT-NUMBER>8081</PORT-NUMBER>\n                                    </TCP-TP-PORT>\n                                </TCP-TP>\n                            </TP-CONFIGURATION>\n                        </AP-APPLICATION-ENDPOINT>\n                    </AP-APPLICATION-ENDPOINTS>\n                </ETHERNET-COMMUNICATION-CONNECTOR>"
+        },
+        {
+          "id": "extended_vehicle_manifest.arxml::SomeIpServiceInstance_0x05",
+          "kind": "providedService",
+          "tag": "PROVIDED-SOMEIP-SERVICE-INSTANCE",
+          "shortName": "SomeIpServiceInstance_0x05",
+          "file": "configuration/extended_vehicle_manifest.arxml",
+          "line": 49,
+          "detail": {
+            "serviceInterfaceId": 5,
+            "version": "1.0",
+            "instanceId": 0
+          },
+          "excerpt": "                <PROVIDED-SOMEIP-SERVICE-INSTANCE>\n                    <SERVICE-INTERFACE-DEPLOYMENT>\n                        <SERVICE-INTERFACE-ID>5</SERVICE-INTERFACE-ID>\n                        <SERVICE-INTERFACE-VERSION>\n                            <MAJOR-VERSION>1</MAJOR-VERSION>\n                            <MINOR-VERSION>0</MINOR-VERSION>\n                        </SERVICE-INTERFACE-VERSION>\n                    </SERVICE-INTERFACE-DEPLOYMENT>\n                    <PROVIDED-EVENT-GROUPS>\n                        <SOMEIP-PROVIDED-EVENT-GROUP>\n                            <EVENT-MULTICAST-UDP-PORT>5555</EVENT-MULTICAST-UDP-PORT>\n                            <IPV-4-MULTICAST-IP-ADDRESS>239.0.0.1</IPV-4-MULTICAST-IP-ADDRESS>"
+        }
+      ]
+    },
+    {
+      "file": "configuration/health_monitoring_manifest.arxml",
+      "package": "PlatformHealthManagementManifest",
+      "lines": 44,
+      "elements": [
+        {
+          "id": "health_monitoring_manifest.arxml::GlobalSupervision",
+          "kind": "supervision",
+          "tag": "GLOBAL-SUPERVISION",
+          "shortName": "GlobalSupervision",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 7,
+          "detail": {
+            "alive_reference_cycle": 100,
+            "expected_alive_indications": 5,
+            "min_deadline": 5,
+            "max_deadline": 15
+          },
+          "excerpt": "                <GLOBAL-SUPERVISION>\n                    <CHECKPOINTS>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>AliveSupervision</SHORT-NAME>\n                            <CHECKPOINT-ID>0</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionSource</SHORT-NAME>\n                            <CHECKPOINT-ID>1</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>"
+        },
+        {
+          "id": "health_monitoring_manifest.arxml::AliveSupervision",
+          "kind": "checkpoint",
+          "tag": "SUPERVISION-CHECKPOINT",
+          "shortName": "AliveSupervision",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 9,
+          "detail": {
+            "checkpointId": 0
+          },
+          "excerpt": "                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>AliveSupervision</SHORT-NAME>\n                            <CHECKPOINT-ID>0</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionSource</SHORT-NAME>\n                            <CHECKPOINT-ID>1</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>\n                            <CHECKPOINT-ID>2</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>"
+        },
+        {
+          "id": "health_monitoring_manifest.arxml::DeadlineSupervisionSource",
+          "kind": "checkpoint",
+          "tag": "SUPERVISION-CHECKPOINT",
+          "shortName": "DeadlineSupervisionSource",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 13,
+          "detail": {
+            "checkpointId": 1
+          },
+          "excerpt": "                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionSource</SHORT-NAME>\n                            <CHECKPOINT-ID>1</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>\n                            <CHECKPOINT-ID>2</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                    </CHECKPOINTS>\n                    <ALIVE-SUPERVISION>\n                        <ALIVE-REFERENCE-CYCLE>100</ALIVE-REFERENCE-CYCLE>\n                        <CHECKPOINT-REF DEST=\"SUPERVISION-CHECKPOINT\">0</CHECKPOINT-REF>"
+        },
+        {
+          "id": "health_monitoring_manifest.arxml::DeadlineSupervisionTarget",
+          "kind": "checkpoint",
+          "tag": "SUPERVISION-CHECKPOINT",
+          "shortName": "DeadlineSupervisionTarget",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 17,
+          "detail": {
+            "checkpointId": 2
+          },
+          "excerpt": "                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>\n                            <CHECKPOINT-ID>2</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                    </CHECKPOINTS>\n                    <ALIVE-SUPERVISION>\n                        <ALIVE-REFERENCE-CYCLE>100</ALIVE-REFERENCE-CYCLE>\n                        <CHECKPOINT-REF DEST=\"SUPERVISION-CHECKPOINT\">0</CHECKPOINT-REF>\n                        <EXPECTED-ALIVE-INDICATIONS>5</EXPECTED-ALIVE-INDICATIONS>\n                        <FAILED-REFERENCE-CYCLES-TOLERANCE>100</FAILED-REFERENCE-CYCLES-TOLERANCE>\n                        <MIN-MARGIN>3</MIN-MARGIN>\n                        <MAX-MARGIN>2</MAX-MARGIN>"
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "module": "application",
+      "files": 2,
+      "tested": 0,
+      "loc": 479,
+      "classes": 1,
+      "coverage": 0.0
+    },
+    {
+      "module": "application/doip",
+      "files": 10,
+      "tested": 0,
+      "loc": 1009,
+      "classes": 5,
+      "coverage": 0.0
+    },
+    {
+      "module": "application/helper",
+      "files": 15,
+      "tested": 0,
+      "loc": 1340,
+      "classes": 10,
+      "coverage": 0.0
+    },
+    {
+      "module": "application/platform",
+      "files": 8,
+      "tested": 0,
+      "loc": 1449,
+      "classes": 4,
+      "coverage": 0.0
+    },
+    {
+      "module": "ara/com",
+      "files": 83,
+      "tested": 24,
+      "loc": 7193,
+      "classes": 47,
+      "coverage": 0.2892
+    },
+    {
+      "module": "ara/core",
+      "files": 7,
+      "tested": 7,
+      "loc": 1499,
+      "classes": 5,
+      "coverage": 1.0
+    },
+    {
+      "module": "ara/diag",
+      "files": 50,
+      "tested": 41,
+      "loc": 4328,
+      "classes": 33,
+      "coverage": 0.82
+    },
+    {
+      "module": "ara/exec",
+      "files": 25,
+      "tested": 22,
+      "loc": 1880,
+      "classes": 14,
+      "coverage": 0.88
+    },
+    {
+      "module": "ara/log",
+      "files": 14,
+      "tested": 7,
+      "loc": 938,
+      "classes": 7,
+      "coverage": 0.5
+    },
+    {
+      "module": "ara/phm",
+      "files": 14,
+      "tested": 12,
+      "loc": 803,
+      "classes": 8,
+      "coverage": 0.8571
+    },
+    {
+      "module": "ara/sm",
+      "files": 7,
+      "tested": 4,
+      "loc": 301,
+      "classes": 5,
+      "coverage": 0.5714
+    },
+    {
+      "module": "arxml",
+      "files": 6,
+      "tested": 4,
+      "loc": 410,
+      "classes": 4,
+      "coverage": 0.6667
+    },
+    {
+      "module": "src (root)",
+      "files": 1,
+      "tested": 0,
+      "loc": 73,
+      "classes": 0,
+      "coverage": 0.0
+    }
+  ],
+  "udsServices": [
+    {
+      "sid": "0x11",
+      "name": "ECUReset",
+      "files": [
+        "src/ara/diag/ecu_reset_request.h"
+      ],
+      "file": "src/ara/diag/ecu_reset_request.h",
+      "line": 23,
+      "excerpt": "        class EcuResetRequest : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x11};\n\n            std::promise<ResetRequestType> mResetTypePromise;\n            std::future<ResetRequestType> mResetTypeFuture;\n            bool mRapidShutdownEnabled;\n\n            bool TryHandleSubFunction(\n                uint8_t subFunction,\n                const MetaInfo &metaInfo,",
+      "tested": true,
+      "tests": [
+        "test/ara/diag/ecu_reset_request_test.cpp"
+      ]
+    },
+    {
+      "sid": "0x22",
+      "name": "ReadDataByIdentifier",
+      "files": [
+        "src/application/doip/obd_to_doip_converter.h",
+        "src/application/helper/read_data_by_identifier.h"
+      ],
+      "file": "src/application/doip/obd_to_doip_converter.h",
+      "line": 18,
+      "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);",
+      "tested": false,
+      "tests": []
+    },
+    {
+      "sid": "0x27",
+      "name": "SecurityAccess",
+      "files": [
+        "src/ara/diag/security_access.h"
+      ],
+      "file": "src/ara/diag/security_access.h",
+      "line": 40,
+      "excerpt": "        class SecurityAccess : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x27};\n            static const uint16_t cInitialSeed{1};\n\n            const size_t cSidIndex{0};\n            const size_t cSubFunctionIndex{1};\n            const size_t cDataRecordOffset{2};\n            const size_t cKeyLength{2};\n\n            const uint8_t cSuppressPosRspMask{0x80};",
+      "tested": true,
+      "tests": [
+        "test/ara/diag/security_access_test.cpp"
+      ]
+    },
+    {
+      "sid": "0x31",
+      "name": "RoutineControl",
+      "files": [
+        "src/ara/diag/generic_routine.h"
+      ],
+      "file": "src/ara/diag/generic_routine.h",
+      "line": 16,
+      "excerpt": "        class GenericRoutine : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x31};\n\n            ReentrancyType mReentrancy;\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancyType Service reentrancy type in a multi-threading contex\n            explicit GenericRoutine(",
+      "tested": true,
+      "tests": [
+        "test/ara/diag/generic_routine_test.cpp"
+      ]
+    },
+    {
+      "sid": "0x34",
+      "name": "RequestDownload",
+      "files": [
+        "src/ara/diag/download.h"
+      ],
+      "file": "src/ara/diag/download.h",
+      "line": 15,
+      "excerpt": "        class DownloadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x34};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kDownload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service",
+      "tested": false,
+      "tests": []
+    },
+    {
+      "sid": "0x35",
+      "name": "RequestUpload",
+      "files": [
+        "src/ara/diag/upload.h"
+      ],
+      "file": "src/ara/diag/upload.h",
+      "line": 15,
+      "excerpt": "        class UploadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x35};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kUpload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service",
+      "tested": false,
+      "tests": []
+    },
+    {
+      "sid": "0x36",
+      "name": "TransferData",
+      "files": [
+        "src/ara/diag/routing/transfer_data.h"
+      ],
+      "file": "src/ara/diag/routing/transfer_data.h",
+      "line": 25,
+      "excerpt": "            class TransferData : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x36};\n                static const size_t cMemoryPoolSize{1024};\n                static const uint8_t cInitialBlockSequenceCounter{1};\n\n                const size_t cSequenceCounterIndex{1};\n                const size_t cRequestParameterOffset{2};\n\n                const uint8_t cWrongBlockSequenceCounter{0x73};\n",
+      "tested": true,
+      "tests": [
+        "test/ara/diag/routing/transfer_data_test.cpp"
+      ]
+    },
+    {
+      "sid": "0x37",
+      "name": "RequestTransferExit",
+      "files": [
+        "src/ara/diag/routing/request_transfer_exit.h"
+      ],
+      "file": "src/ara/diag/routing/request_transfer_exit.h",
+      "line": 16,
+      "excerpt": "            class RequestTransferExit : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x37};\n                TransferData &mTransferData;\n\n            public:\n                /// @brief Constructor\n                /// @param specifier Owner instance specifier\n                /// @param transferData Transfer data service\n                RequestTransferExit(\n                    const core::InstanceSpecifier &specifier,",
+      "tested": true,
+      "tests": [
+        "test/ara/diag/routing/request_transfer_exit_test.cpp"
+      ]
+    }
+  ],
+  "dids": [
+    {
+      "did": "0xF505",
+      "name": "Engine Coolant Temperature",
+      "constant": "cEngineCoolantTemperatureDid",
+      "file": "src/application/helper/read_data_by_identifier.h",
+      "line": 22,
+      "excerpt": "            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n"
+    },
+    {
+      "did": "0xF50D",
+      "name": "Average Speed",
+      "constant": "cAverageSpeedDid",
+      "file": "src/application/helper/read_data_by_identifier.h",
+      "line": 18,
+      "excerpt": "        {\n        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n"
+    },
+    {
+      "did": "0xF52F",
+      "name": "Fuel Amount",
+      "constant": "cFuelAmountDid",
+      "file": "src/application/helper/read_data_by_identifier.h",
+      "line": 19,
+      "excerpt": "        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};"
+    },
+    {
+      "did": "0xF546",
+      "name": "External Temperature",
+      "constant": "cExternalTemperatureDid",
+      "file": "src/application/helper/read_data_by_identifier.h",
+      "line": 20,
+      "excerpt": "            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};"
+    },
+    {
+      "did": "0xF55E",
+      "name": "Average Fuel Consumption",
+      "constant": "cAverageFuelConsumptionDid",
+      "file": "src/application/helper/read_data_by_identifier.h",
+      "line": 21,
+      "excerpt": "            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};"
+    },
+    {
+      "did": "0xF5A6",
+      "name": "Odometer Value",
+      "constant": "cOdometerValueDid",
+      "file": "src/application/helper/read_data_by_identifier.h",
+      "line": 23,
+      "excerpt": "            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n\n            const std::string cResourcesUrl;"
+    }
+  ],
+  "dtcs": [
+    {
+      "name": "TelematicControlModuleEvent",
+      "dtc": "0xC198",
+      "decimal": 49560,
+      "file": "configuration/diagnostic_manager_manifest.arxml",
+      "line": 55
+    }
+  ],
+  "requirementPackages": {
+    "v1": {
+      "package": "OEM Platform Requirements Package",
+      "release": "R2026-01 (baseline)",
+      "issued": "2026-01-16",
+      "format": "ReqIF export, flattened",
+      "requirements": 14
+    },
+    "v2": {
+      "package": "OEM Platform Requirements Package",
+      "release": "R2026-02 (delivery 2)",
+      "issued": "2026-02-27",
+      "format": "ReqIF export, flattened",
+      "requirements": 17
+    }
+  },
+  "requirementDiff": [
+    {
+      "id": "OEM-COM-210",
+      "status": "unchanged",
+      "title": "Event group multicast distribution",
+      "before": "Notification events shall be distributed to subscribed clients over the configured multicast endpoint 239.0.0.1:5555.",
+      "after": "Notification events shall be distributed to subscribed clients over the configured multicast endpoint 239.0.0.1:5555.",
+      "asilBefore": "QM",
+      "asilAfter": "QM",
+      "capability": "someip_pubsub",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "MulticastUdp",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 25,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "someip_pubsub_server.cpp",
+          "file": "src/ara/com/someip/pubsub/someip_pubsub_server.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "someip_pubsub_client.cpp",
+          "file": "src/ara/com/someip/pubsub/someip_pubsub_client.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-COM-230",
+      "status": "unchanged",
+      "title": "RPC transport endpoint",
+      "before": "Platform RPC traffic shall use the TCP endpoint declared in the execution manifest (127.0.0.1:8080).",
+      "after": "Platform RPC traffic shall use the TCP endpoint declared in the execution manifest (127.0.0.1:8080).",
+      "asilBefore": "QM",
+      "asilAfter": "QM",
+      "capability": "someip_rpc",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "ServerUnicastTcp",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 26,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "socket_rpc_server.cpp",
+          "file": "src/ara/com/someip/rpc/socket_rpc_server.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "rpc_client.cpp",
+          "file": "src/ara/com/someip/rpc/rpc_client.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/com/someip/rpc/rpc_client_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-COM-250",
+      "status": "added",
+      "title": "End-to-end protection of safety-relevant events",
+      "before": null,
+      "after": "NEW: Safety-relevant notification events shall be protected with E2E Profile 11, including CRC, counter and data ID checks on the receiver side.",
+      "asilBefore": null,
+      "asilAfter": "C",
+      "capability": "e2e_protection",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "MulticastUdp",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 25,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "profile11.cpp",
+          "file": "src/ara/com/e2e/profile11.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/com/e2e/profile11_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "profile.h",
+          "file": "src/ara/com/e2e/profile.h",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-DIAG-610",
+      "status": "unchanged",
+      "title": "UDS request routing",
+      "before": "The diagnostic manager shall route an incoming UDS request to the handler registered for its SID and shall answer 0x7F/0x11 when no handler exists.",
+      "after": "The diagnostic manager shall route an incoming UDS request to the handler registered for its SID and shall answer 0x7F/0x11 when no handler exists.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "uds_routing",
+      "impacts": [
+        {
+          "type": "uds",
+          "label": "0x22",
+          "file": "src/application/doip/obd_to_doip_converter.h",
+          "line": 18,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "uds_service_router.cpp",
+          "file": "src/ara/diag/routing/uds_service_router.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/routing/uds_service_router_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "routable_uds_service.cpp",
+          "file": "src/ara/diag/routing/routable_uds_service.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-DIAG-620",
+      "status": "changed",
+      "title": "Read vehicle data by identifier",
+      "before": "ReadDataByIdentifier (0x22) shall serve the DIDs for average speed (0xF50D), fuel amount (0xF52F) and external temperature (0xF546) from the connected-vehicle resource cache.",
+      "after": "CHANGED: ReadDataByIdentifier (0x22) shall additionally serve average fuel consumption (0xF55E), engine coolant temperature (0xF505) and odometer value (0xF5A6) with a cache lifetime of at most 5 s.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "uds_read_did",
+      "impacts": [
+        {
+          "type": "uds",
+          "label": "0x22",
+          "file": "src/application/doip/obd_to_doip_converter.h",
+          "line": 18,
+          "resolved": true
+        },
+        {
+          "type": "did",
+          "label": "0xF50D",
+          "file": "src/application/helper/read_data_by_identifier.h",
+          "line": 18,
+          "resolved": true
+        },
+        {
+          "type": "did",
+          "label": "0xF52F",
+          "file": "src/application/helper/read_data_by_identifier.h",
+          "line": 19,
+          "resolved": true
+        },
+        {
+          "type": "did",
+          "label": "0xF546",
+          "file": "src/application/helper/read_data_by_identifier.h",
+          "line": 20,
+          "resolved": true
+        },
+        {
+          "type": "did",
+          "label": "0xF55E",
+          "file": "src/application/helper/read_data_by_identifier.h",
+          "line": 21,
+          "resolved": true
+        },
+        {
+          "type": "did",
+          "label": "0xF505",
+          "file": "src/application/helper/read_data_by_identifier.h",
+          "line": 22,
+          "resolved": true
+        },
+        {
+          "type": "did",
+          "label": "0xF5A6",
+          "file": "src/application/helper/read_data_by_identifier.h",
+          "line": 23,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "read_data_by_identifier.cpp",
+          "file": "src/application/helper/read_data_by_identifier.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "memory_cache.h",
+          "file": "src/application/helper/memory_cache.h",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-DIAG-630",
+      "status": "added",
+      "title": "Security access before privileged services",
+      "before": null,
+      "after": "NEW: SecurityAccess (0x27) seed/key exchange shall gate every privileged diagnostic service, with an attempt-delay timer after three failed key attempts.",
+      "asilBefore": null,
+      "asilAfter": "C",
+      "capability": "uds_security",
+      "impacts": [
+        {
+          "type": "uds",
+          "label": "0x27",
+          "file": "src/ara/diag/security_access.h",
+          "line": 40,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "security_access.cpp",
+          "file": "src/ara/diag/security_access.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/security_access_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "delay_timer.cpp",
+          "file": "src/ara/diag/routing/delay_timer.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/routing/delay_timer_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-DIAG-640",
+      "status": "unchanged",
+      "title": "ECU reset request",
+      "before": "ECUReset (0x11) shall be accepted only in a non-safety-critical machine state and shall confirm the reset before execution.",
+      "after": "ECUReset (0x11) shall be accepted only in a non-safety-critical machine state and shall confirm the reset before execution.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "uds_ecu_reset",
+      "impacts": [
+        {
+          "type": "uds",
+          "label": "0x11",
+          "file": "src/ara/diag/ecu_reset_request.h",
+          "line": 23,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "ecu_reset_request.cpp",
+          "file": "src/ara/diag/ecu_reset_request.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/ecu_reset_request_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-DIAG-660",
+      "status": "changed",
+      "title": "Software download and upload over UDS",
+      "before": "RequestDownload (0x34), TransferData (0x36) and RequestTransferExit (0x37) shall implement a block-sequence-counter protected download.",
+      "after": "CHANGED: RequestDownload (0x34), RequestUpload (0x35), TransferData (0x36) and RequestTransferExit (0x37) shall implement a block-sequence-counter protected transfer in both directions.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "uds_transfer",
+      "impacts": [
+        {
+          "type": "uds",
+          "label": "0x34",
+          "file": "src/ara/diag/download.h",
+          "line": 15,
+          "resolved": true
+        },
+        {
+          "type": "uds",
+          "label": "0x35",
+          "file": "src/ara/diag/upload.h",
+          "line": 15,
+          "resolved": true
+        },
+        {
+          "type": "uds",
+          "label": "0x36",
+          "file": "src/ara/diag/routing/transfer_data.h",
+          "line": 25,
+          "resolved": true
+        },
+        {
+          "type": "uds",
+          "label": "0x37",
+          "file": "src/ara/diag/routing/request_transfer_exit.h",
+          "line": 16,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "download.cpp",
+          "file": "src/ara/diag/download.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "upload.cpp",
+          "file": "src/ara/diag/upload.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "transfer_data.cpp",
+          "file": "src/ara/diag/routing/transfer_data.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/routing/transfer_data_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "request_transfer_exit.cpp",
+          "file": "src/ara/diag/routing/request_transfer_exit.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/routing/request_transfer_exit_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-DOIP-710",
+      "status": "unchanged",
+      "title": "Vehicle announcement",
+      "before": "The DoIP entity shall emit the configured number of vehicle announcement messages after link-up, carrying the configured EID/GID and logical address.",
+      "after": "The DoIP entity shall emit the configured number of vehicle announcement messages after link-up, carrying the configured EID/GID and logical address.",
+      "asilBefore": "QM",
+      "asilAfter": "QM",
+      "capability": "doip",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "DoIpInstantiation",
+          "file": "configuration/extended_vehicle_manifest.arxml",
+          "line": 7,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "vehicle_id_request_handler.cpp",
+          "file": "src/application/doip/vehicle_id_request_handler.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "doip_server.cpp",
+          "file": "src/application/doip/doip_server.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-DOIP-730",
+      "status": "added",
+      "title": "OBD request tunnelling over DoIP",
+      "before": null,
+      "after": "NEW: Legacy OBD-II mode 0x01 requests shall be converted to UDS 0x22 DID requests and tunnelled over the DoIP diagnostic message channel.",
+      "asilBefore": null,
+      "asilAfter": "QM",
+      "capability": "doip",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "DoIpInstantiation",
+          "file": "configuration/extended_vehicle_manifest.arxml",
+          "line": 7,
+          "resolved": true
+        },
+        {
+          "type": "uds",
+          "label": "0x22",
+          "file": "src/application/doip/obd_to_doip_converter.h",
+          "line": 18,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "obd_to_doip_converter.cpp",
+          "file": "src/application/doip/obd_to_doip_converter.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "diag_message_handler.cpp",
+          "file": "src/application/doip/diag_message_handler.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-DTC-810",
+      "status": "unchanged",
+      "title": "Telematics communication loss DTC",
+      "before": "Loss of communication with the telematic control module shall set DTC U0198 after the configured debounce time.",
+      "after": "Loss of communication with the telematic control module shall set DTC U0198 after the configured debounce time.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "dtc_reporting",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "TelematicControlModuleEvent",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 55,
+          "resolved": true
+        },
+        {
+          "type": "arxml",
+          "label": "TelematicControlModuleMonitor",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 48,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "dtc_information.cpp",
+          "file": "src/ara/diag/dtc_information.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/dtc_information_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "timer_based_debouncer.cpp",
+          "file": "src/ara/diag/debouncing/timer_based_debouncer.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/diag/debouncing/timer_based_debouncer_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-EM-310",
+      "status": "unchanged",
+      "title": "Function group state transitions",
+      "before": "Execution Management shall support the MachineFG function group with the states Off and StartUp, and shall reject transitions to undeclared states.",
+      "after": "Execution Management shall support the MachineFG function group with the states Off and StartUp, and shall reject transitions to undeclared states.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "exec_management",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "MachineFG",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 39,
+          "resolved": true
+        },
+        {
+          "type": "arxml",
+          "label": "StartUp",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 47,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "function_group.cpp",
+          "file": "src/ara/exec/function_group.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/exec/function_group_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "function_group_state.cpp",
+          "file": "src/ara/exec/function_group_state.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/exec/function_group_state_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "state_server.cpp",
+          "file": "src/ara/exec/state_server.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/exec/state_server_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-EM-330",
+      "status": "removed",
+      "title": "Deterministic client cycle activation",
+      "before": "A deterministic application shall be able to wait for the next activation cycle and obtain a reproducible random seed per cycle.",
+      "after": null,
+      "asilBefore": "B",
+      "asilAfter": null,
+      "capability": "exec_management",
+      "impacts": [
+        {
+          "type": "source",
+          "label": "deterministic_client.cpp",
+          "file": "src/ara/exec/deterministic_client.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/exec/deterministic_client_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "worker_thread.cpp",
+          "file": "src/ara/exec/worker_thread.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/exec/worker_thread_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-PHM-510",
+      "status": "unchanged",
+      "title": "Alive supervision of platform processes",
+      "before": "Platform Health Management shall report a supervision failure when fewer than the expected alive indications are reported within the configured reference cycle.",
+      "after": "Platform Health Management shall report a supervision failure when fewer than the expected alive indications are reported within the configured reference cycle.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "phm_supervision",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "AliveSupervision",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 9,
+          "resolved": true
+        },
+        {
+          "type": "arxml",
+          "label": "GlobalSupervision",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 7,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "alive_supervision.cpp",
+          "file": "src/ara/phm/supervisors/alive_supervision.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/phm/supervisors/alive_supervision_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "global_supervision.cpp",
+          "file": "src/ara/phm/supervisors/global_supervision.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/phm/supervisors/global_supervision_test.cpp"
+        }
+      ]
+    },
+    {
+      "id": "OEM-PHM-520",
+      "status": "added",
+      "title": "Deadline supervision between checkpoints",
+      "before": null,
+      "after": "NEW: The transition from DeadlineSupervisionSource to DeadlineSupervisionTarget shall be reported as failed when it completes outside the configured [5 ms, 15 ms] window.",
+      "asilBefore": null,
+      "asilAfter": "C",
+      "capability": "phm_supervision",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "DeadlineSupervisionSource",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 13,
+          "resolved": true
+        },
+        {
+          "type": "arxml",
+          "label": "DeadlineSupervisionTarget",
+          "file": "configuration/health_monitoring_manifest.arxml",
+          "line": 17,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "deadline_supervision.cpp",
+          "file": "src/ara/phm/supervisors/deadline_supervision.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/phm/supervisors/deadline_supervision_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "checkpoint_communicator.cpp",
+          "file": "src/ara/phm/checkpoint_communicator.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-SD-101",
+      "status": "changed",
+      "title": "Service discovery offer timing",
+      "before": "The platform shall announce every provided SOME/IP service instance using an initial offer delay drawn from the configured [100 ms, 200 ms] window, and shall enter the repetition phase afterwards.",
+      "after": "The platform shall announce every provided SOME/IP service instance using an initial offer delay drawn from the configured [100 ms, 200 ms] window, shall enter the repetition phase afterwards, and shall stop offering within one cycle of the service going down.",
+      "asilBefore": "QM",
+      "asilAfter": "B",
+      "capability": "someip_sd",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "SomeIpServiceInstance_0x05",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 37,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "someip_sd_server.cpp",
+          "file": "src/ara/com/someip/sd/someip_sd_server.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "initial_wait_state.h",
+          "file": "src/ara/com/someip/sd/fsm/initial_wait_state.h",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "repetition_state.h",
+          "file": "src/ara/com/someip/sd/fsm/repetition_state.h",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "stopped_state.cpp",
+          "file": "src/ara/com/someip/sd/fsm/stopped_state.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-SD-104",
+      "status": "unchanged",
+      "title": "Client find behaviour for required services",
+      "before": "A required service instance shall issue FindService entries until the service is seen, honouring the configured initial find delay.",
+      "after": "A required service instance shall issue FindService entries until the service is seen, honouring the configured initial find delay.",
+      "asilBefore": "QM",
+      "asilAfter": "QM",
+      "capability": "someip_sd",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "DiagnosticManagerEP",
+          "file": "configuration/diagnostic_manager_manifest.arxml",
+          "line": 11,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "someip_sd_client.cpp",
+          "file": "src/ara/com/someip/sd/someip_sd_client.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        },
+        {
+          "type": "source",
+          "label": "client_initial_wait_state.cpp",
+          "file": "src/ara/com/someip/sd/fsm/client_initial_wait_state.cpp",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    },
+    {
+      "id": "OEM-SM-410",
+      "status": "unchanged",
+      "title": "Machine power mode notification",
+      "before": "State Management shall expose the current power mode to subscribed applications through the notifier interface.",
+      "after": "State Management shall expose the current power mode to subscribed applications through the notifier interface.",
+      "asilBefore": "B",
+      "asilAfter": "B",
+      "capability": "state_management",
+      "impacts": [
+        {
+          "type": "arxml",
+          "label": "Off",
+          "file": "configuration/execution_manifest.arxml",
+          "line": 44,
+          "resolved": true
+        },
+        {
+          "type": "source",
+          "label": "power_mode.h",
+          "file": "src/ara/sm/power_mode.h",
+          "line": 1,
+          "resolved": true,
+          "test": "test/ara/sm/power_mode_test.cpp"
+        },
+        {
+          "type": "source",
+          "label": "notifier.h",
+          "file": "src/ara/sm/notifier.h",
+          "line": 1,
+          "resolved": true,
+          "test": null
+        }
+      ]
+    }
+  ],
+  "traceability": [
+    {
+      "id": "OEM-SD-101",
+      "title": "Service discovery offer timing",
+      "asil": "B",
+      "capability": "someip_sd",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-SD-101",
+            "sub": "Service discovery offer timing",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "The platform shall announce every provided SOME/IP service instance using an initial offer delay drawn from the configured [100 ms, 200 ms] window, shall enter the repetition phase afterwards, and shall stop offering within one cycle of the service going down."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "SomeIpServiceInstance_0x05",
+            "sub": "REQUIRED-SOMEIP-SERVICE-INSTANCE",
+            "file": "configuration/diagnostic_manager_manifest.arxml",
+            "line": 37,
+            "excerpt": "                <REQUIRED-SOMEIP-SERVICE-INSTANCE>\n                    <SERVICE-INTERFACE-DEPLOYMENT>\n                        <SERVICE-INTERFACE-ID>5</SERVICE-INTERFACE-ID>\n                    </SERVICE-INTERFACE-DEPLOYMENT>\n                    <SD-CLIENT-CONFIG>\n                        <INITIAL-FIND-BEHAVIOR>\n                            <INITIAL-DELAY-MIN-VALUE>100</INITIAL-DELAY-MIN-VALUE>\n                            <INITIAL-DELAY-MAX-VALUE>200</INITIAL-DELAY-MAX-VALUE>\n                        </INITIAL-FIND-BEHAVIOR>\n                    </SD-CLIENT-CONFIG>\n                </REQUIRED-SOMEIP-SERVICE-INSTANCE>\n                <DIAGNOSTIC-MONITOR-INTERFACE>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "someip_sd_server.cpp",
+            "sub": "ara::com::someip::sd",
+            "file": "src/ara/com/someip/sd/someip_sd_server.cpp",
+            "line": 1,
+            "excerpt": "#include <stdexcept>\n#include <thread>\n#include \"./someip_sd_server.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace sd"
+          },
+          {
+            "label": "initial_wait_state.h",
+            "sub": "ara::com::someip::sd::fsm",
+            "file": "src/ara/com/someip/sd/fsm/initial_wait_state.h",
+            "line": 23,
+            "excerpt": "                    template <typename T>\n                    class InitialWaitState : public TimerSetState<T>\n                    {\n                    protected:\n                        /// @brief Initial delay lower bound in milliseconds\n                        const int InitialDelayMin;\n\n                        /// @brief Initial delay higher bound in milliseconds\n                        const int InitialDelayMax;\n\n                        virtual void SetTimer() override\n                        {"
+          },
+          {
+            "label": "repetition_state.h",
+            "sub": "ara::com::someip::sd::fsm",
+            "file": "src/ara/com/someip/sd/fsm/repetition_state.h",
+            "line": 23,
+            "excerpt": "                    template <typename T>\n                    class RepetitionState : public TimerSetState<T>\n                    {\n                    protected:\n                        /// @brief Maximum iteration in repetition phase\n                        const int RepetitionsMax;\n\n                        /// @brief Repetition iteration delay in milliseconds\n                        const int RepetitionsBaseDelay;\n\n                        virtual void SetTimer() override\n                        {"
+          },
+          {
+            "label": "stopped_state.cpp",
+            "sub": "ara::com::someip::sd::fsm",
+            "file": "src/ara/com/someip/sd/fsm/stopped_state.cpp",
+            "line": 1,
+            "excerpt": "#include \"./stopped_state.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace sd\n            {\n                namespace fsm"
+          }
+        ],
+        "test": []
+      },
+      "gaps": [
+        "no unit test"
+      ]
+    },
+    {
+      "id": "OEM-SD-104",
+      "title": "Client find behaviour for required services",
+      "asil": "QM",
+      "capability": "someip_sd",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-SD-104",
+            "sub": "Client find behaviour for required services",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "A required service instance shall issue FindService entries until the service is seen, honouring the configured initial find delay."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "DiagnosticManagerEP",
+            "sub": "NETWORK-ENDPOINT",
+            "file": "configuration/diagnostic_manager_manifest.arxml",
+            "line": 11,
+            "excerpt": "                            <NETWORK-ENDPOINT>\n                                <SHORT-NAME>DiagnosticManagerEP</SHORT-NAME>\n                                <NETWORK-ENDPOINT-ADDRESSES>\n                                    <IPV-4-CONFIGURATION>\n                                        <IPV-4-ADDRESS>239.0.0.1</IPV-4-ADDRESS>\n                                    </IPV-4-CONFIGURATION>\n                                </NETWORK-ENDPOINT-ADDRESSES>\n                            </NETWORK-ENDPOINT>\n                        </NETWORK-ENDPOINTS>\n                    </ETHERNET-PHYSICAL-CHANNEL>\n                </COMMUNICATION-CLUSTER>\n                <ETHERNET-COMMUNICATION-CONNECTOR>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "someip_sd_client.cpp",
+            "sub": "ara::com::someip::sd",
+            "file": "src/ara/com/someip/sd/someip_sd_client.cpp",
+            "line": 1,
+            "excerpt": "#include <stdexcept>\n#include \"../../option/ipv4_endpoint_option.h\"\n#include \"./someip_sd_client.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace sd"
+          },
+          {
+            "label": "client_initial_wait_state.cpp",
+            "sub": "ara::com::someip::sd::fsm",
+            "file": "src/ara/com/someip/sd/fsm/client_initial_wait_state.cpp",
+            "line": 1,
+            "excerpt": "#include \"client_initial_wait_state.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace sd\n            {\n                namespace fsm"
+          }
+        ],
+        "test": []
+      },
+      "gaps": [
+        "no unit test"
+      ]
+    },
+    {
+      "id": "OEM-COM-210",
+      "title": "Event group multicast distribution",
+      "asil": "QM",
+      "capability": "someip_pubsub",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-COM-210",
+            "sub": "Event group multicast distribution",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "Notification events shall be distributed to subscribed clients over the configured multicast endpoint 239.0.0.1:5555."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "MulticastUdp",
+            "sub": "AP-APPLICATION-ENDPOINT",
+            "file": "configuration/diagnostic_manager_manifest.arxml",
+            "line": 25,
+            "excerpt": "                        <AP-APPLICATION-ENDPOINT>\n                            <SHORT-NAME>MulticastUdp</SHORT-NAME>\n                            <TP-CONFIGURATION>\n                                <UDP-TP>\n                                    <UDP-TP-PORT>\n                                        <PORT-NUMBER>5555</PORT-NUMBER>\n                                    </UDP-TP-PORT>\n                                </UDP-TP>\n                            </TP-CONFIGURATION>\n                        </AP-APPLICATION-ENDPOINT>\n                    </AP-APPLICATION-ENDPOINTS>\n                </ETHERNET-COMMUNICATION-CONNECTOR>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "someip_pubsub_server.cpp",
+            "sub": "ara::com::someip::pubsub",
+            "file": "src/ara/com/someip/pubsub/someip_pubsub_server.cpp",
+            "line": 1,
+            "excerpt": "#include \"../../entry/eventgroup_entry.h\"\n#include \"./someip_pubsub_server.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace pubsub\n            {"
+          },
+          {
+            "label": "someip_pubsub_client.cpp",
+            "sub": "ara::com::someip::pubsub",
+            "file": "src/ara/com/someip/pubsub/someip_pubsub_client.cpp",
+            "line": 1,
+            "excerpt": "#include \"./someip_pubsub_client.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace pubsub\n            {\n                SomeIpPubSubClient::SomeIpPubSubClient("
+          }
+        ],
+        "test": []
+      },
+      "gaps": [
+        "no unit test"
+      ]
+    },
+    {
+      "id": "OEM-COM-230",
+      "title": "RPC transport endpoint",
+      "asil": "QM",
+      "capability": "someip_rpc",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-COM-230",
+            "sub": "RPC transport endpoint",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "Platform RPC traffic shall use the TCP endpoint declared in the execution manifest (127.0.0.1:8080)."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "ServerUnicastTcp",
+            "sub": "AP-APPLICATION-ENDPOINT",
+            "file": "configuration/execution_manifest.arxml",
+            "line": 26,
+            "excerpt": "                        <AP-APPLICATION-ENDPOINT>\n                            <SHORT-NAME>ServerUnicastTcp</SHORT-NAME>\n                            <TP-CONFIGURATION>\n                                <TCP-TP>\n                                    <TCP-TP-PORT>\n                                        <PORT-NUMBER>8080</PORT-NUMBER>\n                                    </TCP-TP-PORT>\n                                </TCP-TP>\n                            </TP-CONFIGURATION>\n                        </AP-APPLICATION-ENDPOINT>\n                    </AP-APPLICATION-ENDPOINTS>\n                </ETHERNET-COMMUNICATION-CONNECTOR>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "socket_rpc_server.cpp",
+            "sub": "ara::com::someip::rpc",
+            "file": "src/ara/com/someip/rpc/socket_rpc_server.cpp",
+            "line": 1,
+            "excerpt": "#include <algorithm>\n#include \"./socket_rpc_server.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace rpc\n            {"
+          },
+          {
+            "label": "rpc_client.cpp",
+            "sub": "ara::com::someip::rpc",
+            "file": "src/ara/com/someip/rpc/rpc_client.cpp",
+            "line": 1,
+            "excerpt": "#include \"./rpc_client.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace rpc\n            {\n                RpcClient::RpcClient("
+          }
+        ],
+        "test": [
+          {
+            "label": "rpc_client_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/com/someip/rpc/rpc_client_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../../../src/ara/com/someip/rpc/rpc_client.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace someip\n        {\n            namespace rpc\n            {"
+          }
+        ]
+      },
+      "gaps": []
+    },
+    {
+      "id": "OEM-COM-250",
+      "title": "End-to-end protection of safety-relevant events",
+      "asil": "C",
+      "capability": "e2e_protection",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-COM-250",
+            "sub": "End-to-end protection of safety-relevant events",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "NEW: Safety-relevant notification events shall be protected with E2E Profile 11, including CRC, counter and data ID checks on the receiver side."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "MulticastUdp",
+            "sub": "AP-APPLICATION-ENDPOINT",
+            "file": "configuration/diagnostic_manager_manifest.arxml",
+            "line": 25,
+            "excerpt": "                        <AP-APPLICATION-ENDPOINT>\n                            <SHORT-NAME>MulticastUdp</SHORT-NAME>\n                            <TP-CONFIGURATION>\n                                <UDP-TP>\n                                    <UDP-TP-PORT>\n                                        <PORT-NUMBER>5555</PORT-NUMBER>\n                                    </UDP-TP-PORT>\n                                </UDP-TP>\n                            </TP-CONFIGURATION>\n                        </AP-APPLICATION-ENDPOINT>\n                    </AP-APPLICATION-ENDPOINTS>\n                </ETHERNET-COMMUNICATION-CONNECTOR>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "profile11.cpp",
+            "sub": "ara::com::e2e",
+            "file": "src/ara/com/e2e/profile11.cpp",
+            "line": 1,
+            "excerpt": "#include <stdexcept>\n#include \"./profile11.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace e2e\n        {\n            constexpr std::size_t Profile11::cTableSize;\n            volatile std::atomic_bool Profile11::mCrcTableInitialized{false};"
+          },
+          {
+            "label": "profile.h",
+            "sub": "ara::com::e2e",
+            "file": "src/ara/com/e2e/profile.h",
+            "line": 25,
+            "excerpt": "            /// @brief E2E protection profile abstract class\n            class Profile\n            {\n            protected:\n                Profile() noexcept = default;\n\n            public:\n                virtual ~Profile() noexcept = default;\n\n                /// @brief Try to protect a message payload by inserting a CRC header\n                /// @param[in] unprotectedData Message payload without any protection\n                /// @param[out] protectedData Message payload containing the CRC protection"
+          }
+        ],
+        "test": [
+          {
+            "label": "profile11_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/com/e2e/profile11_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../../src/ara/com/e2e/profile11.h\"\n\nnamespace ara\n{\n    namespace com\n    {\n        namespace e2e\n        {\n            TEST(Profile11Test, InvalidProtection)\n            {"
+          }
+        ]
+      },
+      "gaps": []
+    },
+    {
+      "id": "OEM-EM-310",
+      "title": "Function group state transitions",
+      "asil": "B",
+      "capability": "exec_management",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-EM-310",
+            "sub": "Function group state transitions",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "Execution Management shall support the MachineFG function group with the states Off and StartUp, and shall reject transitions to undeclared states."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "MachineFG",
+            "sub": "FUNCTION-GROUP",
+            "file": "configuration/execution_manifest.arxml",
+            "line": 39,
+            "excerpt": "                    <FUNCTION-GROUP>\n                        <SHORT-NAME>MachineFG</SHORT-NAME>\n                        <MODE-DECLARATION-GROUP>\n                            <INITIAL-MODE-REF DEST=\"MODE-DECLARATION\">Off</INITIAL-MODE-REF>\n                            <MODE-DECLARATIONS>\n                                <MODE-DECLARATION>\n                                    <SHORT-NAME>Off</SHORT-NAME>\n                                </MODE-DECLARATION>\n                                <MODE-DECLARATION>\n                                    <SHORT-NAME>StartUp</SHORT-NAME>\n                                </MODE-DECLARATION>\n                            </MODE-DECLARATIONS>"
+          },
+          {
+            "label": "StartUp",
+            "sub": "MODE-DECLARATION",
+            "file": "configuration/execution_manifest.arxml",
+            "line": 47,
+            "excerpt": "                                <MODE-DECLARATION>\n                                    <SHORT-NAME>StartUp</SHORT-NAME>\n                                </MODE-DECLARATION>\n                            </MODE-DECLARATIONS>\n                        </MODE-DECLARATION-GROUP>\n                    </FUNCTION-GROUP>\n                </FUNCTION-GROUPS>        \n            </ELEMENTS>\n        </AR-PACKAGE>\n    </AR-PACKAGES>\n</AUTOSAR>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "function_group.cpp",
+            "sub": "ara::exec",
+            "file": "src/ara/exec/function_group.cpp",
+            "line": 1,
+            "excerpt": "#include \"./function_group.h\"\n\nnamespace ara\n{\n    namespace exec\n    {\n        FunctionGroup::FunctionGroup(std::string metaModelIdentifier) : mInstnaceSpecifier{metaModelIdentifier}\n        {\n        }\n\n        core::Result<FunctionGroup> FunctionGroup::Create("
+          },
+          {
+            "label": "function_group_state.cpp",
+            "sub": "ara::exec",
+            "file": "src/ara/exec/function_group_state.cpp",
+            "line": 1,
+            "excerpt": "#include <algorithm>\n#include \"../com/helper/payload_helper.h\"\n#include \"./function_group_state.h\"\n\nnamespace ara\n{\n    namespace exec\n    {\n        FunctionGroupState::FunctionGroupState(\n            const FunctionGroup *functionGroup,\n            std::string metaModelIdentifier) : mFunctionGroup{functionGroup},"
+          },
+          {
+            "label": "state_server.cpp",
+            "sub": "ara::exec",
+            "file": "src/ara/exec/state_server.cpp",
+            "line": 1,
+            "excerpt": "#include \"./state_server.h\"\n\nnamespace ara\n{\n    namespace exec\n    {\n        StateServer::StateServer(\n            com::someip::rpc::RpcServer *rpcServer,\n            std::set<std::pair<std::string, std::string>> &&functionGroupStates,\n            std::map<std::string, std::string> &&initialStates) : mRpcServer{rpcServer},\n                                                                  mFunctionGroupStates{std::move(functionGroupStates)},"
+          }
+        ],
+        "test": [
+          {
+            "label": "function_group_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/exec/function_group_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../src/ara/exec/function_group.h\"\n\nnamespace ara\n{\n    namespace exec\n    {\n        TEST(FunctionGroupTest, Factory)\n        {\n            const std::string cShortnamePath{\"application\"};\n            auto _functionGroup = FunctionGroup::Create(cShortnamePath).Value();"
+          },
+          {
+            "label": "function_group_state_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/exec/function_group_state_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../src/ara/exec/function_group_state.h\"\n\nnamespace ara\n{\n    namespace exec\n    {\n        TEST(FunctionGroupStateTest, Factory)\n        {\n            const std::string cShortnamePath{\"application\"};\n            const std::string cState{\"stateXYZ\"};"
+          },
+          {
+            "label": "state_server_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/exec/state_server_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../src/ara/exec/state_server.h\"\n#include \"./helper/mock_rpc_server.h\"\n\nnamespace ara\n{\n    namespace exec\n    {\n        class StateServerTest : public testing::Test\n        {\n        private:"
+          }
+        ]
+      },
+      "gaps": []
+    },
+    {
+      "id": "OEM-SM-410",
+      "title": "Machine power mode notification",
+      "asil": "B",
+      "capability": "state_management",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-SM-410",
+            "sub": "Machine power mode notification",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "State Management shall expose the current power mode to subscribed applications through the notifier interface."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "Off",
+            "sub": "MODE-DECLARATION",
+            "file": "configuration/execution_manifest.arxml",
+            "line": 44,
+            "excerpt": "                                <MODE-DECLARATION>\n                                    <SHORT-NAME>Off</SHORT-NAME>\n                                </MODE-DECLARATION>\n                                <MODE-DECLARATION>\n                                    <SHORT-NAME>StartUp</SHORT-NAME>\n                                </MODE-DECLARATION>\n                            </MODE-DECLARATIONS>\n                        </MODE-DECLARATION-GROUP>\n                    </FUNCTION-GROUP>\n                </FUNCTION-GROUPS>        \n            </ELEMENTS>\n        </AR-PACKAGE>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "power_mode.h",
+            "sub": "ara::sm",
+            "file": "src/ara/sm/power_mode.h",
+            "line": 1,
+            "excerpt": "#ifndef POWER_MODE_H\n#define POWER_MODE_H\n\nnamespace ara\n{\n    namespace sm\n    {\n        /// @brief Power mode request message\n        enum class PowerModeMsg\n        {\n            kOn,        ///< Normal operation mode"
+          },
+          {
+            "label": "notifier.h",
+            "sub": "ara::sm",
+            "file": "src/ara/sm/notifier.h",
+            "line": 19,
+            "excerpt": "        template <typename T>\n        class Notifier\n        {\n        private:\n            T &mState;\n            std::vector<NotificationHandler<T>> mSubsribers;\n\n        public:\n            /// @brief Constructor\n            /// @param state State\n            Notifier(T &state) : mState{state}\n            {"
+          }
+        ],
+        "test": [
+          {
+            "label": "power_mode_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/sm/power_mode_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../src/ara/sm/power_mode.h\"\n#include \"../../../src/ara/com/cg/communication_group_server.h\"\n#include \"../../../src/ara/com/cg/communication_group_client.h\"\n\nnamespace ara\n{\n    namespace sm\n    {\n        class PowerModeTest : public testing::Test\n        {"
+          }
+        ]
+      },
+      "gaps": []
+    },
+    {
+      "id": "OEM-PHM-510",
+      "title": "Alive supervision of platform processes",
+      "asil": "B",
+      "capability": "phm_supervision",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-PHM-510",
+            "sub": "Alive supervision of platform processes",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "Platform Health Management shall report a supervision failure when fewer than the expected alive indications are reported within the configured reference cycle."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "AliveSupervision",
+            "sub": "SUPERVISION-CHECKPOINT",
+            "file": "configuration/health_monitoring_manifest.arxml",
+            "line": 9,
+            "excerpt": "                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>AliveSupervision</SHORT-NAME>\n                            <CHECKPOINT-ID>0</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionSource</SHORT-NAME>\n                            <CHECKPOINT-ID>1</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>\n                            <CHECKPOINT-ID>2</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>"
+          },
+          {
+            "label": "GlobalSupervision",
+            "sub": "GLOBAL-SUPERVISION",
+            "file": "configuration/health_monitoring_manifest.arxml",
+            "line": 7,
+            "excerpt": "                <GLOBAL-SUPERVISION>\n                    <CHECKPOINTS>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>AliveSupervision</SHORT-NAME>\n                            <CHECKPOINT-ID>0</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionSource</SHORT-NAME>\n                            <CHECKPOINT-ID>1</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "alive_supervision.cpp",
+            "sub": "ara::phm::supervisors",
+            "file": "src/ara/phm/supervisors/alive_supervision.cpp",
+            "line": 1,
+            "excerpt": "#include <stdexcept>\n#include <thread>\n#include \"./alive_supervision.h\"\n\nnamespace ara\n{\n    namespace phm\n    {\n        namespace supervisors\n        {\n            const TypeOfSupervision AliveSupervision::cSupervisionType{"
+          },
+          {
+            "label": "global_supervision.cpp",
+            "sub": "ara::phm::supervisors",
+            "file": "src/ara/phm/supervisors/global_supervision.cpp",
+            "line": 1,
+            "excerpt": "#include \"./global_supervision.h\"\n\nnamespace ara\n{\n    namespace phm\n    {\n        namespace supervisors\n        {\n            GlobalSupervision::GlobalSupervision(\n                std::initializer_list<ElementarySupervision *> supervisors) : mSupervisors{supervisors},\n                                                                              mOnGlobalStatusChanged{nullptr}"
+          }
+        ],
+        "test": [
+          {
+            "label": "alive_supervision_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/phm/supervisors/alive_supervision_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../../src/ara/phm/supervisors/alive_supervision.h\"\n\nnamespace ara\n{\n    namespace phm\n    {\n        namespace supervisors\n        {\n            TEST(AliveSupervisionTest, ZeroMinMarginConstruction)\n            {"
+          },
+          {
+            "label": "global_supervision_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/phm/supervisors/global_supervision_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"./dummy_supervision.h\"\n#include \"../../../../src/ara/phm/supervisors/global_supervision.h\"\n\nnamespace ara\n{\n    namespace phm\n    {\n        namespace supervisors\n        {\n            TEST(GlobalSupervisionTest, EmptyConstructor)"
+          }
+        ]
+      },
+      "gaps": []
+    },
+    {
+      "id": "OEM-PHM-520",
+      "title": "Deadline supervision between checkpoints",
+      "asil": "C",
+      "capability": "phm_supervision",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-PHM-520",
+            "sub": "Deadline supervision between checkpoints",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "NEW: The transition from DeadlineSupervisionSource to DeadlineSupervisionTarget shall be reported as failed when it completes outside the configured [5 ms, 15 ms] window."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "DeadlineSupervisionSource",
+            "sub": "SUPERVISION-CHECKPOINT",
+            "file": "configuration/health_monitoring_manifest.arxml",
+            "line": 13,
+            "excerpt": "                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionSource</SHORT-NAME>\n                            <CHECKPOINT-ID>1</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>\n                            <CHECKPOINT-ID>2</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                    </CHECKPOINTS>\n                    <ALIVE-SUPERVISION>\n                        <ALIVE-REFERENCE-CYCLE>100</ALIVE-REFERENCE-CYCLE>\n                        <CHECKPOINT-REF DEST=\"SUPERVISION-CHECKPOINT\">0</CHECKPOINT-REF>"
+          },
+          {
+            "label": "DeadlineSupervisionTarget",
+            "sub": "SUPERVISION-CHECKPOINT",
+            "file": "configuration/health_monitoring_manifest.arxml",
+            "line": 17,
+            "excerpt": "                        <SUPERVISION-CHECKPOINT>\n                            <SHORT-NAME>DeadlineSupervisionTarget</SHORT-NAME>\n                            <CHECKPOINT-ID>2</CHECKPOINT-ID>\n                        </SUPERVISION-CHECKPOINT>\n                    </CHECKPOINTS>\n                    <ALIVE-SUPERVISION>\n                        <ALIVE-REFERENCE-CYCLE>100</ALIVE-REFERENCE-CYCLE>\n                        <CHECKPOINT-REF DEST=\"SUPERVISION-CHECKPOINT\">0</CHECKPOINT-REF>\n                        <EXPECTED-ALIVE-INDICATIONS>5</EXPECTED-ALIVE-INDICATIONS>\n                        <FAILED-REFERENCE-CYCLES-TOLERANCE>100</FAILED-REFERENCE-CYCLES-TOLERANCE>\n                        <MIN-MARGIN>3</MIN-MARGIN>\n                        <MAX-MARGIN>2</MAX-MARGIN>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "deadline_supervision.cpp",
+            "sub": "ara::phm::supervisors",
+            "file": "src/ara/phm/supervisors/deadline_supervision.cpp",
+            "line": 1,
+            "excerpt": "#include \"./deadline_supervision.h\"\n\nnamespace ara\n{\n    namespace phm\n    {\n        namespace supervisors\n        {\n            const TypeOfSupervision DeadlineSupervision::cSupervisionType{\n                TypeOfSupervision::DeadlineSupervision};\n"
+          },
+          {
+            "label": "checkpoint_communicator.cpp",
+            "sub": "ara::phm",
+            "file": "src/ara/phm/checkpoint_communicator.cpp",
+            "line": 1,
+            "excerpt": "#include \"./checkpoint_communicator.h\"\n\nnamespace ara\n{\n    namespace phm\n    {\n        void CheckpointCommunicator::SetCallback(CheckpointReception &&callback)\n        {\n            Callback = std::move(callback);\n        }\n"
+          }
+        ],
+        "test": [
+          {
+            "label": "deadline_supervision_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/phm/supervisors/deadline_supervision_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../../src/ara/phm/supervisors/deadline_supervision.h\"\n\nnamespace ara\n{\n    namespace phm\n    {\n        namespace supervisors\n        {\n            static const int cNyquistMargin = 2;\n"
+          }
+        ]
+      },
+      "gaps": []
+    },
+    {
+      "id": "OEM-DIAG-610",
+      "title": "UDS request routing",
+      "asil": "B",
+      "capability": "uds_routing",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DIAG-610",
+            "sub": "UDS request routing",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "The diagnostic manager shall route an incoming UDS request to the handler registered for its SID and shall answer 0x7F/0x11 when no handler exists."
+          }
+        ],
+        "manifest": [],
+        "service": [
+          {
+            "label": "UDS 0x22 ReadDataByIdentifier",
+            "sub": "ara::diag::routing",
+            "file": "src/application/doip/obd_to_doip_converter.h",
+            "line": 18,
+            "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);"
+          }
+        ],
+        "source": [
+          {
+            "label": "uds_service_router.cpp",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/routing/uds_service_router.cpp",
+            "line": 1,
+            "excerpt": "#include \"./uds_service_router.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            void UdsServiceRouter::AddService(RoutableUdsService *service)\n            {\n                mServices[service->GetSid()] = service;"
+          },
+          {
+            "label": "routable_uds_service.cpp",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/routing/routable_uds_service.cpp",
+            "line": 1,
+            "excerpt": "#include \"../diag_error_domain.h\"\n#include \"./routable_uds_service.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            const uint8_t RoutableUdsService::cPositiveResponseSidIncrement;\n            const uint8_t RoutableUdsService::cNegativeResponseCodeSid;"
+          }
+        ],
+        "test": [
+          {
+            "label": "uds_service_router_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/routing/uds_service_router_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../../src/ara/diag/routing/uds_service_router.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            TEST(UdsServiceRouterTest, ValidRouteMethod)\n            {"
+          }
+        ]
+      },
+      "gaps": [
+        "no manifest element"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-620",
+      "title": "Read vehicle data by identifier",
+      "asil": "B",
+      "capability": "uds_read_did",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DIAG-620",
+            "sub": "Read vehicle data by identifier",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "CHANGED: ReadDataByIdentifier (0x22) shall additionally serve average fuel consumption (0xF55E), engine coolant temperature (0xF505) and odometer value (0xF5A6) with a cache lifetime of at most 5 s."
+          }
+        ],
+        "manifest": [],
+        "service": [
+          {
+            "label": "UDS 0x22 ReadDataByIdentifier",
+            "sub": "ara::diag::routing",
+            "file": "src/application/doip/obd_to_doip_converter.h",
+            "line": 18,
+            "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);"
+          },
+          {
+            "label": "DID 0xF50D",
+            "sub": "Average Speed",
+            "file": "src/application/helper/read_data_by_identifier.h",
+            "line": 18,
+            "excerpt": "        {\n        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n"
+          },
+          {
+            "label": "DID 0xF52F",
+            "sub": "Fuel Amount",
+            "file": "src/application/helper/read_data_by_identifier.h",
+            "line": 19,
+            "excerpt": "        private:\n            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};"
+          },
+          {
+            "label": "DID 0xF546",
+            "sub": "External Temperature",
+            "file": "src/application/helper/read_data_by_identifier.h",
+            "line": 20,
+            "excerpt": "            static const uint8_t cSid{0x22};\n            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};"
+          },
+          {
+            "label": "DID 0xF55E",
+            "sub": "Average Fuel Consumption",
+            "file": "src/application/helper/read_data_by_identifier.h",
+            "line": 21,
+            "excerpt": "            static const uint16_t cAverageSpeedDid{0xf50d};\n            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};"
+          },
+          {
+            "label": "DID 0xF505",
+            "sub": "Engine Coolant Temperature",
+            "file": "src/application/helper/read_data_by_identifier.h",
+            "line": 22,
+            "excerpt": "            static const uint16_t cFuelAmountDid{0xf52f};\n            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n"
+          },
+          {
+            "label": "DID 0xF5A6",
+            "sub": "Odometer Value",
+            "file": "src/application/helper/read_data_by_identifier.h",
+            "line": 23,
+            "excerpt": "            static const uint16_t cExternalTemperatureDid{0xf546};\n            static const uint16_t cAverageFuelConsumptionDid{0xf55e};\n            static const uint16_t cEngineCoolantTemperatureDid{0xf505};\n            static const uint16_t cOdometerValueDid{0xf5a6};\n            static const std::chrono::seconds cCacheLifetime;\n            static const ara::core::InstanceSpecifier cSpecifer;\n\n            const uint8_t cConditionsNotCorrectNrc{0x22};\n            const uint8_t cRequestOutOfRangeNrc{0x31};\n            const bool cCollectJsonComments{false};\n\n            const std::string cResourcesUrl;"
+          }
+        ],
+        "source": [
+          {
+            "label": "read_data_by_identifier.cpp",
+            "sub": "application::helper",
+            "file": "src/application/helper/read_data_by_identifier.cpp",
+            "line": 1,
+            "excerpt": "#include \"../../ara/diag/conversation.h\"\n#include \"./read_data_by_identifier.h\"\n#include <iostream>\n\nnamespace application\n{\n    namespace helper\n    {\n        const uint8_t ReadDataByIdentifier::cSid;\n        const uint16_t ReadDataByIdentifier::cAverageSpeedDid;\n        const uint16_t ReadDataByIdentifier::cFuelAmountDid;"
+          },
+          {
+            "label": "memory_cache.h",
+            "sub": "application::helper",
+            "file": "src/application/helper/memory_cache.h",
+            "line": 16,
+            "excerpt": "        template <typename K, typename T>\n        class MemoryCache\n        {\n        private:\n            const std::chrono::seconds cLifetime;\n            std::map<K, std::pair<const std::chrono::system_clock::time_point, const T>> mCachedItems;\n\n        public:\n            /// @brief Constructor\n            /// @param lifetime Cached item lifetime in seconds\n            explicit MemoryCache(std::chrono::seconds lifetime) : cLifetime{lifetime}\n            {"
+          }
+        ],
+        "test": []
+      },
+      "gaps": [
+        "no manifest element",
+        "no unit test"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-630",
+      "title": "Security access before privileged services",
+      "asil": "C",
+      "capability": "uds_security",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DIAG-630",
+            "sub": "Security access before privileged services",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "NEW: SecurityAccess (0x27) seed/key exchange shall gate every privileged diagnostic service, with an attempt-delay timer after three failed key attempts."
+          }
+        ],
+        "manifest": [],
+        "service": [
+          {
+            "label": "UDS 0x27 SecurityAccess",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/security_access.h",
+            "line": 40,
+            "excerpt": "        class SecurityAccess : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x27};\n            static const uint16_t cInitialSeed{1};\n\n            const size_t cSidIndex{0};\n            const size_t cSubFunctionIndex{1};\n            const size_t cDataRecordOffset{2};\n            const size_t cKeyLength{2};\n\n            const uint8_t cSuppressPosRspMask{0x80};"
+          }
+        ],
+        "source": [
+          {
+            "label": "security_access.cpp",
+            "sub": "ara::diag",
+            "file": "src/ara/diag/security_access.cpp",
+            "line": 1,
+            "excerpt": "#include \"./security_access.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        const uint8_t SecurityAccess::cSid;\n        const uint16_t SecurityAccess::cInitialSeed;\n\n        SecurityAccess::SecurityAccess(\n            const core::InstanceSpecifier &specifier,"
+          },
+          {
+            "label": "delay_timer.cpp",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/routing/delay_timer.cpp",
+            "line": 1,
+            "excerpt": "#include \"./delay_timer.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            DelayTimer::DelayTimer() noexcept : mLock(mMutex, std::defer_lock)\n            {\n            }"
+          }
+        ],
+        "test": [
+          {
+            "label": "security_access_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/security_access_test.cpp",
+            "line": 1,
+            "excerpt": "#include \"./routing/testable_uds_service.h\"\n#include \"../../../src/ara/diag/security_access.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        class SecurityAccessTest : public routing::TestableUdsService\n        {\n        private:\n            static core::InstanceSpecifier mSpecifier;"
+          },
+          {
+            "label": "delay_timer_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/routing/delay_timer_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../../src/ara/diag/routing/delay_timer.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            TEST(DelayTimerTest, Constructor)\n            {"
+          }
+        ]
+      },
+      "gaps": [
+        "no manifest element"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-640",
+      "title": "ECU reset request",
+      "asil": "B",
+      "capability": "uds_ecu_reset",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DIAG-640",
+            "sub": "ECU reset request",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "ECUReset (0x11) shall be accepted only in a non-safety-critical machine state and shall confirm the reset before execution."
+          }
+        ],
+        "manifest": [],
+        "service": [
+          {
+            "label": "UDS 0x11 ECUReset",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/ecu_reset_request.h",
+            "line": 23,
+            "excerpt": "        class EcuResetRequest : public routing::RoutableUdsService\n        {\n        private:\n            static const uint8_t cSid{0x11};\n\n            std::promise<ResetRequestType> mResetTypePromise;\n            std::future<ResetRequestType> mResetTypeFuture;\n            bool mRapidShutdownEnabled;\n\n            bool TryHandleSubFunction(\n                uint8_t subFunction,\n                const MetaInfo &metaInfo,"
+          }
+        ],
+        "source": [
+          {
+            "label": "ecu_reset_request.cpp",
+            "sub": "ara::diag",
+            "file": "src/ara/diag/ecu_reset_request.cpp",
+            "line": 1,
+            "excerpt": "#include <stdexcept>\n#include \"./ecu_reset_request.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        const uint8_t EcuResetRequest::cSid;\n\n        EcuResetRequest::EcuResetRequest(\n            const core::InstanceSpecifier &specifier) : routing::RoutableUdsService(specifier, cSid),"
+          }
+        ],
+        "test": [
+          {
+            "label": "ecu_reset_request_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/ecu_reset_request_test.cpp",
+            "line": 1,
+            "excerpt": "#include \"./routing/testable_uds_service.h\"\n#include \"../../../src/ara/diag/ecu_reset_request.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        class EcuResetRequestTest : public routing::TestableUdsService\n        {\n        private:\n            static core::InstanceSpecifier mSpecifier;"
+          }
+        ]
+      },
+      "gaps": [
+        "no manifest element"
+      ]
+    },
+    {
+      "id": "OEM-DIAG-660",
+      "title": "Software download and upload over UDS",
+      "asil": "B",
+      "capability": "uds_transfer",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DIAG-660",
+            "sub": "Software download and upload over UDS",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "CHANGED: RequestDownload (0x34), RequestUpload (0x35), TransferData (0x36) and RequestTransferExit (0x37) shall implement a block-sequence-counter protected transfer in both directions."
+          }
+        ],
+        "manifest": [],
+        "service": [
+          {
+            "label": "UDS 0x34 RequestDownload",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/download.h",
+            "line": 15,
+            "excerpt": "        class DownloadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x34};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kDownload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service"
+          },
+          {
+            "label": "UDS 0x35 RequestUpload",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/upload.h",
+            "line": 15,
+            "excerpt": "        class UploadService : public routing::RequestTransfer\n        {\n        private:\n            static const uint8_t cSid{0x35};\n            static const routing::TransferDirection cTransferDirection{\n                routing::TransferDirection::kUpload};\n\n        public:\n            /// @brief Constructor\n            /// @param specifier Instance specifier that owns the service\n            /// @param reentrancy Service reentrancy type\n            /// @param transferData Reference to the transfer data service"
+          },
+          {
+            "label": "UDS 0x36 TransferData",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/routing/transfer_data.h",
+            "line": 25,
+            "excerpt": "            class TransferData : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x36};\n                static const size_t cMemoryPoolSize{1024};\n                static const uint8_t cInitialBlockSequenceCounter{1};\n\n                const size_t cSequenceCounterIndex{1};\n                const size_t cRequestParameterOffset{2};\n\n                const uint8_t cWrongBlockSequenceCounter{0x73};\n"
+          },
+          {
+            "label": "UDS 0x37 RequestTransferExit",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/routing/request_transfer_exit.h",
+            "line": 16,
+            "excerpt": "            class RequestTransferExit : public RoutableUdsService\n            {\n            private:\n                static const uint8_t cSid{0x37};\n                TransferData &mTransferData;\n\n            public:\n                /// @brief Constructor\n                /// @param specifier Owner instance specifier\n                /// @param transferData Transfer data service\n                RequestTransferExit(\n                    const core::InstanceSpecifier &specifier,"
+          }
+        ],
+        "source": [
+          {
+            "label": "download.cpp",
+            "sub": "ara::diag",
+            "file": "src/ara/diag/download.cpp",
+            "line": 1,
+            "excerpt": "#include \"./download.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        const uint8_t DownloadService::cSid;\n        const routing::TransferDirection DownloadService::cTransferDirection;\n\n        DownloadService::DownloadService(\n            const core::InstanceSpecifier &specifier,"
+          },
+          {
+            "label": "upload.cpp",
+            "sub": "ara::diag",
+            "file": "src/ara/diag/upload.cpp",
+            "line": 1,
+            "excerpt": "#include \"./upload.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        const uint8_t UploadService::cSid;\n        const routing::TransferDirection UploadService::cTransferDirection;\n\n        UploadService::UploadService(\n            const core::InstanceSpecifier &specifier,"
+          },
+          {
+            "label": "transfer_data.cpp",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/routing/transfer_data.cpp",
+            "line": 1,
+            "excerpt": "#include <algorithm>\n#include \"./transfer_data.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            const uint8_t TransferData::cSid;\n            const size_t TransferData::cMemoryPoolSize;"
+          },
+          {
+            "label": "request_transfer_exit.cpp",
+            "sub": "ara::diag::routing",
+            "file": "src/ara/diag/routing/request_transfer_exit.cpp",
+            "line": 1,
+            "excerpt": "#include \"./request_transfer_exit.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            const uint8_t RequestTransferExit::cSid;\n\n            RequestTransferExit::RequestTransferExit("
+          }
+        ],
+        "test": [
+          {
+            "label": "transfer_data_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/routing/transfer_data_test.cpp",
+            "line": 1,
+            "excerpt": "#include \"./testable_uds_service.h\"\n#include \"../../../../src/ara/diag/routing/transfer_data.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            class TransferDataTest : public TestableUdsService\n            {"
+          },
+          {
+            "label": "request_transfer_exit_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/routing/request_transfer_exit_test.cpp",
+            "line": 1,
+            "excerpt": "#include \"./testable_uds_service.h\"\n#include \"../../../../src/ara/diag/routing/request_transfer_exit.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace routing\n        {\n            class RequestTransferExitTest : public TestableUdsService\n            {"
+          }
+        ]
+      },
+      "gaps": [
+        "no manifest element"
+      ]
+    },
+    {
+      "id": "OEM-DOIP-710",
+      "title": "Vehicle announcement",
+      "asil": "QM",
+      "capability": "doip",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DOIP-710",
+            "sub": "Vehicle announcement",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "The DoIP entity shall emit the configured number of vehicle announcement messages after link-up, carrying the configured EID/GID and logical address."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "DoIpInstantiation",
+            "sub": "DO-IP-INSTANTIATION",
+            "file": "configuration/extended_vehicle_manifest.arxml",
+            "line": 7,
+            "excerpt": "                <DO-IP-INSTANTIATION>\n                    <EID>1</EID>\n                    <GID>1</GID>\n                    <LOGICAL-ADDRESS>1</LOGICAL-ADDRESS>\n                    <NETWORK-INTERFACES>\n                        <DO-IP-NETWORK-CONFIGURATION>\n                            <MAX-INITIAL-VEHICLE-ANNOUNCEMENT-TIME>0</MAX-INITIAL-VEHICLE-ANNOUNCEMENT-TIME>\n                            <VEHICLE-ANNOUNCEMENT-COUNT>3</VEHICLE-ANNOUNCEMENT-COUNT>\n                            <VEHICLE-ANNOUNCEMENT-INTERVAL>1</VEHICLE-ANNOUNCEMENT-INTERVAL>\n                        </DO-IP-NETWORK-CONFIGURATION>\n                    </NETWORK-INTERFACES>\n                </DO-IP-INSTANTIATION>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "vehicle_id_request_handler.cpp",
+            "sub": "application::doip",
+            "file": "src/application/doip/vehicle_id_request_handler.cpp",
+            "line": 1,
+            "excerpt": "#include \"./vehicle_id_request_handler.h\"\n\nnamespace application\n{\n    namespace doip\n    {\n        constexpr size_t VehicleIdRequestHandler::cMacAddressSize;\n        const uint8_t VehicleIdRequestHandler::cFurtherAction;\n\n        VehicleIdRequestHandler::VehicleIdRequestHandler(\n            uint8_t protocolVersion,"
+          },
+          {
+            "label": "doip_server.cpp",
+            "sub": "application::doip",
+            "file": "src/application/doip/doip_server.cpp",
+            "line": 1,
+            "excerpt": "#include <algorithm>\n#include <stdexcept>\n#include \"./doip_server.h\"\n\nnamespace application\n{\n    namespace doip\n    {\n        constexpr size_t DoipServer::cDoipPacketSize;\n\n        DoipServer::DoipServer("
+          }
+        ],
+        "test": []
+      },
+      "gaps": [
+        "no unit test"
+      ]
+    },
+    {
+      "id": "OEM-DOIP-730",
+      "title": "OBD request tunnelling over DoIP",
+      "asil": "QM",
+      "capability": "doip",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DOIP-730",
+            "sub": "OBD request tunnelling over DoIP",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "NEW: Legacy OBD-II mode 0x01 requests shall be converted to UDS 0x22 DID requests and tunnelled over the DoIP diagnostic message channel."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "DoIpInstantiation",
+            "sub": "DO-IP-INSTANTIATION",
+            "file": "configuration/extended_vehicle_manifest.arxml",
+            "line": 7,
+            "excerpt": "                <DO-IP-INSTANTIATION>\n                    <EID>1</EID>\n                    <GID>1</GID>\n                    <LOGICAL-ADDRESS>1</LOGICAL-ADDRESS>\n                    <NETWORK-INTERFACES>\n                        <DO-IP-NETWORK-CONFIGURATION>\n                            <MAX-INITIAL-VEHICLE-ANNOUNCEMENT-TIME>0</MAX-INITIAL-VEHICLE-ANNOUNCEMENT-TIME>\n                            <VEHICLE-ANNOUNCEMENT-COUNT>3</VEHICLE-ANNOUNCEMENT-COUNT>\n                            <VEHICLE-ANNOUNCEMENT-INTERVAL>1</VEHICLE-ANNOUNCEMENT-INTERVAL>\n                        </DO-IP-NETWORK-CONFIGURATION>\n                    </NETWORK-INTERFACES>\n                </DO-IP-INSTANTIATION>"
+          }
+        ],
+        "service": [
+          {
+            "label": "UDS 0x22 ReadDataByIdentifier",
+            "sub": "ara::diag::routing",
+            "file": "src/application/doip/obd_to_doip_converter.h",
+            "line": 18,
+            "excerpt": "        private:\n            // Show current data mode\n            static const uint8_t cService{0x01};\n            static const uint8_t cSid{0x22};\n            static const uint8_t cProtocolVersion{2};\n\n            DoipClient mClient;\n\n            static bool tryParseUdsData(\n                std::vector<uint8_t> &&udsResponse,\n                uint8_t &pid,\n                std::vector<uint8_t> &obdData);"
+          }
+        ],
+        "source": [
+          {
+            "label": "obd_to_doip_converter.cpp",
+            "sub": "application::doip",
+            "file": "src/application/doip/obd_to_doip_converter.cpp",
+            "line": 1,
+            "excerpt": "#include \"./obd_to_doip_converter.h\"\n#include \"../../ara/diag/routing/routable_uds_service.h\"\n\nnamespace application\n{\n    namespace doip\n    {\n        const uint8_t ObdToDoipConverter::cService;\n        const uint8_t ObdToDoipConverter::cSid;\n        const uint8_t ObdToDoipConverter::cProtocolVersion;\n"
+          },
+          {
+            "label": "diag_message_handler.cpp",
+            "sub": "application::doip",
+            "file": "src/application/doip/diag_message_handler.cpp",
+            "line": 1,
+            "excerpt": "#include <doiplib/diag_message_ack.h>\n#include \"./diag_message_handler.h\"\n\nnamespace application\n{\n    namespace doip\n    {\n        DiagMessageHandler::DiagMessageHandler(\n            helper::CurlWrapper *curl,\n            std::string resourcesUrl,\n            uint8_t protocolVersion) : mService(curl, resourcesUrl),"
+          }
+        ],
+        "test": []
+      },
+      "gaps": [
+        "no unit test"
+      ]
+    },
+    {
+      "id": "OEM-DTC-810",
+      "title": "Telematics communication loss DTC",
+      "asil": "B",
+      "capability": "dtc_reporting",
+      "stages": {
+        "requirement": [
+          {
+            "label": "OEM-DTC-810",
+            "sub": "Telematics communication loss DTC",
+            "file": "demo/data/oem_reqs_v2.json",
+            "line": 1,
+            "excerpt": "Loss of communication with the telematic control module shall set DTC U0198 after the configured debounce time."
+          }
+        ],
+        "manifest": [
+          {
+            "label": "TelematicControlModuleEvent",
+            "sub": "DIAGNOSTIC-EVENT-INTERFACE",
+            "file": "configuration/diagnostic_manager_manifest.arxml",
+            "line": 55,
+            "excerpt": "                <DIAGNOSTIC-EVENT-INTERFACE>\n                    <SHORT-NAME>TelematicControlModuleEvent</SHORT-NAME>\n                    <!-- ISO 15031-6 DTC Format:\n                    U0198 (0xC198) = Lost Communication With Telematic Control Module -->\n                    <DTC-NUMBER>49560</DTC-NUMBER>\n                </DIAGNOSTIC-EVENT-INTERFACE>\n            </ELEMENTS>\n        </AR-PACKAGE>\n    </AR-PACKAGES>\n</AUTOSAR>"
+          },
+          {
+            "label": "TelematicControlModuleMonitor",
+            "sub": "DIAGNOSTIC-MONITOR-INTERFACE",
+            "file": "configuration/diagnostic_manager_manifest.arxml",
+            "line": 48,
+            "excerpt": "                <DIAGNOSTIC-MONITOR-INTERFACE>\n                    <SHORT-NAME>TelematicControlModuleMonitor</SHORT-NAME>\n                    <DIAG-EVENT-DEBOUNCE-TIME-BASED>\n                        <TIME-PASSED-THRESHOLD>6000</TIME-PASSED-THRESHOLD>\n                        <TIME-FAILED-THRESHOLD>6000</TIME-FAILED-THRESHOLD>\n                    </DIAG-EVENT-DEBOUNCE-TIME-BASED>\n                </DIAGNOSTIC-MONITOR-INTERFACE>\n                <DIAGNOSTIC-EVENT-INTERFACE>\n                    <SHORT-NAME>TelematicControlModuleEvent</SHORT-NAME>\n                    <!-- ISO 15031-6 DTC Format:\n                    U0198 (0xC198) = Lost Communication With Telematic Control Module -->\n                    <DTC-NUMBER>49560</DTC-NUMBER>"
+          }
+        ],
+        "service": [],
+        "source": [
+          {
+            "label": "dtc_information.cpp",
+            "sub": "ara::diag",
+            "file": "src/ara/diag/dtc_information.cpp",
+            "line": 1,
+            "excerpt": "#include \"./dtc_information.h\"\n#include \"./diag_error_domain.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        DTCInformation::DTCInformation(const core::InstanceSpecifier &specifier) : mSpecifier{specifier},\n                                                                                   mControlDtcStatus{ControlDtcStatusType::kDTCSettingOff}\n        {\n        }"
+          },
+          {
+            "label": "timer_based_debouncer.cpp",
+            "sub": "ara::diag::debouncing",
+            "file": "src/ara/diag/debouncing/timer_based_debouncer.cpp",
+            "line": 1,
+            "excerpt": "#include <chrono>\n#include \"./timer_based_debouncer.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace debouncing\n        {\n            TimerBasedDebouncer::TimerBasedDebouncer(\n                std::function<void(bool)> callback,"
+          }
+        ],
+        "test": [
+          {
+            "label": "dtc_information_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/dtc_information_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../src/ara/diag/dtc_information.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        class DtcInformationTest : public testing::Test\n        {\n        protected:\n            const ControlDtcStatusType cInitialControlDtcStatus{"
+          },
+          {
+            "label": "timer_based_debouncer_test.cpp",
+            "sub": "gtest",
+            "file": "test/ara/diag/debouncing/timer_based_debouncer_test.cpp",
+            "line": 1,
+            "excerpt": "#include <gtest/gtest.h>\n#include \"../../../../src/ara/diag/debouncing/timer_based_debouncer.h\"\n\nnamespace ara\n{\n    namespace diag\n    {\n        namespace debouncing\n        {\n            class TimerBasedDebouncerTest : public testing::Test\n            {"
+          }
+        ]
+      },
+      "gaps": []
+    }
+  ],
+  "matrix": {
+    "oems": [
+      {
+        "id": "bmw",
+        "name": "BMW",
+        "short": "BMW"
+      },
+      {
+        "id": "audi",
+        "name": "Audi",
+        "short": "Audi"
+      },
+      {
+        "id": "gm",
+        "name": "GM",
+        "short": "GM"
+      }
+    ],
+    "rows": [
+      {
+        "id": "someip_sd",
+        "name": "SOME/IP Service Discovery",
+        "evidence": [
+          "SomeIpServiceInstance_0x05 (diagnostic_manager_manifest.arxml)",
+          "SomeIpServiceInstance_0x05 (extended_vehicle_manifest.arxml)"
+        ],
+        "files": [
+          "src/ara/com/someip/sd/fsm/client_initial_wait_state.cpp",
+          "src/ara/com/someip/sd/fsm/client_initial_wait_state.h",
+          "src/ara/com/someip/sd/fsm/client_repetition_state.cpp",
+          "src/ara/com/someip/sd/fsm/client_repetition_state.h",
+          "src/ara/com/someip/sd/fsm/client_service_state.h",
+          "src/ara/com/someip/sd/fsm/initial_wait_state.h",
+          "src/ara/com/someip/sd/fsm/main_state.cpp",
+          "src/ara/com/someip/sd/fsm/main_state.h",
+          "src/ara/com/someip/sd/fsm/notready_state.cpp",
+          "src/ara/com/someip/sd/fsm/notready_state.h",
+          "src/ara/com/someip/sd/fsm/repetition_state.h",
+          "src/ara/com/someip/sd/fsm/service_notseen_state.cpp",
+          "src/ara/com/someip/sd/fsm/service_notseen_state.h",
+          "src/ara/com/someip/sd/fsm/service_ready_state.cpp",
+          "src/ara/com/someip/sd/fsm/service_ready_state.h",
+          "src/ara/com/someip/sd/fsm/service_seen_state.cpp",
+          "src/ara/com/someip/sd/fsm/service_seen_state.h",
+          "src/ara/com/someip/sd/fsm/stopped_state.cpp",
+          "src/ara/com/someip/sd/fsm/stopped_state.h",
+          "src/ara/com/someip/sd/fsm/timer_set_state.h",
+          "src/ara/com/someip/sd/sd_network_layer.cpp",
+          "src/ara/com/someip/sd/sd_network_layer.h",
+          "src/ara/com/someip/sd/someip_sd_agent.h",
+          "src/ara/com/someip/sd/someip_sd_client.cpp",
+          "src/ara/com/someip/sd/someip_sd_client.h",
+          "src/ara/com/someip/sd/someip_sd_message.cpp",
+          "src/ara/com/someip/sd/someip_sd_message.h",
+          "src/ara/com/someip/sd/someip_sd_server.cpp",
+          "src/ara/com/someip/sd/someip_sd_server.h"
+        ],
+        "tested": 2,
+        "cells": {
+          "bmw": {
+            "state": "partial",
+            "note": "2/29 files under test; no unit test"
+          },
+          "audi": {
+            "state": "partial",
+            "note": "2/29 files under test; no unit test"
+          },
+          "gm": {
+            "state": "partial",
+            "note": "2/29 files under test; no unit test"
+          }
+        }
+      },
+      {
+        "id": "someip_pubsub",
+        "name": "SOME/IP Publish/Subscribe",
+        "evidence": [
+          "SomeIpServiceInstance_0x05 (diagnostic_manager_manifest.arxml)",
+          "SomeIpServiceInstance_0x05 (extended_vehicle_manifest.arxml)"
+        ],
+        "files": [
+          "src/ara/com/someip/pubsub/fsm/notsubscribed_state.cpp",
+          "src/ara/com/someip/pubsub/fsm/notsubscribed_state.h",
+          "src/ara/com/someip/pubsub/fsm/service_down_state.cpp",
+          "src/ara/com/someip/pubsub/fsm/service_down_state.h",
+          "src/ara/com/someip/pubsub/fsm/subscribed_state.cpp",
+          "src/ara/com/someip/pubsub/fsm/subscribed_state.h",
+          "src/ara/com/someip/pubsub/someip_pubsub_client.cpp",
+          "src/ara/com/someip/pubsub/someip_pubsub_client.h",
+          "src/ara/com/someip/pubsub/someip_pubsub_server.cpp",
+          "src/ara/com/someip/pubsub/someip_pubsub_server.h"
+        ],
+        "tested": 0,
+        "cells": {
+          "bmw": {
+            "state": "partial",
+            "note": "0/10 files under test; no unit test"
+          },
+          "audi": {
+            "state": "partial",
+            "note": "0/10 files under test; no unit test"
+          },
+          "gm": {
+            "state": "absent",
+            "note": "not in GM package"
+          }
+        }
+      },
+      {
+        "id": "someip_rpc",
+        "name": "SOME/IP RPC over TCP",
+        "evidence": [
+          "SomeIpServiceInstance_0x05 (diagnostic_manager_manifest.arxml)",
+          "SomeIpServiceInstance_0x05 (extended_vehicle_manifest.arxml)"
+        ],
+        "files": [
+          "src/ara/com/someip/rpc/rpc_client.cpp",
+          "src/ara/com/someip/rpc/rpc_client.h",
+          "src/ara/com/someip/rpc/rpc_server.cpp",
+          "src/ara/com/someip/rpc/rpc_server.h",
+          "src/ara/com/someip/rpc/socket_rpc_client.cpp",
+          "src/ara/com/someip/rpc/socket_rpc_client.h",
+          "src/ara/com/someip/rpc/socket_rpc_server.cpp",
+          "src/ara/com/someip/rpc/socket_rpc_server.h",
+          "src/ara/com/someip/rpc/someip_rpc_message.cpp",
+          "src/ara/com/someip/rpc/someip_rpc_message.h"
+        ],
+        "tested": 6,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "6/10 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "6/10 files under test"
+          },
+          "gm": {
+            "state": "supported",
+            "note": "6/10 files under test"
+          }
+        }
+      },
+      {
+        "id": "exec_management",
+        "name": "Execution Management & function groups",
+        "evidence": [
+          "MachineFG (execution_manifest.arxml)"
+        ],
+        "files": [
+          "src/ara/exec/deterministic_client.cpp",
+          "src/ara/exec/deterministic_client.h",
+          "src/ara/exec/exec_error_domain.cpp",
+          "src/ara/exec/exec_error_domain.h",
+          "src/ara/exec/exec_exception.cpp",
+          "src/ara/exec/exec_exception.h",
+          "src/ara/exec/execution_client.cpp",
+          "src/ara/exec/execution_client.h",
+          "src/ara/exec/execution_error_event.h",
+          "src/ara/exec/execution_server.cpp",
+          "src/ara/exec/execution_server.h",
+          "src/ara/exec/function_group.cpp",
+          "src/ara/exec/function_group.h",
+          "src/ara/exec/function_group_state.cpp",
+          "src/ara/exec/function_group_state.h",
+          "src/ara/exec/helper/atomic_optional.h",
+          "src/ara/exec/helper/modelled_process.cpp",
+          "src/ara/exec/helper/modelled_process.h",
+          "src/ara/exec/state_client.cpp",
+          "src/ara/exec/state_client.h",
+          "src/ara/exec/state_server.cpp",
+          "src/ara/exec/state_server.h",
+          "src/ara/exec/worker_runnable.h",
+          "src/ara/exec/worker_thread.cpp",
+          "src/ara/exec/worker_thread.h"
+        ],
+        "tested": 22,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "22/25 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "22/25 files under test"
+          },
+          "gm": {
+            "state": "supported",
+            "note": "22/25 files under test"
+          }
+        }
+      },
+      {
+        "id": "state_management",
+        "name": "Machine state management",
+        "evidence": [],
+        "files": [
+          "src/ara/sm/notifier.h",
+          "src/ara/sm/power_mode.h",
+          "src/ara/sm/states.h",
+          "src/ara/sm/trigger.h",
+          "src/ara/sm/trigger_in.h",
+          "src/ara/sm/trigger_inout.h",
+          "src/ara/sm/trigger_out.h"
+        ],
+        "tested": 4,
+        "cells": {
+          "bmw": {
+            "state": "partial",
+            "note": "4/7 files under test"
+          },
+          "audi": {
+            "state": "partial",
+            "note": "4/7 files under test"
+          },
+          "gm": {
+            "state": "partial",
+            "note": "4/7 files under test"
+          }
+        }
+      },
+      {
+        "id": "phm_supervision",
+        "name": "Platform Health supervision",
+        "evidence": [
+          "GlobalSupervision (health_monitoring_manifest.arxml)"
+        ],
+        "files": [
+          "src/ara/phm/checkpoint_communicator.cpp",
+          "src/ara/phm/checkpoint_communicator.h",
+          "src/ara/phm/recovery_action.cpp",
+          "src/ara/phm/recovery_action.h",
+          "src/ara/phm/supervised_entity.cpp",
+          "src/ara/phm/supervised_entity.h",
+          "src/ara/phm/supervisors/alive_supervision.cpp",
+          "src/ara/phm/supervisors/alive_supervision.h",
+          "src/ara/phm/supervisors/deadline_supervision.cpp",
+          "src/ara/phm/supervisors/deadline_supervision.h",
+          "src/ara/phm/supervisors/elementary_supervision.cpp",
+          "src/ara/phm/supervisors/elementary_supervision.h",
+          "src/ara/phm/supervisors/global_supervision.cpp",
+          "src/ara/phm/supervisors/global_supervision.h"
+        ],
+        "tested": 12,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "12/14 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "12/14 files under test"
+          },
+          "gm": {
+            "state": "supported",
+            "note": "12/14 files under test"
+          }
+        }
+      },
+      {
+        "id": "uds_routing",
+        "name": "UDS service routing",
+        "evidence": [
+          "UDS 0x36",
+          "UDS 0x37"
+        ],
+        "files": [
+          "src/ara/diag/routing/delay_timer.cpp",
+          "src/ara/diag/routing/delay_timer.h",
+          "src/ara/diag/routing/nrc_exception.cpp",
+          "src/ara/diag/routing/nrc_exception.h",
+          "src/ara/diag/routing/request_transfer.cpp",
+          "src/ara/diag/routing/request_transfer.h",
+          "src/ara/diag/routing/request_transfer_exit.cpp",
+          "src/ara/diag/routing/request_transfer_exit.h",
+          "src/ara/diag/routing/routable_uds_service.cpp",
+          "src/ara/diag/routing/routable_uds_service.h",
+          "src/ara/diag/routing/transfer_data.cpp",
+          "src/ara/diag/routing/transfer_data.h",
+          "src/ara/diag/routing/uds_service_router.cpp",
+          "src/ara/diag/routing/uds_service_router.h"
+        ],
+        "tested": 12,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "12/14 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "12/14 files under test"
+          },
+          "gm": {
+            "state": "supported",
+            "note": "12/14 files under test"
+          }
+        }
+      },
+      {
+        "id": "uds_read_did",
+        "name": "UDS ReadDataByIdentifier (0x22)",
+        "evidence": [
+          "UDS 0x22"
+        ],
+        "files": [
+          "src/application/helper/read_data_by_identifier.cpp",
+          "src/application/helper/read_data_by_identifier.h"
+        ],
+        "tested": 0,
+        "cells": {
+          "bmw": {
+            "state": "partial",
+            "note": "0/2 files under test; no unit test"
+          },
+          "audi": {
+            "state": "partial",
+            "note": "0/2 files under test; no unit test"
+          },
+          "gm": {
+            "state": "partial",
+            "note": "0/2 files under test; no unit test"
+          }
+        }
+      },
+      {
+        "id": "uds_security",
+        "name": "UDS SecurityAccess (0x27)",
+        "evidence": [
+          "UDS 0x27"
+        ],
+        "files": [
+          "src/ara/diag/security_access.cpp",
+          "src/ara/diag/security_access.h"
+        ],
+        "tested": 2,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          },
+          "gm": {
+            "state": "absent",
+            "note": "not in GM package"
+          }
+        }
+      },
+      {
+        "id": "uds_ecu_reset",
+        "name": "UDS ECUReset (0x11)",
+        "evidence": [
+          "UDS 0x11"
+        ],
+        "files": [
+          "src/ara/diag/ecu_reset_request.cpp",
+          "src/ara/diag/ecu_reset_request.h"
+        ],
+        "tested": 2,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          },
+          "gm": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          }
+        }
+      },
+      {
+        "id": "uds_transfer",
+        "name": "UDS Download/Upload/Transfer (0x34-0x37)",
+        "evidence": [
+          "UDS 0x34",
+          "UDS 0x35",
+          "UDS 0x36"
+        ],
+        "files": [
+          "src/ara/diag/download.cpp",
+          "src/ara/diag/download.h",
+          "src/ara/diag/routing/request_transfer.cpp",
+          "src/ara/diag/routing/request_transfer.h",
+          "src/ara/diag/routing/request_transfer_exit.cpp",
+          "src/ara/diag/routing/request_transfer_exit.h",
+          "src/ara/diag/routing/transfer_data.cpp",
+          "src/ara/diag/routing/transfer_data.h",
+          "src/ara/diag/upload.cpp",
+          "src/ara/diag/upload.h"
+        ],
+        "tested": 6,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "6/10 files under test"
+          },
+          "audi": {
+            "state": "absent",
+            "note": "not in Audi package"
+          },
+          "gm": {
+            "state": "absent",
+            "note": "not in GM package"
+          }
+        }
+      },
+      {
+        "id": "doip",
+        "name": "DoIP vehicle announcement & routing",
+        "evidence": [
+          "DoIpInstantiation (extended_vehicle_manifest.arxml)",
+          "UDS 0x22"
+        ],
+        "files": [
+          "src/application/doip/diag_message_handler.cpp",
+          "src/application/doip/diag_message_handler.h",
+          "src/application/doip/doip_client.cpp",
+          "src/application/doip/doip_client.h",
+          "src/application/doip/doip_server.cpp",
+          "src/application/doip/doip_server.h",
+          "src/application/doip/obd_to_doip_converter.cpp",
+          "src/application/doip/obd_to_doip_converter.h",
+          "src/application/doip/vehicle_id_request_handler.cpp",
+          "src/application/doip/vehicle_id_request_handler.h"
+        ],
+        "tested": 0,
+        "cells": {
+          "bmw": {
+            "state": "partial",
+            "note": "0/10 files under test; no unit test"
+          },
+          "audi": {
+            "state": "partial",
+            "note": "0/10 files under test; no unit test"
+          },
+          "gm": {
+            "state": "absent",
+            "note": "not in GM package"
+          }
+        }
+      },
+      {
+        "id": "dtc_reporting",
+        "name": "DTC / event memory reporting",
+        "evidence": [
+          "TelematicControlModuleEvent (diagnostic_manager_manifest.arxml)"
+        ],
+        "files": [
+          "src/ara/diag/dtc_information.cpp",
+          "src/ara/diag/dtc_information.h"
+        ],
+        "tested": 2,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          },
+          "gm": {
+            "state": "supported",
+            "note": "2/2 files under test"
+          }
+        }
+      },
+      {
+        "id": "e2e_protection",
+        "name": "E2E Profile 11 protection",
+        "evidence": [],
+        "files": [
+          "src/ara/com/e2e/profile.h",
+          "src/ara/com/e2e/profile11.cpp",
+          "src/ara/com/e2e/profile11.h"
+        ],
+        "tested": 2,
+        "cells": {
+          "bmw": {
+            "state": "supported",
+            "note": "2/3 files under test"
+          },
+          "audi": {
+            "state": "supported",
+            "note": "2/3 files under test"
+          },
+          "gm": {
+            "state": "absent",
+            "note": "not in GM package"
+          }
+        }
+      },
+      {
+        "id": "logging",
+        "name": "ara::log logging framework",
+        "evidence": [],
+        "files": [
+          "src/ara/log/argument.h",
+          "src/ara/log/common.h",
+          "src/ara/log/log_stream.cpp",
+          "src/ara/log/log_stream.h",
+          "src/ara/log/logger.cpp",
+          "src/ara/log/logger.h",
+          "src/ara/log/logging_framework.cpp",
+          "src/ara/log/logging_framework.h",
+          "src/ara/log/sink/console_log_sink.cpp",
+          "src/ara/log/sink/console_log_sink.h",
+          "src/ara/log/sink/file_log_sink.cpp",
+          "src/ara/log/sink/file_log_sink.h",
+          "src/ara/log/sink/log_sink.cpp",
+          "src/ara/log/sink/log_sink.h"
+        ],
+        "tested": 7,
+        "cells": {
+          "bmw": {
+            "state": "partial",
+            "note": "7/14 files under test"
+          },
+          "audi": {
+            "state": "partial",
+            "note": "7/14 files under test"
+          },
+          "gm": {
+            "state": "partial",
+            "note": "7/14 files under test"
+          }
+        }
+      }
+    ]
+  },
+  "untested": [
+    {
+      "path": "src/application/extended_vehicle.cpp",
+      "module": "application",
+      "loc": 411
+    },
+    {
+      "path": "src/application/platform/platform_health_management.cpp",
+      "module": "application/platform",
+      "loc": 368
+    },
+    {
+      "path": "src/application/platform/diagnostic_manager.cpp",
+      "module": "application/platform",
+      "loc": 358
+    },
+    {
+      "path": "src/application/doip/obd_to_doip_converter.cpp",
+      "module": "application/doip",
+      "loc": 310
+    },
+    {
+      "path": "src/application/helper/read_data_by_identifier.cpp",
+      "module": "application/helper",
+      "loc": 307
+    },
+    {
+      "path": "src/ara/com/someip/sd/someip_sd_client.cpp",
+      "module": "ara/com",
+      "loc": 298
+    },
+    {
+      "path": "src/application/platform/state_management.cpp",
+      "module": "application/platform",
+      "loc": 219
+    },
+    {
+      "path": "src/application/platform/execution_management.cpp",
+      "module": "application/platform",
+      "loc": 217
+    },
+    {
+      "path": "src/ara/com/entry/entry.cpp",
+      "module": "ara/com",
+      "loc": 206
+    },
+    {
+      "path": "src/ara/com/someip/someip_message.cpp",
+      "module": "ara/com",
+      "loc": 199
+    },
+    {
+      "path": "src/ara/com/someip/sd/someip_sd_server.cpp",
+      "module": "ara/com",
+      "loc": 188
+    },
+    {
+      "path": "src/application/doip/doip_client.cpp",
+      "module": "application/doip",
+      "loc": 174
+    },
+    {
+      "path": "src/ara/com/someip/someip_message.h",
+      "module": "ara/com",
+      "loc": 165
+    },
+    {
+      "path": "src/ara/com/someip/pubsub/someip_pubsub_server.cpp",
+      "module": "ara/com",
+      "loc": 149
+    },
+    {
+      "path": "src/application/helper/argument_configuration.cpp",
+      "module": "application/helper",
+      "loc": 147
+    },
+    {
+      "path": "src/ara/com/someip/sd/fsm/timer_set_state.h",
+      "module": "ara/com",
+      "loc": 141
+    },
+    {
+      "path": "src/application/helper/network_configuration.h",
+      "module": "application/helper",
+      "loc": 135
+    },
+    {
+      "path": "src/application/doip/doip_server.cpp",
+      "module": "application/doip",
+      "loc": 132
+    },
+    {
+      "path": "src/ara/com/entry/entry.h",
+      "module": "ara/com",
+      "loc": 124
+    },
+    {
+      "path": "src/application/helper/fifo_checkpoint_communicator.cpp",
+      "module": "application/helper",
+      "loc": 122
+    },
+    {
+      "path": "src/ara/com/someip/rpc/socket_rpc_server.cpp",
+      "module": "ara/com",
+      "loc": 121
+    },
+    {
+      "path": "src/ara/diag/routing/routable_uds_service.h",
+      "module": "ara/diag",
+      "loc": 117
+    },
+    {
+      "path": "src/ara/com/someip/pubsub/someip_pubsub_client.cpp",
+      "module": "ara/com",
+      "loc": 115
+    },
+    {
+      "path": "src/ara/com/someip/sd/someip_sd_client.h",
+      "module": "ara/com",
+      "loc": 108
+    },
+    {
+      "path": "src/ara/com/someip/rpc/socket_rpc_client.cpp",
+      "module": "ara/com",
+      "loc": 101
+    },
+    {
+      "path": "src/ara/com/someip/sd/sd_network_layer.cpp",
+      "module": "ara/com",
+      "loc": 98
+    },
+    {
+      "path": "src/ara/com/someip/sd/someip_sd_agent.h",
+      "module": "ara/com",
+      "loc": 95
+    },
+    {
+      "path": "src/ara/com/someip/sd/fsm/initial_wait_state.h",
+      "module": "ara/com",
+      "loc": 89
+    },
+    {
+      "path": "src/ara/com/someip/sd/fsm/repetition_state.h",
+      "module": "ara/com",
+      "loc": 87
+    },
+    {
+      "path": "src/ara/com/someip/sd/someip_sd_server.h",
+      "module": "ara/com",
+      "loc": 84
+    },
+    {
+      "path": "src/application/platform/state_management.h",
+      "module": "application/platform",
+      "loc": 82
+    },
+    {
+      "path": "src/application/helper/network_configuration.cpp",
+      "module": "application/helper",
+      "loc": 81
+    },
+    {
+      "path": "src/ara/com/someip/pubsub/someip_pubsub_client.h",
+      "module": "ara/com",
+      "loc": 78
+    },
+    {
+      "path": "src/ara/com/option/option.h",
+      "module": "ara/com",
+      "loc": 78
+    },
+    {
+      "path": "src/ara/com/helper/finite_state_machine.h",
+      "module": "ara/com",
+      "loc": 76
+    },
+    {
+      "path": "src/ara/com/someip/pubsub/someip_pubsub_server.h",
+      "module": "ara/com",
+      "loc": 76
+    },
+    {
+      "path": "src/application/helper/argument_configuration.h",
+      "module": "application/helper",
+      "loc": 76
+    },
+    {
+      "path": "src/application/helper/curl_wrapper.cpp",
+      "module": "application/helper",
+      "loc": 74
+    },
+    {
+      "path": "src/main.cpp",
+      "module": "src (root)",
+      "loc": 73
+    },
+    {
+      "path": "src/ara/com/someip/sd/fsm/service_notseen_state.cpp",
+      "module": "ara/com",
+      "loc": 73
+    }
+  ]
+}
