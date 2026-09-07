@@ -17,6 +17,11 @@ namespace ara
             kRunning = 0 ///< Application process performs normally
         };
 
+        /// @brief Convert an execution state to its short-name
+        /// @param state Execution state to be converted
+        /// @returns Execution state short-name
+        std::string ToString(ExecutionState state);
+
         /// @brief Class that enables an adaptive application to interact with Execution Management
         class ExecutionClient final
         {

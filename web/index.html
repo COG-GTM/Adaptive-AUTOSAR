@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Adaptive AUTOSAR ECU Cockpit</title>
+    <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+    <header class="cockpit-header">
+        <div class="brand">
+            <span class="brand-mark">ARA</span>
+            <span class="brand-title">Adaptive AUTOSAR&nbsp;&middot;&nbsp;ECU Cockpit</span>
+        </div>
+        <div class="header-metrics">
+            <div class="header-metric">
+                <span class="header-metric-label">Uptime</span>
+                <span class="header-metric-value" id="uptime">--</span>
+            </div>
+            <div class="header-metric">
+                <span class="header-metric-label">Link</span>
+                <span class="header-metric-value status-pill" id="link">OFFLINE</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="grid">
+        <section class="panel panel-global">
+            <h2>Global Supervision</h2>
+            <div class="global-status" id="global-status">DEACTIVATED</div>
+            <div class="global-detail">
+                <span id="global-dominant">no dominant supervision</span>
+            </div>
+            <ul class="supervision-list" id="supervisions"></ul>
+        </section>
+
+        <section class="panel">
+            <h2>Execution Management</h2>
+            <table class="data-table" id="applications">
+                <thead>
+                    <tr>
+                        <th>Application</th>
+                        <th>Execution State</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section class="panel">
+            <h2>State Management</h2>
+            <table class="data-table" id="function-groups">
+                <thead>
+                    <tr>
+                        <th>Function Group</th>
+                        <th>State</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <h3>Recent Transitions</h3>
+            <ul class="transition-list" id="transitions"></ul>
+        </section>
+
+        <section class="panel">
+            <h2>PHM Checkpoints</h2>
+            <table class="data-table" id="checkpoints">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Checkpoint</th>
+                        <th>Reports</th>
+                        <th>Last</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </section>
+
+        <section class="panel">
+            <h2>SOME/IP</h2>
+            <div class="metric-row">
+                <div class="metric">
+                    <span class="metric-value" id="someip-rate">0.0</span>
+                    <span class="metric-label">msg / s</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-value" id="someip-total">0</span>
+                    <span class="metric-label">total</span>
+                </div>
+            </div>
+            <ul class="someip-list" id="someip-messages"></ul>
+        </section>
+
+        <section class="panel panel-logs">
+            <h2>Log Tail</h2>
+            <ul class="log-list" id="logs"></ul>
+        </section>
+    </main>
+
+    <script src="/cockpit.js"></script>
+</body>
+
+</html>

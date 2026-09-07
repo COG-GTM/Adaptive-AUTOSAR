@@ -7,6 +7,17 @@ namespace ara
     {
         const ExecErrorDomain ExecutionClient::cErrorDomain;
 
+        std::string ToString(ExecutionState state)
+        {
+            switch (state)
+            {
+            case ExecutionState::kRunning:
+                return "kRunning";
+            default:
+                return "kUnknown";
+            }
+        }
+
         ExecutionClient::ExecutionClient(
             core::InstanceSpecifier instanceSpecifier,
             com::someip::rpc::RpcClient *rpcClient,

@@ -1,4 +1,5 @@
 #include <utility>
+#include "../../../telemetry/telemetry_hub.h"
 #include "./rpc_server.h"
 
 namespace ara
@@ -77,6 +78,14 @@ namespace ara
                     {
                         const SomeIpRpcMessage _request{
                             SomeIpRpcMessage::Deserialize(requestPayload)};
+
+                        telemetry::TelemetryHub::Instance().PublishSomeIpMessage(
+                            telemetry::SomeIpRecord{
+                                "rx",
+                                "server",
+                                static_cast<uint16_t>(_request.MessageId() >> 16),
+                                static_cast<uint16_t>(_request.MessageId()),
+                                static_cast<uint32_t>(_request.RpcPayload().size())});
 
                         SomeIpReturnCode _returnCode{validate(_request)};
                         if (_returnCode != SomeIpReturnCode::eOK)

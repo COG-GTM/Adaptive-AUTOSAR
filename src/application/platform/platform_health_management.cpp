@@ -1,5 +1,41 @@
+#include "../../ara/telemetry/telemetry_hub.h"
 #include "../helper/argument_configuration.h"
 #include "./platform_health_management.h"
+
+namespace
+{
+    std::string toString(ara::phm::supervisors::SupervisionStatus status)
+    {
+        switch (status)
+        {
+        case ara::phm::supervisors::SupervisionStatus::kDeactivated:
+            return "kDeactivated";
+        case ara::phm::supervisors::SupervisionStatus::kOk:
+            return "kOk";
+        case ara::phm::supervisors::SupervisionStatus::kFailed:
+            return "kFailed";
+        case ara::phm::supervisors::SupervisionStatus::kExpired:
+            return "kExpired";
+        default:
+            return "kUnknown";
+        }
+    }
+
+    std::string toString(ara::phm::TypeOfSupervision type)
+    {
+        switch (type)
+        {
+        case ara::phm::TypeOfSupervision::AliveSupervision:
+            return "AliveSupervision";
+        case ara::phm::TypeOfSupervision::DeadlineSupervision:
+            return "DeadlineSupervision";
+        case ara::phm::TypeOfSupervision::LogicalSupervision:
+            return "LogicalSupervision";
+        default:
+            return "UnknownSupervision";
+        }
+    }
+}
 
 namespace application
 {
@@ -31,7 +67,49 @@ namespace application
             if (_reportDelegateItr != mReportDelegates.end())
             {
                 _reportDelegateItr->second();
+                publishSupervisionTelemetry(checkpoint);
             }
+        }
+
+        void PlatformHealthManagement::publishSupervisionTelemetry(
+            uint32_t checkpoint)
+        {
+            auto &_hub{ara::telemetry::TelemetryHub::Instance()};
+            _hub.PublishCheckpoint(checkpoint);
+
+            for (const ara::phm::supervisors::ElementarySupervision *cSupervision :
+                 {static_cast<ara::phm::supervisors::ElementarySupervision *>(
+                      mAliveSupervision),
+                  static_cast<ara::phm::supervisors::ElementarySupervision *>(
+                      mDeadlineSupervision)})
+            {
+                if (cSupervision)
+                {
+                    _hub.PublishSupervisionStatus(
+                        toString(cSupervision->GetType()),
+                        toString(cSupervision->GetStatus()));
+                }
+            }
+
+            if (mGlobalSupervision)
+            {
+                _hub.PublishGlobalSupervisionStatus(
+                    toString(mGlobalSupervision->GetStatus()),
+                    mDominantSupervisionType);
+            }
+        }
+
+        std::string PlatformHealthManagement::getCheckpointName(
+            const std::string &content)
+        {
+            const arxml::ArxmlReader cCheckpointReader(
+                content.c_str(), content.length());
+
+            const arxml::ArxmlNode cShortNameNode{
+                cCheckpointReader.GetRootNode(
+                    {"SUPERVISION-CHECKPOINT", "SHORT-NAME"})};
+
+            return cShortNameNode.GetValue<std::string>();
         }
 
         uint32_t PlatformHealthManagement::getCheckpointId(const std::string &content)
@@ -62,9 +140,12 @@ namespace application
 
             for (const auto cCheckpointNode : cCheckpointNodes)
             {
-                const uint32_t cCheckpointId{
-                    getCheckpointId(cCheckpointNode.GetContent())};
+                const std::string cContent{cCheckpointNode.GetContent()};
+                const uint32_t cCheckpointId{getCheckpointId(cContent)};
                 checkpoints.insert(cCheckpointId);
+
+                ara::telemetry::TelemetryHub::Instance().RegisterCheckpoint(
+                    cCheckpointId, getCheckpointName(cContent));
             }
         }
 
@@ -275,6 +356,10 @@ namespace application
         void PlatformHealthManagement::onGlobalStatusChanged(
             ara::phm::supervisors::SupervisionUpdate update)
         {
+            mDominantSupervisionType = toString(update.type);
+            ara::telemetry::TelemetryHub::Instance().PublishGlobalSupervisionStatus(
+                toString(update.status), mDominantSupervisionType);
+
             if (update.status == ara::phm::supervisors::SupervisionStatus::kExpired)
             {
                 const ara::exec::ExecutionError cSupervisionExpired{0};

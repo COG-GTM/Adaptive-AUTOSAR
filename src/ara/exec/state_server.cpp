@@ -1,3 +1,4 @@
+#include "../telemetry/telemetry_hub.h"
 #include "./state_server.h"
 
 namespace ara
@@ -37,6 +38,12 @@ namespace ara
 
                     throw std::logic_error(cMessage);
                 }
+            }
+
+            for (const auto &cCurrentState : mCurrentStates)
+            {
+                telemetry::TelemetryHub::Instance().PublishFunctionGroupState(
+                    cCurrentState.first, cCurrentState.second);
             }
 
             auto _setStateHandler{
@@ -155,6 +162,8 @@ namespace ara
                 // Update the newly reported state and react with an empty RPC response payload
                 mCurrentStates[_functionGroup] = _state;
                 _currentStatesLock.unlock();
+                telemetry::TelemetryHub::Instance().PublishFunctionGroupState(
+                    _functionGroup, _state);
                 notify(_functionGroup, _state);
                 rpcResponsePayload.clear();
                 return true;
