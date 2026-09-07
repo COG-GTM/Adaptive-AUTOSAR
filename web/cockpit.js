@@ -249,10 +249,21 @@ function render(snapshot) {
     renderLogs(snapshot);
 }
 
+function resetState() {
+    state.logs = [];
+    state.someIpMessages = [];
+    state.transitions = [];
+    state.functionGroupStates = {};
+    state.applicationStates = {};
+}
+
 function connect() {
     const source = new EventSource("/api/stream");
 
-    source.onopen = () => setLink(true);
+    source.onopen = () => {
+        resetState();
+        setLink(true);
+    };
 
     source.onmessage = (event) => {
         setLink(true);
