@@ -1,0 +1,744 @@
+{
+  "schemaVersion": 1,
+  "runId": "2026-09-07T12-59-32Z",
+  "startedAt": "2026-09-07T12:59:32Z",
+  "finishedAt": "2026-09-07T12:59:56Z",
+  "durationMs": 23596,
+  "host": {
+    "hostname": "devin-box",
+    "os": "Linux 5.15.200",
+    "machine": "x86_64",
+    "cpus": 8,
+    "python": "3.10.12"
+  },
+  "commit": {
+    "sha": "f7ce5545e1463e6675a0dab71d459e93fcd3205c",
+    "shortSha": "f7ce554",
+    "branch": "devin/1788785554-verification-command-center",
+    "dirty": true
+  },
+  "environment": {
+    "secretsPresent": true,
+    "degraded": false,
+    "startMode": "pty-interactive",
+    "startModeReason": "main.cpp skips its blocking getchar() calls when both secrets are set in the environment, so an env-var start terminates right after initialisation. The socket scenarios feed the same secret values into the binary's prompts on a pseudo terminal to keep a real platform running.",
+    "restDependency": "The DoIP server and the SD offer path are only constructed after https://api.volvocars.com/extended-vehicle/v1/vehicles resolves a VIN."
+  },
+  "scenarios": [
+    {
+      "id": "build",
+      "name": "CMake Debug build",
+      "category": "build",
+      "capabilities": [],
+      "description": "Configures and compiles the platform and its unit tests from this checkout.",
+      "command": "cmake -B build -DCMAKE_BUILD_TYPE=Debug && cmake --build build --config Debug -j8",
+      "cwd": ".",
+      "exitCode": 0,
+      "durationMs": 1382,
+      "status": "pass",
+      "assertions": [
+        {
+          "name": "cmake configure exits 0",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "cmake build exits 0",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "simulator binary exists",
+          "expected": "build/bin/adaptive_autosar",
+          "actual": "present",
+          "ok": true
+        }
+      ],
+      "stdoutTail": "\u2026s of target jsoncpp_test\nConsolidate compiler generated dependencies of target ara_diag\nConsolidate compiler generated dependencies of target gtest_main\nConsolidate compiler generated dependencies of target gmock\nConsolidate compiler generated dependencies of target ara_com\n[ 18%] Built target ara_exec\n[ 18%] Built target jsontestrunner_exe\n[ 18%] Built target jsoncpp_test\n[ 18%] Built target gtest_main\n[ 22%] Built target ara_diag\n[ 22%] Built target gmock\n[ 29%] Built target ara_com\nConsolidate compiler generated dependencies of target ara_phm\nConsolidate compiler generated dependencies of target arxml_unit_test\nConsolidate compiler generated dependencies of target gmock_main\nConsolidate compiler generated dependencies of target obd_ii_emulator_test\nConsolidate compiler generated dependencies of target async_bsd_socket_lib_test\nConsolidate compiler generated dependencies of target ara_log\n[ 29%] Built target arxml_unit_test\n[ 33%] Built target ara_phm\n[ 33%] Built target gmock_main\n[ 33%] Built target obd_ii_emulator_test\n[ 33%] Built target async_bsd_socket_lib_test\n[ 33%] Built target ara_log\nConsolidate compiler generated dependencies of target libcurl\nConsolidate compiler generated dependencies of target doip_lib_test\n[ 37%] Built target doip_lib_test\n[ 74%] Built target libcurl\nConsolidate compiler generated dependencies of target adaptive_autosar\nConsolidate compiler generated dependencies of target curl\n[ 77%] Built target adaptive_autosar\n[ 85%] Built target curl\nConsolidate compiler generated dependencies of target ara_unit_test\n[100%] Built target ara_unit_test\n",
+      "stderrTail": "",
+      "logExcerpt": [],
+      "notes": ""
+    },
+    {
+      "id": "unit_tests",
+      "name": "Unit suite (ctest)",
+      "category": "tests",
+      "capabilities": [
+        "doip",
+        "dtc_reporting",
+        "e2e_protection",
+        "exec_management",
+        "logging",
+        "phm_supervision",
+        "someip_pubsub",
+        "someip_rpc",
+        "someip_sd",
+        "state_management",
+        "uds_ecu_reset",
+        "uds_routing",
+        "uds_security",
+        "uds_transfer"
+      ],
+      "description": "Runs the repository's gtest suites through ctest and maps each suite to the platform capability it covers.",
+      "command": "cd build && ctest -C Debug --output-on-failure",
+      "cwd": "build",
+      "exitCode": 0,
+      "durationMs": 19710,
+      "status": "pass",
+      "assertions": [
+        {
+          "name": "ctest exits 0",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "no failing test",
+          "expected": "0 failures",
+          "actual": "0 failures",
+          "ok": true
+        },
+        {
+          "name": "test suite is not empty",
+          "expected": ">0 tests",
+          "actual": "466 tests",
+          "ok": true
+        }
+      ],
+      "stdoutTail": "\u2026tionUsingPreviousMessage\n458/466 Test #458: DiagMessageNackTest.ValidDeserializationUsingPreviousMessage ..........   Passed    0.00 sec\n        Start 459: DiagMessageNackTest.InvalidDeserialization\n459/466 Test #459: DiagMessageNackTest.InvalidDeserialization ............................   Passed    0.00 sec\n        Start 460: AnnouncementTimerTest.Constructor\n460/466 Test #460: AnnouncementTimerTest.Constructor .....................................   Passed    0.00 sec\n        Start 461: AnnouncementTimerTest.StartMethod\n461/466 Test #461: AnnouncementTimerTest.StartMethod .....................................   Passed    4.00 sec\n        Start 462: DoipControllerTest.ValidRequestHandling\n462/466 Test #462: DoipControllerTest.ValidRequestHandling ...............................   Passed    0.00 sec\n        Start 463: DoipControllerTest.InvalidLargeRequestHandling\n463/466 Test #463: DoipControllerTest.InvalidLargeRequestHandling ........................   Passed    0.00 sec\n        Start 464: DoipControllerTest.InvalidTypeRequestHandling\n464/466 Test #464: DoipControllerTest.InvalidTypeRequestHandling .........................   Passed    0.00 sec\n        Start 465: DoipControllerTest.InvalidLengthRequestHandling\n465/466 Test #465: DoipControllerTest.InvalidLengthRequestHandling .......................   Passed    0.00 sec\n        Start 466: DoipControllerTest.EmptyRequestHandling\n466/466 Test #466: DoipControllerTest.EmptyRequestHandling ...............................   Passed    0.00 sec\n\n100% tests passed, 0 tests failed out of 466\n\nTotal Test time (real) =  19.71 sec\n",
+      "stderrTail": "",
+      "logExcerpt": [],
+      "notes": "466 tests executed, 466 passed.",
+      "capabilityResults": {
+        "someip_sd": {
+          "tests": 44,
+          "passed": 44,
+          "suites": [
+            "DelayTimerTest",
+            "EventgroupEntryTest",
+            "Ipv4EndpointOptionTest",
+            "LoadBalancingOptionTest",
+            "ServiceEntryTest",
+            "SomeIpSdMessageTest",
+            "SomeIpSdTest",
+            "TtlTimerTest"
+          ]
+        },
+        "someip_pubsub": {
+          "tests": 9,
+          "passed": 9,
+          "suites": [
+            "PubSubStateTest",
+            "SomeIpPubSubTest"
+          ]
+        },
+        "someip_rpc": {
+          "tests": 22,
+          "passed": 22,
+          "suites": [
+            "MessageTest",
+            "RpcClientTest",
+            "RpcServerTest",
+            "SomeIpRpcMessageTest"
+          ]
+        },
+        "exec_management": {
+          "tests": 20,
+          "passed": 20,
+          "suites": [
+            "DeterministicClientTest",
+            "ExecExceptionTest",
+            "ExecutionClientTest",
+            "ExecutionServerTest",
+            "ModelledProcessTest",
+            "WorkerRunnableTest",
+            "WorkerThreadTest"
+          ]
+        },
+        "state_management": {
+          "tests": 41,
+          "passed": 41,
+          "suites": [
+            "FunctionGroupStateTest",
+            "FunctionGroupTest",
+            "MachineStateTest",
+            "SMTriggerInTest",
+            "SMTriggerOutTest",
+            "StateClientTest",
+            "StateServerCtorTest",
+            "StateServerTest",
+            "TriggerInOutTest"
+          ]
+        },
+        "phm_supervision": {
+          "tests": 24,
+          "passed": 24,
+          "suites": [
+            "AliveSupervisionTest",
+            "DeadlineSupervisionTest",
+            "ElementarySupervisionTest",
+            "GlobalSupervisionTest",
+            "RecoveryActionTest",
+            "SupervisedEntityTest"
+          ]
+        },
+        "uds_routing": {
+          "tests": 18,
+          "passed": 18,
+          "suites": [
+            "CancellationHandlerTest",
+            "ConversationTest",
+            "GenericUdsServiceTest",
+            "MetaInfoTest",
+            "NrcExceptionTest",
+            "UdsServiceRouterTest"
+          ]
+        },
+        "uds_read_did": {
+          "tests": 0,
+          "passed": 0,
+          "suites": []
+        },
+        "uds_security": {
+          "tests": 11,
+          "passed": 11,
+          "suites": [
+            "SecurityAccessTest"
+          ]
+        },
+        "uds_ecu_reset": {
+          "tests": 7,
+          "passed": 7,
+          "suites": [
+            "EcuResetRequestTest"
+          ]
+        },
+        "uds_transfer": {
+          "tests": 18,
+          "passed": 18,
+          "suites": [
+            "DummyRequestTransfer",
+            "RequestTransferExitTest",
+            "RequestTransferTest",
+            "TransferDataTest"
+          ]
+        },
+        "doip": {
+          "tests": 78,
+          "passed": 78,
+          "suites": [
+            "AliveCheckRequestTest",
+            "AliveCheckResponseTest",
+            "AnnouncementTimerTest",
+            "DiagMessageAckTest",
+            "DiagMessageNackTest",
+            "DiagMessageTest",
+            "DoipControllerTest",
+            "DoipLibTest",
+            "EidVehicleIdRequestTest",
+            "EntityStatusRequestTest",
+            "EntityStatusResponseTest",
+            "GenericNackTest",
+            "PowerModeRequestTest",
+            "PowerModeResponseTest",
+            "PowerModeTest",
+            "RoutingActivationRequestTest",
+            "RoutingActivationResponseTest",
+            "VehicleIdRequestTest",
+            "VehicleIdResponeTest",
+            "VinVehicleIdRequestTest"
+          ]
+        },
+        "dtc_reporting": {
+          "tests": 37,
+          "passed": 37,
+          "suites": [
+            "ConditionTest",
+            "CounterBasedDebouncerTest",
+            "DiagErrorDomainTest",
+            "DtcInformationTest",
+            "EventTest",
+            "MonitorTest",
+            "OperationCycleTest",
+            "TimerBasedDebouncerTest"
+          ]
+        },
+        "e2e_protection": {
+          "tests": 6,
+          "passed": 6,
+          "suites": [
+            "Profile11Test"
+          ]
+        },
+        "logging": {
+          "tests": 9,
+          "passed": 9,
+          "suites": [
+            "LogArgumentTest",
+            "LogStreamTest",
+            "LoggerTest",
+            "LoggingFrameworkTest"
+          ]
+        }
+      }
+    },
+    {
+      "id": "non_interactive_startup",
+      "name": "Documented non-interactive startup",
+      "category": "platform",
+      "capabilities": [
+        "exec_management",
+        "logging"
+      ],
+      "description": "Runs the documented env-var startup command and records the lifecycle it produces.",
+      "command": "VCC_API_KEY=*** BEARER_TOKEN=*** build/bin/adaptive_autosar ./configuration/execution_manifest.arxml ./configuration/extended_vehicle_manifest.arxml ./configuration/diagnostic_manager_manifest.arxml ./configuration/health_monitoring_manifest.arxml",
+      "cwd": ".",
+      "exitCode": 0,
+      "durationMs": 540,
+      "status": "pass",
+      "assertions": [
+        {
+          "name": "start does not hang on a prompt",
+          "expected": "exits without stdin input",
+          "actual": "exited",
+          "ok": true
+        },
+        {
+          "name": "exit code is 0",
+          "expected": "0",
+          "actual": "0",
+          "ok": true
+        },
+        {
+          "name": "secrets are read from the environment",
+          "expected": "'loaded from environment variable' twice",
+          "actual": "2 occurrences",
+          "ok": true
+        },
+        {
+          "name": "execution management initialises",
+          "expected": "Execution management has been initialized.",
+          "actual": "found",
+          "ok": true
+        }
+      ],
+      "stdoutTail": "\u2026xtended Vehicle AA has been initialized.\nMon Sep  7 12:59:53 2026\n DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;TelematicControlModuleMonitor is offered.\nMon Sep  7 12:59:53 2026\n DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Diagnostic Manager has been initialized.\nMon Sep  7 12:59:53 2026\n ExecutionManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Execution management has been terminated.\nMon Sep  7 12:59:54 2026\n ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Error;Setting the VIN failed due to unexpected RESTful response format.\nMon Sep  7 12:59:54 2026\n ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;There was no active diagnostic conversation at the termination.\nMon Sep  7 12:59:54 2026\n ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Extended Vehicle AA has been terminated.\nMon Sep  7 12:59:54 2026\n DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Diagnostic Manager has been terminated.\nMon Sep  7 12:59:54 2026\n PlatformHeathManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Plafrom health management has been terminated.\nMon Sep  7 12:59:54 2026\n DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;TelematicControlModuleMonitor offer is stopped.\n",
+      "stderrTail": "",
+      "logExcerpt": [
+        "ExecutionManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Execution management has been initialized.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Function group: MachineFG is configured.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State: Off of function group: MachineFG is configured.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State: StartUp of function group: MachineFG is configured.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State management has been initialized.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State management has been terminated.",
+        "PlatformHeathManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Plafrom health management has been initialized.",
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Extended Vehicle AA has been initialized.",
+        "DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;TelematicControlModuleMonitor is offered.",
+        "DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Diagnostic Manager has been initialized.",
+        "ExecutionManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Execution management has been terminated.",
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Error;Setting the VIN failed due to unexpected RESTful response format.",
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;There was no active diagnostic conversation at the termination.",
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Extended Vehicle AA has been terminated.",
+        "DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Diagnostic Manager has been terminated.",
+        "PlatformHeathManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Plafrom health management has been terminated.",
+        "DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;TelematicControlModuleMonitor offer is stopped."
+      ],
+      "notes": "main.cpp skips its two getchar() calls when both secrets come from the environment, so this start path initialises every process and terminates immediately (540 ms here). The socket scenarios below therefore drive the binary on a PTY instead."
+    },
+    {
+      "id": "platform_boot",
+      "name": "Platform boot & process lifecycle",
+      "category": "platform",
+      "capabilities": [
+        "exec_management",
+        "phm_supervision",
+        "logging"
+      ],
+      "description": "Boots the simulator and waits for every modelled process to report initialisation.",
+      "command": "build/bin/adaptive_autosar ./configuration/execution_manifest.arxml ./configuration/extended_vehicle_manifest.arxml ./configuration/diagnostic_manager_manifest.arxml ./configuration/health_monitoring_manifest.arxml  (secrets fed on a PTY)",
+      "cwd": ".",
+      "exitCode": null,
+      "durationMs": 1601,
+      "status": "pass",
+      "assertions": [
+        {
+          "name": "execution management initialises",
+          "expected": "Execution management has been initialized.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "state management initialises",
+          "expected": "State management has been initialized.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "platform health management initialises",
+          "expected": "Plafrom health management has been initialized.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "extended vehicle AA initialises",
+          "expected": "Extended Vehicle AA has been initialized.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "diagnostic manager initialises",
+          "expected": "Diagnostic Manager has been initialized.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "platform stays running",
+          "expected": "process alive after boot",
+          "actual": "alive",
+          "ok": true
+        }
+      ],
+      "stdoutTail": "\u2026:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State: Off of function group: MachineFG is configured.\nStateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State: StartUp of function group: MachineFG is configured.\nStateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State management has been initialized.\nPlatformHeathManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Plafrom health management has been initialized.\nExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Extended Vehicle AA has been initialized.\nDiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;TelematicControlModuleMonitor is offered.\nDiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Diagnostic Manager has been initialized.\nStateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;EM initial machine state transition is fetched successfully.\nStateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;EM is transited to the start-up state successfully.\nStateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Execution state is reported successfully.\nExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Error;Setting the VIN failed due to unexpected RESTful response format.",
+      "stderrTail": "",
+      "logExcerpt": [
+        "ExecutionManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Execution management has been initialized.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State management has been initialized.",
+        "PlatformHeathManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Plafrom health management has been initialized.",
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Extended Vehicle AA has been initialized.",
+        "DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Diagnostic Manager has been initialized."
+      ],
+      "notes": ""
+    },
+    {
+      "id": "exec_state_transitions",
+      "name": "Function group state transitions",
+      "category": "platform",
+      "capabilities": [
+        "exec_management",
+        "state_management"
+      ],
+      "description": "Verifies MachineFG reaches its StartUp state and that Execution Management accepts the reported execution state.",
+      "command": "(observed on the running platform started by platform_boot)",
+      "cwd": ".",
+      "exitCode": null,
+      "durationMs": 0,
+      "status": "pass",
+      "assertions": [
+        {
+          "name": "MachineFG is configured",
+          "expected": "Function group: MachineFG is configured.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "Off state is configured",
+          "expected": "State: Off of function group: MachineFG is configured.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "StartUp state is configured",
+          "expected": "State: StartUp of function group: MachineFG is configured.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "initial machine state transition",
+          "expected": "EM initial machine state transition is fetched successfully.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "StartUp transition",
+          "expected": "EM is transited to the start-up state successfully.",
+          "actual": "logged",
+          "ok": true
+        },
+        {
+          "name": "execution state report",
+          "expected": "Execution state is reported successfully.",
+          "actual": "logged",
+          "ok": true
+        }
+      ],
+      "stdoutTail": "",
+      "stderrTail": "",
+      "logExcerpt": [
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Function group: MachineFG is configured.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State: Off of function group: MachineFG is configured.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State: StartUp of function group: MachineFG is configured.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;EM initial machine state transition is fetched successfully.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;EM is transited to the start-up state successfully.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Execution state is reported successfully."
+      ],
+      "notes": ""
+    },
+    {
+      "id": "someip_sd_find",
+      "name": "SOME/IP Service Discovery client FSM",
+      "category": "someip",
+      "capabilities": [
+        "someip_sd"
+      ],
+      "description": "Joins the SD multicast group declared in the manifests before boot and decodes the FindService entries the Diagnostic Manager's SD client actually puts on the wire.",
+      "command": "join udp://239.0.0.1:5555 (IGMP on 127.0.0.1) and decode SOME/IP-SD messages",
+      "cwd": ".",
+      "exitCode": 0,
+      "durationMs": 0,
+      "status": "pass",
+      "assertions": [
+        {
+          "name": "SD messages observed on the multicast group",
+          "expected": ">=1 SOME/IP-SD message",
+          "actual": "4 messages",
+          "ok": true
+        },
+        {
+          "name": "SD message ID 0xFFFF8100 with protocol/interface version 1/1",
+          "expected": "protocolVersion=1 interfaceVersion=1",
+          "actual": "protocolVersion=1 interfaceVersion=1",
+          "ok": true
+        },
+        {
+          "name": "FindService for the manifested service 0x0005",
+          "expected": "FindService entry, serviceId=0x0005",
+          "actual": "4 FindService entries, service ids ['0x0005']",
+          "ok": true
+        },
+        {
+          "name": "client FSM leaves the initial wait phase (repetition finds)",
+          "expected": ">=2 FindService entries",
+          "actual": "4 FindService entries",
+          "ok": true
+        },
+        {
+          "name": "session id increments across repetitions",
+          "expected": "strictly increasing session ids",
+          "actual": "session ids [1, 2, 3, 4]",
+          "ok": true
+        }
+      ],
+      "stdoutTail": "from 127.0.0.1:5555 session=0x0001 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)\nfrom 127.0.0.1:5555 session=0x0002 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)\nfrom 127.0.0.1:5555 session=0x0003 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)\nfrom 127.0.0.1:5555 session=0x0004 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)",
+      "stderrTail": "",
+      "logExcerpt": [
+        "DiagnosticManager Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Diagnostic Manager has been initialized."
+      ],
+      "notes": "",
+      "capturedMessages": [
+        {
+          "sessionId": 1,
+          "flags": 3221225472,
+          "protocolVersion": 1,
+          "interfaceVersion": 1,
+          "messageType": 2,
+          "returnCode": 0,
+          "entries": [
+            {
+              "type": 0,
+              "typeName": "FindService",
+              "serviceId": 5,
+              "instanceId": 65535,
+              "majorVersion": 255,
+              "ttl": 16777215
+            }
+          ],
+          "from": "127.0.0.1:5555",
+          "bytes": 256,
+          "hex": "ffff8100000000240000000101010200c000000000000010000000000005ffffffffffffffffffff000000000000000000000000000000000000000000000000"
+        },
+        {
+          "sessionId": 2,
+          "flags": 3221225472,
+          "protocolVersion": 1,
+          "interfaceVersion": 1,
+          "messageType": 2,
+          "returnCode": 0,
+          "entries": [
+            {
+              "type": 0,
+              "typeName": "FindService",
+              "serviceId": 5,
+              "instanceId": 65535,
+              "majorVersion": 255,
+              "ttl": 16777215
+            }
+          ],
+          "from": "127.0.0.1:5555",
+          "bytes": 256,
+          "hex": "ffff8100000000240000000201010200c000000000000010000000000005ffffffffffffffffffff000000000000000000000000000000000000000000000000"
+        },
+        {
+          "sessionId": 3,
+          "flags": 3221225472,
+          "protocolVersion": 1,
+          "interfaceVersion": 1,
+          "messageType": 2,
+          "returnCode": 0,
+          "entries": [
+            {
+              "type": 0,
+              "typeName": "FindService",
+              "serviceId": 5,
+              "instanceId": 65535,
+              "majorVersion": 255,
+              "ttl": 16777215
+            }
+          ],
+          "from": "127.0.0.1:5555",
+          "bytes": 256,
+          "hex": "ffff8100000000240000000301010200c000000000000010000000000005ffffffffffffffffffff00000000697f000060457de1697f0000c48f1cc3af550000"
+        },
+        {
+          "sessionId": 4,
+          "flags": 3221225472,
+          "protocolVersion": 1,
+          "interfaceVersion": 1,
+          "messageType": 2,
+          "returnCode": 0,
+          "entries": [
+            {
+              "type": 0,
+              "typeName": "FindService",
+              "serviceId": 5,
+              "instanceId": 65535,
+              "majorVersion": 255,
+              "ttl": 16777215
+            }
+          ],
+          "from": "127.0.0.1:5555",
+          "bytes": 256,
+          "hex": "ffff8100000000240000000401010200c000000000000010000000000005ffffffffffffffffffff00000000697f000060457de1697f0000c48f1cc3af550000"
+        }
+      ]
+    },
+    {
+      "id": "someip_sd_offer",
+      "name": "SOME/IP service offering & subscription",
+      "category": "someip",
+      "capabilities": [
+        "someip_pubsub"
+      ],
+      "description": "Checks whether the Extended Vehicle AA answers the client's finds with an OfferService entry for service 0x0005 and whether an eventgroup subscription follows.",
+      "command": "join udp://239.0.0.1:5555 (IGMP on 127.0.0.1) and decode SOME/IP-SD messages",
+      "cwd": ".",
+      "exitCode": 1,
+      "durationMs": 0,
+      "status": "fail",
+      "assertions": [
+        {
+          "name": "OfferService for service 0x0005",
+          "expected": "OfferService entry, serviceId=0x0005",
+          "actual": "0 OfferService entries",
+          "ok": false
+        },
+        {
+          "name": "eventgroup subscription follows the offer",
+          "expected": ">=1 SubscribeEventgroup entry",
+          "actual": "0 SubscribeEventgroup entries",
+          "ok": false
+        }
+      ],
+      "stdoutTail": "from 127.0.0.1:5555 session=0x0001 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)\nfrom 127.0.0.1:5555 session=0x0002 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)\nfrom 127.0.0.1:5555 session=0x0003 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)\nfrom 127.0.0.1:5555 session=0x0004 entries=FindService(service=0x0005, instance=0xFFFF, ttl=16777215)",
+      "stderrTail": "",
+      "logExcerpt": [
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Extended Vehicle AA has been initialized.",
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Error;Setting the VIN failed due to unexpected RESTful response format."
+      ],
+      "notes": "ExtendedVehicle::Main only calls mSdServer->Start() after the VCC extended-vehicle REST call resolves a VIN; that call fails in this environment, so nothing is offered and no subscription can follow."
+    },
+    {
+      "id": "someip_rpc",
+      "name": "SOME/IP RPC on TCP 8080",
+      "category": "someip",
+      "capabilities": [
+        "someip_rpc",
+        "state_management",
+        "exec_management"
+      ],
+      "description": "Sends real SOME/IP request messages to the Execution Management RPC server and asserts on the returned message type and return code.",
+      "command": "SOME/IP requests to tcp://127.0.0.1:8080 (service 0x0003 SetState, service 0x0001 ReportExecutionState)",
+      "cwd": ".",
+      "exitCode": 0,
+      "durationMs": 107,
+      "status": "pass",
+      "assertions": [
+        {
+          "name": "unknown service 0x00FF is rejected",
+          "expected": "messageType=0x81 returnCode=0x02 (eUnknownService)",
+          "actual": "messageType=0x81 returnCode=0x02 (eUnknownService)",
+          "ok": true
+        },
+        {
+          "name": "SetState MachineFG/DoesNotExist is rejected",
+          "expected": "messageType=0x81 returnCode=0x01 (eNotOk)",
+          "actual": "messageType=0x81 returnCode=0x01 (eNotOk)",
+          "ok": true
+        },
+        {
+          "name": "repeated EM state transition is refused",
+          "expected": "messageType=0x81 returnCode=0x01 (eNotOk)",
+          "actual": "messageType=0x81 returnCode=0x01 (eNotOk)",
+          "ok": true
+        },
+        {
+          "name": "ReportExecutionState(kRunning) is accepted",
+          "expected": "messageType=0x80 returnCode=0x00 (eOK)",
+          "actual": "messageType=0x80 returnCode=0x00 (eOK)",
+          "ok": true
+        },
+        {
+          "name": "SetState MachineFG/Off is accepted",
+          "expected": "messageType=0x80 returnCode=0x00 (eOK)",
+          "actual": "messageType=0x80 returnCode=0x00 (eOK)",
+          "ok": true
+        }
+      ],
+      "stdoutTail": "unknown service 0x00FF is rejected: messageType=0x81 returnCode=0x02 (eUnknownService)\nSetState MachineFG/DoesNotExist is rejected: messageType=0x81 returnCode=0x01 (eNotOk)\nrepeated EM state transition is refused: messageType=0x81 returnCode=0x01 (eNotOk)\nReportExecutionState(kRunning) is accepted: messageType=0x80 returnCode=0x00 (eOK)\nSetState MachineFG/Off is accepted: messageType=0x80 returnCode=0x00 (eOK)",
+      "stderrTail": "",
+      "logExcerpt": [
+        "ExecutionManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Execution management has been initialized.",
+        "StateManagement Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;State management has been initialized."
+      ],
+      "notes": ""
+    },
+    {
+      "id": "uds_doip",
+      "name": "UDS over DoIP on TCP 8081",
+      "category": "diagnostics",
+      "capabilities": [
+        "doip",
+        "uds_routing",
+        "uds_read_did"
+      ],
+      "description": "Opens a DoIP (ISO 13400) connection to the Extended Vehicle AA and issues a vehicle identification request plus UDS ReadDataByIdentifier (0x22) requests for the DIDs implemented in src/application/helper/read_data_by_identifier.h.",
+      "command": "DoIP VehicleIdRequest (0x0001) + UDS 0x22 on DIDs 0xF50D, 0xF52F, 0xF546, 0xF55E, 0xF505, 0xF5A6 to tcp://127.0.0.1:8081",
+      "cwd": ".",
+      "exitCode": 1,
+      "durationMs": 0,
+      "status": "fail",
+      "assertions": [
+        {
+          "name": "DoIP server accepts a TCP connection",
+          "expected": "connected to 127.0.0.1:8081",
+          "actual": "[Errno 111] Connection refused",
+          "ok": false
+        }
+      ],
+      "stdoutTail": "connect(tcp://127.0.0.1:8081) -> [Errno 111] Connection refused",
+      "stderrTail": "",
+      "logExcerpt": [
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Info;Extended Vehicle AA has been initialized.",
+        "ExtendedVehicle Context ID:Lifetime;Context Description:Application lifetime logs;Log Level:Error;Setting the VIN failed due to unexpected RESTful response format."
+      ],
+      "notes": "ExtendedVehicle::Main only constructs the DoIP server after the VCC extended-vehicle REST call resolves a VIN, so no socket is listening when that call fails."
+    }
+  ],
+  "summary": {
+    "total": 9,
+    "passed": 7,
+    "failed": 2,
+    "skipped": 0
+  }
+}
