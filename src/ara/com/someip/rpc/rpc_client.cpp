@@ -1,3 +1,4 @@
+#include "../../../telemetry/telemetry_hub.h"
 #include "./rpc_client.h"
 
 namespace ara
@@ -64,6 +65,14 @@ namespace ara
                         mProtocolVersion,
                         mInterfaceVersion,
                         rpcPayload);
+
+                    telemetry::TelemetryHub::Instance().PublishSomeIpMessage(
+                        telemetry::SomeIpRecord{
+                            "tx",
+                            "client",
+                            serviceId,
+                            methodId,
+                            static_cast<uint32_t>(rpcPayload.size())});
 
                     Send(_request.Payload());
 

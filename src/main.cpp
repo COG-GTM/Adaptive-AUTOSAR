@@ -1,10 +1,55 @@
+#include <csignal>
 #include <cstdlib>
 #include "./application/helper/argument_configuration.h"
 #include "./application/platform/execution_management.h"
+#include "./ara/telemetry/telemetry_hub.h"
+#include "./ara/telemetry/telemetry_server.h"
 
 bool running;
 AsyncBsdSocketLib::Poller poller;
 application::platform::ExecutionManagement *executionManagement;
+
+namespace
+{
+    const std::string cDashboardPortEnvVar{"DASHBOARD_PORT"};
+    const std::string cDashboardRootEnvVar{"DASHBOARD_ROOT"};
+    const uint16_t cDefaultDashboardPort{8088};
+    const std::string cDefaultDashboardRoot{"./web"};
+
+    std::atomic_bool interrupted{false};
+
+    void onInterrupted(int)
+    {
+        interrupted = true;
+    }
+
+    std::string getEnvironmentVariable(
+        const std::string &key, std::string defaultValue)
+    {
+        const char *cValue{std::getenv(key.c_str())};
+
+        return (cValue != nullptr && cValue[0] != '\0')
+                   ? std::string(cValue)
+                   : std::move(defaultValue);
+    }
+
+    uint16_t getDashboardPort()
+    {
+        const std::string cPort{
+            getEnvironmentVariable(
+                cDashboardPortEnvVar,
+                std::to_string(cDefaultDashboardPort))};
+
+        try
+        {
+            return static_cast<uint16_t>(std::stoul(cPort));
+        }
+        catch (const std::exception &)
+        {
+            return cDefaultDashboardPort;
+        }
+    }
+}
 
 void performPolling()
 {
@@ -51,13 +96,43 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    const uint16_t cDashboardPort{getDashboardPort()};
+    ara::telemetry::TelemetryServer _telemetryServer(
+        &ara::telemetry::TelemetryHub::Instance(),
+        cDashboardPort,
+        getEnvironmentVariable(cDashboardRootEnvVar, cDefaultDashboardRoot));
+
+    if (_telemetryServer.Start())
+    {
+        std::cout << "ECU cockpit dashboard is served at http://127.0.0.1:"
+                  << _telemetryServer.Port() << '\n';
+    }
+    else
+    {
+        std::cout << "Serving the ECU cockpit dashboard at port "
+                  << cDashboardPort << " failed.\n";
+    }
+
+    std::signal(SIGINT, onInterrupted);
+    std::signal(SIGTERM, onInterrupted);
+
     running = true;
     executionManagement = new application::platform::ExecutionManagement(&poller);
     executionManagement->Initialize(_argumentConfiguration.GetArguments());
 
     std::future<void> _future{std::async(std::launch::async, performPolling)};
 
-    if (!_nonInteractive)
+    if (_nonInteractive)
+    {
+        // Keep the platform alive so that the dashboard can observe the runtime
+        // until the process is interrupted.
+        const std::chrono::milliseconds cSleepDuration{100};
+        while (!interrupted)
+        {
+            std::this_thread::sleep_for(cSleepDuration);
+        }
+    }
+    else
     {
         std::getchar();
         std::system("clear");
@@ -67,6 +142,7 @@ int main(int argc, char *argv[])
     int _result{executionManagement->Terminate()};
     running = false;
     _future.get();
+    _telemetryServer.Stop();
     delete executionManagement;
 
     return _result;

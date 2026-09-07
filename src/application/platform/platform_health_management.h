@@ -27,13 +27,16 @@ namespace application
             ara::phm::supervisors::GlobalSupervision *mGlobalSupervision;
             helper::LogRecoveryAction mRecoveryAction;
             std::map<uint32_t, std::function<void()>> mReportDelegates;
+            std::string mDominantSupervisionType;
 
             static uint32_t getCheckpointId(const std::string& content);
+            static std::string getCheckpointName(const std::string &content);
             static void fillCheckpoints(
                 const arxml::ArxmlReader &reader,
                 std::set<uint32_t> &checkpoints);
 
             void onReportCheckpoint(uint32_t checkpoint);
+            void publishSupervisionTelemetry(uint32_t checkpoint);
             bool tryAddReportDelegate(
                 std::string checkpointIdStr,
                 const std::set<uint32_t> &checkpoints,

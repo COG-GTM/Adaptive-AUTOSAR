@@ -1,3 +1,4 @@
+#include "../telemetry/telemetry_hub.h"
 #include "./execution_server.h"
 
 namespace ara
@@ -73,6 +74,8 @@ namespace ara
                 // Insert/update the newly reported state and
                 // react with an empty RPC response payload
                 mExecutionStates[_id] = _executionState;
+                telemetry::TelemetryHub::Instance().PublishExecutionState(
+                    _id, ToString(_executionState));
                 rpcResponsePayload.clear();
                 return true;
             }

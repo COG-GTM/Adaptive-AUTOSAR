@@ -82,6 +82,9 @@ set(source_ara_log_dir
 set(source_ara_log_sink_dir
   "${CMAKE_SOURCE_DIR}/src/ara/log/sink")
 
+set(source_ara_telemetry_dir
+  "${CMAKE_SOURCE_DIR}/src/ara/telemetry")
+
 set(source_ara_sm_dir
   "${CMAKE_SOURCE_DIR}/src/ara/sm")
 
@@ -162,6 +165,12 @@ set(test_ara_core_dir
 set(test_ara_log_dir
   "${CMAKE_SOURCE_DIR}/test/ara/log")
 
+set(test_ara_log_sink_dir
+  "${CMAKE_SOURCE_DIR}/test/ara/log/sink")
+
+set(test_ara_telemetry_dir
+  "${CMAKE_SOURCE_DIR}/test/ara/telemetry")
+
 set(test_ara_sm_dir
   "${CMAKE_SOURCE_DIR}/test/ara/sm")
 
@@ -240,6 +249,19 @@ add_library(
 )
 
 add_library(
+  ara_telemetry
+  ${source_ara_telemetry_dir}/telemetry_hub.h
+  ${source_ara_telemetry_dir}/telemetry_hub.cpp
+  ${source_ara_telemetry_dir}/telemetry_server.h
+  ${source_ara_telemetry_dir}/telemetry_server.cpp
+)
+
+target_link_libraries(
+  ara_telemetry
+  jsoncpp_lib
+)
+
+add_library(
   ara_log
   ${source_ara_log_dir}/argument.h
   ${source_ara_log_dir}/log_stream.h
@@ -254,6 +276,8 @@ add_library(
   ${source_ara_log_sink_dir}/file_log_sink.cpp
   ${source_ara_log_sink_dir}/log_sink.h
   ${source_ara_log_sink_dir}/log_sink.cpp
+  ${source_ara_log_sink_dir}/telemetry_log_sink.h
+  ${source_ara_log_sink_dir}/telemetry_log_sink.cpp
 )
 
 add_library(
@@ -459,12 +483,14 @@ add_library(
 
 target_link_libraries(
   ara_com
+  ara_telemetry
   async_bsd_socket_lib
 )
 
 target_link_libraries(
   ara_exec
   ara_core
+  ara_telemetry
   async_bsd_socket_lib
 )
 
@@ -472,6 +498,7 @@ target_link_libraries(
   ara_log
   ara_core
   ara_com
+  ara_telemetry
 )
 
 target_link_libraries(
@@ -528,6 +555,7 @@ target_link_libraries(
   adaptive_autosar
   libcurl
   jsoncpp_lib
+  ara_telemetry
   obd_ii_emulator
   doip_lib
   arxml
@@ -552,6 +580,9 @@ if(build_tests)
     ${test_ara_log_dir}/log_stream_test.cpp
     ${test_ara_log_dir}/logger_test.cpp
     ${test_ara_log_dir}/logging_framework_test.cpp
+    ${test_ara_log_sink_dir}/telemetry_log_sink_test.cpp
+    ${test_ara_telemetry_dir}/telemetry_hub_test.cpp
+    ${test_ara_telemetry_dir}/telemetry_server_test.cpp
     ${test_ara_sm_dir}/trigger_in_test.cpp
     ${test_ara_sm_dir}/trigger_out_test.cpp
     ${test_ara_sm_dir}/trigger_inout_test.cpp
@@ -640,6 +671,7 @@ if(build_tests)
     obd_ii_emulator
     doip_lib
     ara_log
+    ara_telemetry
     ara_sm
     ara_phm
     ara_diag

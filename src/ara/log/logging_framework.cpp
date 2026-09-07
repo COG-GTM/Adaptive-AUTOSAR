@@ -67,8 +67,14 @@ namespace ara
 
             if (logMode == LogMode::kConsole)
             {
+                std::unique_ptr<sink::LogSink> _consoleSink{
+                    new sink::ConsoleLogSink(appId, appDescription)};
                 sink::LogSink *_logSink =
-                    new sink::ConsoleLogSink(appId, appDescription);
+                    new sink::TelemetryLogSink(
+                        std::move(_consoleSink),
+                        &telemetry::TelemetryHub::Instance(),
+                        appId,
+                        appDescription);
                 LoggingFramework *_result =
                     new LoggingFramework(_logSink, logLevel);
 
@@ -87,8 +93,14 @@ namespace ara
             LogLevel logLevel,
             std::string appDescription)
         {
+            std::unique_ptr<sink::LogSink> _fileSink{
+                new sink::FileLogSink(filePath, appId, appDescription)};
             sink::LogSink *_logSink =
-                new sink::FileLogSink(filePath, appId, appDescription);
+                new sink::TelemetryLogSink(
+                    std::move(_fileSink),
+                    &telemetry::TelemetryHub::Instance(),
+                    appId,
+                    appDescription);
             LoggingFramework *_result =
                 new LoggingFramework(_logSink, logLevel);
 
