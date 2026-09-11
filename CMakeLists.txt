@@ -213,6 +213,9 @@ set(test_ara_phm_dir
 set(test_ara_phm_supervisors_dir
   "${CMAKE_SOURCE_DIR}/test/ara/phm/supervisors")
 
+set(test_application_helper_dir
+  "${CMAKE_SOURCE_DIR}/test/application/helper")
+
 ########################################################################
 
 add_library(
@@ -628,10 +631,22 @@ if(build_tests)
     ${test_ara_phm_supervisors_dir}/global_supervision_test.cpp
   )
 
+  add_executable(
+    application_unit_test
+    ${source_application_helper_dir}/argument_configuration.h
+    ${source_application_helper_dir}/argument_configuration.cpp
+    ${test_application_helper_dir}/argument_configuration_test.cpp
+  )
+
   target_link_libraries(
     arxml_unit_test
     gtest_main
     arxml
+  )
+
+  target_link_libraries(
+    application_unit_test
+    gtest_main
   )
 
   target_link_libraries(
@@ -648,4 +663,5 @@ if(build_tests)
   include(GoogleTest)
   gtest_discover_tests(arxml_unit_test)
   gtest_discover_tests(ara_unit_test)
+  gtest_discover_tests(application_unit_test)
  endif()

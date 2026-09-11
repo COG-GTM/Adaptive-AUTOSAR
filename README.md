@@ -59,6 +59,25 @@ in order to connect to the [Volvo Extended Vehicle](https://developer.volvocars.
 
 > ⚠️ Due to security reasons, the terminal echo is temporarily disabled while typing the key and the token.
 
+### Headless (non-interactive) mode
+The key and the token can be provided via the `VCC_API_KEY` and `BEARER_TOKEN` environment variables instead of the console prompt. When the standard input is not a terminal (e.g., in CI or a container), or when `--noninteractive` is passed, the simulation skips all the console interactions and keeps running until it receives `SIGINT`/`SIGTERM`, or until the optional run duration elapses:
+```bash
+VCC_API_KEY=... BEARER_TOKEN=... RUN_DURATION_MS=10000 ./build/bin/adaptive_autosar --noninteractive
+```
+
+Every argument can be resolved from the command line (`--key=value`), then from an environment variable, and finally from its default value:
+
+| Argument | Command line | Environment variable |
+|---|---|---|
+| Execution manifest | `--config=<path>` (or 1st positional) | `ADAPTIVE_AUTOSAR_CONFIG` |
+| Extended Vehicle manifest | `--evconfig=<path>` (or 2nd positional) | `ADAPTIVE_AUTOSAR_EVCONFIG` |
+| Diagnostic Manager manifest | `--dmconfig=<path>` (or 3rd positional) | `ADAPTIVE_AUTOSAR_DMCONFIG` |
+| PHM manifest | `--phmconfig=<path>` (or 4th positional) | `ADAPTIVE_AUTOSAR_PHMCONFIG` |
+| Non-interactive mode | `--noninteractive[=0\|1]` | `ADAPTIVE_AUTOSAR_NONINTERACTIVE` |
+| Bounded run duration (ms) | `--runduration=<ms>` | `RUN_DURATION_MS` |
+| VCC API key | – | `VCC_API_KEY` |
+| OAuth 2.0 bearer token | – | `BEARER_TOKEN` |
+
 ## Documentation
 
 Please refer to [the project GitHub pages](https://langroodi.github.io/Adaptive-AUTOSAR/) powered by Doxygen.
