@@ -87,7 +87,7 @@ namespace application
 
             void ExpectDefaultManifests(const ArgumentConfiguration &configuration)
             {
-                const auto &_arguments{configuration.GetArguments()};
+                const std::map<std::string, std::string> &_arguments{configuration.GetArguments()};
                 EXPECT_EQ(_arguments.at(ArgumentConfiguration::cConfigArgument), cDefaultConfig);
                 EXPECT_EQ(_arguments.at(ArgumentConfiguration::cEvConfigArgument), cDefaultEvConfig);
                 EXPECT_EQ(_arguments.at(ArgumentConfiguration::cDmConfigArgument), cDefaultDmConfig);
@@ -140,7 +140,7 @@ namespace application
             SetArguments({"adaptive_autosar"});
 
             ArgumentConfiguration _configuration(Argc(), Argv.data());
-            const auto &_arguments{_configuration.GetArguments()};
+            const std::map<std::string, std::string> &_arguments{_configuration.GetArguments()};
 
             EXPECT_EQ(_arguments.size(), cExpectedSize);
             EXPECT_EQ(
@@ -168,7 +168,7 @@ namespace application
             SetArguments({"adaptive_autosar", cConfig, cEvConfig, cDmConfig, cPhmConfig});
 
             ArgumentConfiguration _configuration{CreateConfiguration()};
-            const auto &_arguments{_configuration.GetArguments()};
+            const std::map<std::string, std::string> &_arguments{_configuration.GetArguments()};
 
             EXPECT_EQ(_arguments.size(), cExpectedSize);
             EXPECT_EQ(_arguments.at(ArgumentConfiguration::cConfigArgument), cConfig);
@@ -189,7 +189,7 @@ namespace application
                 {"adaptive_autosar", cConfig, cEvConfig, cDmConfig, cPhmConfig, "extra.arxml"});
 
             ArgumentConfiguration _configuration{CreateConfiguration()};
-            const auto &_arguments{_configuration.GetArguments()};
+            const std::map<std::string, std::string> &_arguments{_configuration.GetArguments()};
 
             EXPECT_EQ(_arguments.size(), cExpectedSize);
             EXPECT_EQ(_arguments.at(ArgumentConfiguration::cConfigArgument), cConfig);
@@ -203,7 +203,7 @@ namespace application
             SetArguments({"adaptive_autosar"});
 
             ArgumentConfiguration _configuration{CreateConfiguration()};
-            const auto &_arguments{_configuration.GetArguments()};
+            const std::map<std::string, std::string> &_arguments{_configuration.GetArguments()};
 
             EXPECT_EQ(_arguments.count(ArgumentConfiguration::cApiKeyArgument), 0);
             EXPECT_EQ(_arguments.count(ArgumentConfiguration::cBearerTokenArgument), 0);
