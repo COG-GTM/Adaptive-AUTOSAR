@@ -24,15 +24,22 @@ namespace application
             const uint8_t cProtocolVersion;
             DoipLib::DiagMessage mRequest;
             std::vector<uint8_t> mUdsResponse;
+            mutable std::size_t mHandledCount;
 
         public:
-            explicit MockDiagMessageHandler(uint8_t protocolVersion) : cProtocolVersion{protocolVersion}
+            explicit MockDiagMessageHandler(uint8_t protocolVersion) : cProtocolVersion{protocolVersion},
+                                                                        mHandledCount{0}
             {
             }
 
             void SetUdsResponse(std::vector<uint8_t> &&udsResponse)
             {
                 mUdsResponse = std::move(udsResponse);
+            }
+
+            std::size_t HandledCount() const noexcept
+            {
+                return mHandledCount;
             }
 
             DoipLib::Message *GetMessage() override
@@ -56,6 +63,7 @@ namespace application
                     _diagMessage->GetTargetAddress(),
                     mUdsResponse);
                 _diagMessageAck.Serialize(response);
+                ++mHandledCount;
 
                 return true;
             }
@@ -192,6 +200,12 @@ namespace application
             void SetUdsResponse(std::vector<uint8_t> &&udsResponse)
             {
                 mDiagMessageHandler.SetUdsResponse(std::move(udsResponse));
+            }
+
+            /// @brief Get the number of diagnostic messages answered so far
+            std::size_t HandledDiagMessageCount() const noexcept
+            {
+                return mDiagMessageHandler.HandledCount();
             }
 
             ~MockDoipServer()

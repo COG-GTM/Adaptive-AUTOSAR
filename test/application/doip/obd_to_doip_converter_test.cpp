@@ -25,6 +25,7 @@ namespace application
             MockDoipServer Server;
 
             bool CallbackInvoked{false};
+            std::size_t CallbackCount{0};
             std::vector<uint8_t> ReceivedPid;
             std::vector<uint8_t> ReceivedData;
             uint8_t ReceivedService{0};
@@ -42,6 +43,7 @@ namespace application
                     [this](const std::vector<uint8_t> &pid, std::vector<uint8_t> &&data, uint8_t service)
                     {
                         CallbackInvoked = true;
+                        ++CallbackCount;
                         ReceivedPid = pid;
                         ReceivedData = std::move(data);
                         ReceivedService = service;
@@ -86,16 +88,32 @@ namespace application
                 return CallbackInvoked;
             }
 
+            bool TryWaitForServerResponses(std::size_t count)
+            {
+                for (int i = 0; i < cMaxPollIterations && Server.HandledDiagMessageCount() < count; ++i)
+                {
+                    Poller.TryPoll(cPollTimeout);
+                }
+
+                return Server.HandledDiagMessageCount() == count;
+            }
+
             /// @brief Send a follow-up positive request and verify it is the first one delivered
-            /// @note The TCP stream is ordered, so the previous response has been processed beforehand.
+            /// @note The server has already answered the previous request with the current canned response,
+            ///       and the TCP stream is ordered, so the previous response is processed before the follow-up.
             void ExpectOnlyFollowUpDelivered()
             {
                 const uint8_t cFollowUpPid{0x46};
                 const uint8_t cFollowUpData{0x55};
 
+                ASSERT_TRUE(TryWaitForServerResponses(1));
+                ASSERT_FALSE(CallbackInvoked);
+
                 Server.SetUdsResponse({0x62, 0xf5, cFollowUpPid, cFollowUpData});
                 ASSERT_TRUE(TrySendRemotePid(cFollowUpPid));
                 ASSERT_TRUE(TryWaitForCallback());
+                EXPECT_EQ(2, Server.HandledDiagMessageCount());
+                EXPECT_EQ(1, CallbackCount);
 
                 const std::vector<uint8_t> cExpectedPid{cFollowUpPid};
                 const std::vector<uint8_t> cExpectedData{cFollowUpData};
