@@ -213,6 +213,9 @@ set(test_ara_phm_dir
 set(test_ara_phm_supervisors_dir
   "${CMAKE_SOURCE_DIR}/test/ara/phm/supervisors")
 
+set(test_application_helper_dir
+  "${CMAKE_SOURCE_DIR}/test/application/helper")
+
 ########################################################################
 
 add_library(
@@ -559,12 +562,14 @@ if(build_tests)
     ${test_ara_com_e2e_dir}/profile11_test.cpp
     ${test_ara_com_entry_dir}/eventgroup_entry_test.cpp
     ${test_ara_com_entry_dir}/service_entry_test.cpp
+    ${test_ara_com_entry_dir}/entry_deserializer_test.cpp
     ${test_ara_com_helper_dir}/ipv4_address_test.cpp
     ${test_ara_com_helper_dir}/mockup_network_layer.h
     ${test_ara_com_helper_dir}/ttl_timer_test.cpp
     ${test_ara_com_helper_dir}/concurrent_queue_test.cpp
     ${test_ara_com_option_dir}/ipv4_endpoint_option_test.cpp
     ${test_ara_com_option_dir}/loadbalancing_option_test.cpp
+    ${test_ara_com_option_dir}/option_deserializer_test.cpp
     ${test_ara_com_someip_pubsub_dir}/someip_pubsub_test.cpp
     ${test_ara_com_someip_pubsub_fsm_dir}/pubsub_state_test.cpp
     ${test_ara_com_someip_rpc_dir}/someip_rpc_message_test.cpp
@@ -628,6 +633,15 @@ if(build_tests)
     ${test_ara_phm_supervisors_dir}/global_supervision_test.cpp
   )
 
+  add_executable(
+    application_unit_test
+    ${source_application_helper_dir}/argument_configuration.h
+    ${source_application_helper_dir}/argument_configuration.cpp
+    ${source_application_helper_dir}/memory_cache.h
+    ${test_application_helper_dir}/argument_configuration_test.cpp
+    ${test_application_helper_dir}/memory_cache_test.cpp
+  )
+
   target_link_libraries(
     arxml_unit_test
     gtest_main
@@ -645,7 +659,13 @@ if(build_tests)
     ara_diag
   )
 
+  target_link_libraries(
+    application_unit_test
+    gtest_main
+  )
+
   include(GoogleTest)
   gtest_discover_tests(arxml_unit_test)
   gtest_discover_tests(ara_unit_test)
+  gtest_discover_tests(application_unit_test)
  endif()
