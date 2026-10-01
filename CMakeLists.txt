@@ -62,6 +62,7 @@ FetchContent_MakeAvailable(
 # Options:
 
 option(build_tests "Build all the tests." ON)
+option(enable_coverage "Instrument the test targets for code coverage reporting." OFF)
 
 ########################################################################
 #
@@ -177,6 +178,9 @@ set(test_ara_com_helper_dir
 set(test_ara_com_option_dir
   "${CMAKE_SOURCE_DIR}/test/ara/com/option")
 
+set(test_ara_com_someip_dir
+  "${CMAKE_SOURCE_DIR}/test/ara/com/someip")
+
 set(test_ara_com_someip_pubsub_dir
   "${CMAKE_SOURCE_DIR}/test/ara/com/someip/pubsub")
 
@@ -212,6 +216,12 @@ set(test_ara_phm_dir
 
 set(test_ara_phm_supervisors_dir
   "${CMAKE_SOURCE_DIR}/test/ara/phm/supervisors")
+
+set(test_application_doip_dir
+  "${CMAKE_SOURCE_DIR}/test/application/doip")
+
+set(test_application_helper_dir
+  "${CMAKE_SOURCE_DIR}/test/application/helper")
 
 ########################################################################
 
@@ -465,6 +475,8 @@ target_link_libraries(
 target_link_libraries(
   ara_exec
   ara_core
+  ara_com
+  ara_log
   async_bsd_socket_lib
 )
 
@@ -484,9 +496,8 @@ target_link_libraries(
   ara_exec
 )
 
-add_executable(
-  adaptive_autosar
-  ${source_dir}/main.cpp
+add_library(
+  application_lib
   ${source_application_dir}/extended_vehicle.h
   ${source_application_dir}/extended_vehicle.cpp
   ${source_application_helper_dir}/argument_configuration.h
@@ -525,7 +536,7 @@ add_executable(
 )
 
 target_link_libraries(
-  adaptive_autosar
+  application_lib
   libcurl
   jsoncpp_lib
   obd_ii_emulator
@@ -537,6 +548,16 @@ target_link_libraries(
   ara_phm
 )
 
+add_executable(
+  adaptive_autosar
+  ${source_dir}/main.cpp
+)
+
+target_link_libraries(
+  adaptive_autosar
+  application_lib
+)
+
 if(build_tests)
   enable_testing()
 
@@ -546,25 +567,71 @@ if(build_tests)
     ${test_arxml_dir}/arxml_reader_test.cpp
   )
 
+  target_link_libraries(
+    arxml_unit_test
+    gtest_main
+    arxml
+  )
+
   add_executable(
-    ara_unit_test
+    ara_core_unit_test
+    ${test_ara_core_dir}/optional_test.cpp
+    ${test_ara_core_dir}/result_test.cpp
+    ${test_ara_core_dir}/result_void_test.cpp
+    ${test_ara_core_dir}/error_domain_test.cpp
+    ${test_ara_core_dir}/error_code_test.cpp
+    ${test_ara_core_dir}/instance_specifier_test.cpp
+  )
+
+  target_link_libraries(
+    ara_core_unit_test
+    gtest_main
+    ara_core
+  )
+
+  add_executable(
+    ara_log_unit_test
     ${test_ara_log_dir}/argument_test.cpp
     ${test_ara_log_dir}/log_stream_test.cpp
     ${test_ara_log_dir}/logger_test.cpp
     ${test_ara_log_dir}/logging_framework_test.cpp
+    ${test_ara_log_dir}/file_log_sink_test.cpp
+  )
+
+  target_link_libraries(
+    ara_log_unit_test
+    gtest_main
+    ara_log
+  )
+
+  add_executable(
+    ara_sm_unit_test
     ${test_ara_sm_dir}/trigger_in_test.cpp
     ${test_ara_sm_dir}/trigger_out_test.cpp
     ${test_ara_sm_dir}/trigger_inout_test.cpp
     ${test_ara_sm_dir}/power_mode_test.cpp
+  )
+
+  target_link_libraries(
+    ara_sm_unit_test
+    gtest_main
+    ara_sm
+  )
+
+  add_executable(
+    ara_com_unit_test
     ${test_ara_com_e2e_dir}/profile11_test.cpp
     ${test_ara_com_entry_dir}/eventgroup_entry_test.cpp
     ${test_ara_com_entry_dir}/service_entry_test.cpp
+    ${test_ara_com_entry_dir}/entry_deserializer_test.cpp
     ${test_ara_com_helper_dir}/ipv4_address_test.cpp
     ${test_ara_com_helper_dir}/mockup_network_layer.h
     ${test_ara_com_helper_dir}/ttl_timer_test.cpp
     ${test_ara_com_helper_dir}/concurrent_queue_test.cpp
     ${test_ara_com_option_dir}/ipv4_endpoint_option_test.cpp
     ${test_ara_com_option_dir}/loadbalancing_option_test.cpp
+    ${test_ara_com_option_dir}/option_deserializer_test.cpp
+    ${test_ara_com_someip_dir}/someip_message_test.cpp
     ${test_ara_com_someip_pubsub_dir}/someip_pubsub_test.cpp
     ${test_ara_com_someip_pubsub_fsm_dir}/pubsub_state_test.cpp
     ${test_ara_com_someip_rpc_dir}/someip_rpc_message_test.cpp
@@ -574,6 +641,17 @@ if(build_tests)
     ${test_ara_com_someip_sd_dir}/network_abstraction_test.cpp
     ${test_ara_com_someip_sd_dir}/someip_sd_test.cpp
     ${test_ara_com_someip_sd_fsm_dir}/machine_state_test.cpp
+  )
+
+  target_link_libraries(
+    ara_com_unit_test
+    gtest_main
+    ara_com
+    async_bsd_socket_lib
+  )
+
+  add_executable(
+    ara_exec_unit_test
     ${test_ara_exec_dir}/worker_thread_test.cpp
     ${test_ara_exec_dir}/worker_runnable_test.cpp
     ${test_ara_exec_dir}/deterministic_client_test.cpp
@@ -588,12 +666,16 @@ if(build_tests)
     ${test_ara_exec_helper_dir}/mock_rpc_client.h
     ${test_ara_exec_helper_dir}/mock_rpc_server.h
     ${test_ara_exec_helper_dir}/modelled_process_test.cpp
-    ${test_ara_core_dir}/optional_test.cpp
-    ${test_ara_core_dir}/result_test.cpp
-    ${test_ara_core_dir}/result_void_test.cpp
-    ${test_ara_core_dir}/error_domain_test.cpp
-    ${test_ara_core_dir}/error_code_test.cpp
-    ${test_ara_core_dir}/instance_specifier_test.cpp
+  )
+
+  target_link_libraries(
+    ara_exec_unit_test
+    gtest_main
+    ara_exec
+  )
+
+  add_executable(
+    ara_diag_unit_test
     ${test_ara_diag_dir}/obd_communication_test.cpp
     ${test_ara_diag_dir}/meta_info_test.cpp
     ${test_ara_diag_dir}/cancellation_handler_test.cpp
@@ -609,6 +691,8 @@ if(build_tests)
     ${test_ara_diag_dir}/generic_routine_test.cpp
     ${test_ara_diag_dir}/monitor_test.cpp
     ${test_ara_diag_dir}/doip_lib_test.cpp
+    ${test_ara_diag_dir}/upload_test.cpp
+    ${test_ara_diag_dir}/download_test.cpp
     ${test_ara_diag_routing_dir}/testable_uds_service.h
     ${test_ara_diag_routing_dir}/uds_service_router_test.cpp
     ${test_ara_diag_routing_dir}/delay_timer_test.cpp
@@ -618,6 +702,18 @@ if(build_tests)
     ${test_ara_diag_routing_dir}/request_transfer_test.cpp
     ${test_ara_diag_debouncing_dir}/counter_based_debouncer_test.cpp
     ${test_ara_diag_debouncing_dir}/timer_based_debouncer_test.cpp
+  )
+
+  target_link_libraries(
+    ara_diag_unit_test
+    gtest_main
+    ara_diag
+    obd_ii_emulator
+    doip_lib
+  )
+
+  add_executable(
+    ara_phm_unit_test
     ${test_ara_phm_dir}/recovery_action_test.cpp
     ${test_ara_phm_dir}/mocked_checkpoint_communicator.h
     ${test_ara_phm_dir}/supervised_entity_test.cpp
@@ -629,23 +725,61 @@ if(build_tests)
   )
 
   target_link_libraries(
-    arxml_unit_test
+    ara_phm_unit_test
     gtest_main
-    arxml
+    ara_phm
+  )
+
+  add_executable(
+    application_unit_test
+    ${test_application_helper_dir}/memory_cache_test.cpp
+    ${test_application_helper_dir}/argument_configuration_test.cpp
+    ${test_application_doip_dir}/vehicle_id_request_handler_test.cpp
+    ${test_application_doip_dir}/diag_message_handler_test.cpp
+    ${test_application_doip_dir}/mock_doip_server.h
+    ${test_application_doip_dir}/obd_to_doip_converter_test.cpp
   )
 
   target_link_libraries(
-    ara_unit_test
+    application_unit_test
     gtest_main
-    obd_ii_emulator
-    doip_lib
-    ara_log
-    ara_sm
-    ara_phm
-    ara_diag
+    application_lib
   )
 
+  set(unit_test_targets
+    arxml_unit_test
+    ara_core_unit_test
+    ara_log_unit_test
+    ara_sm_unit_test
+    ara_com_unit_test
+    ara_exec_unit_test
+    ara_diag_unit_test
+    ara_phm_unit_test
+    application_unit_test
+  )
+
+  if(enable_coverage)
+    set(coverage_flags --coverage -fprofile-arcs -ftest-coverage)
+    set(coverage_targets
+      ${unit_test_targets}
+      arxml
+      ara_core
+      ara_log
+      ara_com
+      ara_sm
+      ara_exec
+      ara_diag
+      ara_phm
+      application_lib
+    )
+    foreach(coverage_target ${coverage_targets})
+      target_compile_options(${coverage_target} PRIVATE ${coverage_flags})
+      target_link_options(${coverage_target} PRIVATE ${coverage_flags})
+    endforeach()
+  endif()
+
   include(GoogleTest)
-  gtest_discover_tests(arxml_unit_test)
-  gtest_discover_tests(ara_unit_test)
- endif()
+  foreach(unit_test_target ${unit_test_targets})
+    gtest_discover_tests(${unit_test_target})
+  endforeach()
+endif()
