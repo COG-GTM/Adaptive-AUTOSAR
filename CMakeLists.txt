@@ -213,6 +213,12 @@ set(test_ara_phm_dir
 set(test_ara_phm_supervisors_dir
   "${CMAKE_SOURCE_DIR}/test/ara/phm/supervisors")
 
+set(test_application_doip_dir
+  "${CMAKE_SOURCE_DIR}/test/application/doip")
+
+set(test_application_helper_dir
+  "${CMAKE_SOURCE_DIR}/test/application/helper")
+
 ########################################################################
 
 add_library(
@@ -484,9 +490,8 @@ target_link_libraries(
   ara_exec
 )
 
-add_executable(
-  adaptive_autosar
-  ${source_dir}/main.cpp
+add_library(
+  application_lib STATIC
   ${source_application_dir}/extended_vehicle.h
   ${source_application_dir}/extended_vehicle.cpp
   ${source_application_helper_dir}/argument_configuration.h
@@ -525,7 +530,7 @@ add_executable(
 )
 
 target_link_libraries(
-  adaptive_autosar
+  application_lib
   libcurl
   jsoncpp_lib
   obd_ii_emulator
@@ -535,6 +540,16 @@ target_link_libraries(
   ara_log
   ara_diag
   ara_phm
+)
+
+add_executable(
+  adaptive_autosar
+  ${source_dir}/main.cpp
+)
+
+target_link_libraries(
+  adaptive_autosar
+  application_lib
 )
 
 if(build_tests)
@@ -628,6 +643,14 @@ if(build_tests)
     ${test_ara_phm_supervisors_dir}/global_supervision_test.cpp
   )
 
+  add_executable(
+    application_unit_test
+    ${test_application_helper_dir}/argument_configuration_test.cpp
+    ${test_application_helper_dir}/fifo_checkpoint_communicator_test.cpp
+    ${test_application_doip_dir}/doip_client_server_test.cpp
+    ${test_application_doip_dir}/obd_to_doip_converter_test.cpp
+  )
+
   target_link_libraries(
     arxml_unit_test
     gtest_main
@@ -645,7 +668,15 @@ if(build_tests)
     ara_diag
   )
 
+  target_link_libraries(
+    application_unit_test
+    gtest_main
+    async_bsd_socket_lib
+    application_lib
+  )
+
   include(GoogleTest)
   gtest_discover_tests(arxml_unit_test)
   gtest_discover_tests(ara_unit_test)
+  gtest_discover_tests(application_unit_test)
  endif()
