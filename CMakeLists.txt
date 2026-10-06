@@ -213,6 +213,18 @@ set(test_ara_phm_dir
 set(test_ara_phm_supervisors_dir
   "${CMAKE_SOURCE_DIR}/test/ara/phm/supervisors")
 
+set(test_application_dir
+  "${CMAKE_SOURCE_DIR}/test/application")
+
+set(test_application_doip_dir
+  "${CMAKE_SOURCE_DIR}/test/application/doip")
+
+set(test_application_helper_dir
+  "${CMAKE_SOURCE_DIR}/test/application/helper")
+
+set(test_application_platform_dir
+  "${CMAKE_SOURCE_DIR}/test/application/platform")
+
 ########################################################################
 
 add_library(
@@ -484,9 +496,8 @@ target_link_libraries(
   ara_exec
 )
 
-add_executable(
-  adaptive_autosar
-  ${source_dir}/main.cpp
+add_library(
+  application
   ${source_application_dir}/extended_vehicle.h
   ${source_application_dir}/extended_vehicle.cpp
   ${source_application_helper_dir}/argument_configuration.h
@@ -525,7 +536,7 @@ add_executable(
 )
 
 target_link_libraries(
-  adaptive_autosar
+  application
   libcurl
   jsoncpp_lib
   obd_ii_emulator
@@ -535,6 +546,17 @@ target_link_libraries(
   ara_log
   ara_diag
   ara_phm
+  async_bsd_socket_lib
+)
+
+add_executable(
+  adaptive_autosar
+  ${source_dir}/main.cpp
+)
+
+target_link_libraries(
+  adaptive_autosar
+  application
 )
 
 if(build_tests)
@@ -645,7 +667,48 @@ if(build_tests)
     ara_diag
   )
 
+  add_executable(
+    application_unit_test
+    ${test_application_helper_dir}/testable_fixture.h
+    ${test_application_helper_dir}/mock_http_server.h
+    ${test_application_helper_dir}/argument_configuration_test.cpp
+    ${test_application_helper_dir}/network_configuration_test.cpp
+    ${test_application_helper_dir}/rpc_configuration_test.cpp
+    ${test_application_helper_dir}/memory_cache_test.cpp
+    ${test_application_helper_dir}/curl_wrapper_test.cpp
+    ${test_application_helper_dir}/read_data_by_identifier_test.cpp
+    ${test_application_helper_dir}/log_recovery_action_test.cpp
+    ${test_application_helper_dir}/fifo_checkpoint_communicator_test.cpp
+    ${test_application_doip_dir}/vehicle_id_request_handler_test.cpp
+    ${test_application_doip_dir}/diag_message_handler_test.cpp
+    ${test_application_doip_dir}/doip_server_test.cpp
+    ${test_application_doip_dir}/doip_client_test.cpp
+    ${test_application_doip_dir}/obd_to_doip_converter_test.cpp
+    ${test_application_platform_dir}/state_management_test.cpp
+    ${test_application_platform_dir}/platform_health_management_test.cpp
+    ${test_application_platform_dir}/diagnostic_manager_test.cpp
+    ${test_application_platform_dir}/execution_management_test.cpp
+    ${test_application_dir}/extended_vehicle_test.cpp
+  )
+
+  target_compile_definitions(
+    application_unit_test
+    PRIVATE
+    APPLICATION_TEST_CONFIGURATION_DIR="${CMAKE_SOURCE_DIR}/configuration"
+  )
+
+  target_link_libraries(
+    application_unit_test
+    gtest_main
+    application
+    obd_ii_emulator
+    doip_lib
+    jsoncpp_lib
+    libcurl
+  )
+
   include(GoogleTest)
   gtest_discover_tests(arxml_unit_test)
   gtest_discover_tests(ara_unit_test)
+  gtest_discover_tests(application_unit_test)
  endif()

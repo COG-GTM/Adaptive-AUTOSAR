@@ -14,12 +14,15 @@ namespace application
             const ara::com::option::Layer4ProtocolType cProtocol{
                 ara::com::option::Layer4ProtocolType::Tcp};
 
-            TryGetNetworkConfiguration(
-                cArxmlReader,
-                networkEndpoint,
-                applicationEndpoint,
-                cProtocol,
-                configuration);
+            if (!TryGetNetworkConfiguration(
+                    cArxmlReader,
+                    networkEndpoint,
+                    applicationEndpoint,
+                    cProtocol,
+                    configuration))
+            {
+                return false;
+            }
 
             uint8_t _protocolVersion;
             if (!TryExtractDeepValue(
