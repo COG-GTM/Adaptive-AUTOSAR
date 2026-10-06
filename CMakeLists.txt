@@ -62,6 +62,13 @@ FetchContent_MakeAvailable(
 # Options:
 
 option(build_tests "Build all the tests." ON)
+option(coverage "Build tests with gcov instrumentation" OFF)
+
+# Instrument all targets defined below (project libraries and tests)
+if(coverage AND build_tests)
+  add_compile_options(--coverage -O0 -g)
+  add_link_options(--coverage)
+endif()
 
 ########################################################################
 #
