@@ -60,6 +60,8 @@ jobs:
       continue-on-error: true
       with:
         files: ${{github.workspace}}/build/coverage_filtered.info
+        disable_search: true
+        plugins: noop
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: false
 
