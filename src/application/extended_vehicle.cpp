@@ -8,14 +8,19 @@ namespace application
 {
     const std::string ExtendedVehicle::cAppId{"ExtendedVehicle"};
     const ara::core::InstanceSpecifier ExtendedVehicle::cSeInstance{"ExtendedVehicleSE"};
+    const std::string ExtendedVehicle::cDefaultVehiclesUrl{
+        "https://api.volvocars.com/extended-vehicle/v1/vehicles"};
 
     ExtendedVehicle::ExtendedVehicle(
         AsyncBsdSocketLib::Poller *poller,
-        ara::phm::CheckpointCommunicator *checkpointCommunicator) : ara::exec::helper::ModelledProcess(cAppId, poller),
-                                                                    mSupervisedEntity{cSeInstance, checkpointCommunicator},
-                                                                    mNetworkLayer{nullptr},
-                                                                    mSdServer{nullptr},
-                                                                    mCurl{nullptr}
+        ara::phm::CheckpointCommunicator *checkpointCommunicator,
+        std::string vehiclesUrl) : ara::exec::helper::ModelledProcess(cAppId, poller),
+                                   mSupervisedEntity{cSeInstance, checkpointCommunicator},
+                                   mNetworkLayer{nullptr},
+                                   mSdServer{nullptr},
+                                   mCurl{nullptr},
+                                   mDoipServer{nullptr},
+                                   cVehiclesUrl{vehiclesUrl}
     {
     }
 
@@ -162,8 +167,7 @@ namespace application
         const bool cCollectJsonComments{false};
         const std::string cVehiclesKey{"vehicles"};
         const std::string cErrorKey{"error"};
-        const std::string cRequestUrl{
-            "https://api.volvocars.com/extended-vehicle/v1/vehicles"};
+        const std::string cRequestUrl{cVehiclesUrl};
 
         mCurl = new helper::CurlWrapper(apiKey, bearerToken);
 

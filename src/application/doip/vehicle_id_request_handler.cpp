@@ -26,7 +26,7 @@ namespace application
             {
                 const uint64_t cOctet{id & _mask};
                 _result[i] = static_cast<uint8_t>(cOctet >> (i * 8));
-                _mask <<= i * 8;
+                _mask <<= 8;
             }
 
             return _result;

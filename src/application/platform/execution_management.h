@@ -59,7 +59,10 @@ namespace application
         public:
             /// @brief Constructor
             /// @param poller Global poller for network communication
-            explicit ExecutionManagement(AsyncBsdSocketLib::Poller *poller);
+            /// @param vehiclesUrl Extended vehicle RESTful API vehicles endpoint
+            explicit ExecutionManagement(
+                AsyncBsdSocketLib::Poller *poller,
+                std::string vehiclesUrl = ExtendedVehicle::cDefaultVehiclesUrl);
 
             ~ExecutionManagement() override;
         };

@@ -10,13 +10,15 @@ namespace application
         const std::string ExecutionManagement::cAppId{"ExecutionManagement"};
         const std::string ExecutionManagement::cFifoPath{"/tmp/fifo_communicator"};
 
-        ExecutionManagement::ExecutionManagement(AsyncBsdSocketLib::Poller *poller) : ara::exec::helper::ModelledProcess(cAppId, poller),
-                                                                                      mCommunicator(poller, cFifoPath),
-                                                                                      mStateManagement(poller),
-                                                                                      mPlatformHealthManager(poller, &mCommunicator, cMachineFunctionGroup),
-                                                                                      mExtendedVehicle(poller, &mCommunicator),
-                                                                                      mDiagnosticManager(poller),
-                                                                                      mStateServer{nullptr}
+        ExecutionManagement::ExecutionManagement(
+            AsyncBsdSocketLib::Poller *poller,
+            std::string vehiclesUrl) : ara::exec::helper::ModelledProcess(cAppId, poller),
+                                       mCommunicator(poller, cFifoPath),
+                                       mStateManagement(poller),
+                                       mPlatformHealthManager(poller, &mCommunicator, cMachineFunctionGroup),
+                                       mExtendedVehicle(poller, &mCommunicator, vehiclesUrl),
+                                       mDiagnosticManager(poller),
+                                       mStateServer{nullptr}
         {
         }
 

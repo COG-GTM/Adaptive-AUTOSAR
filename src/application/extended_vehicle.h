@@ -30,6 +30,7 @@ namespace application
         ara::com::someip::sd::SomeIpSdServer *mSdServer;
         helper::CurlWrapper *mCurl;
         doip::DoipServer *mDoipServer;
+        const std::string cVehiclesUrl;
 
         std::string mResourcesUrl;
 
@@ -54,12 +55,17 @@ namespace application
             const std::map<std::string, std::string> &arguments) override;
 
     public:
+        /// @brief Default Volvo extended vehicle RESTful API vehicles endpoint
+        static const std::string cDefaultVehiclesUrl;
+
         /// @brief Constructor
         /// @param poller Global poller for network communication
         /// @param checkpointCommunicator Medium to communicate the supervision checkpoints
+        /// @param vehiclesUrl Extended vehicle RESTful API vehicles endpoint
         ExtendedVehicle(
             AsyncBsdSocketLib::Poller *poller,
-            ara::phm::CheckpointCommunicator *checkpointCommunicator);
+            ara::phm::CheckpointCommunicator *checkpointCommunicator,
+            std::string vehiclesUrl = cDefaultVehiclesUrl);
 
         ~ExtendedVehicle() override;
     };
