@@ -21,6 +21,8 @@ namespace application
             static const uint16_t cAverageFuelConsumptionDid{0xf55e};
             static const uint16_t cEngineCoolantTemperatureDid{0xf505};
             static const uint16_t cOdometerValueDid{0xf5a6};
+            static const uint16_t cVinDid{0xf190};
+            static const size_t cVinLength{17};
             static const std::chrono::seconds cCacheLifetime;
             static const ara::core::InstanceSpecifier cSpecifer;
 
@@ -29,6 +31,7 @@ namespace application
             const bool cCollectJsonComments{false};
 
             const std::string cResourcesUrl;
+            const std::string cVin;
             CurlWrapper *mCurl;
             Json::Reader mJsonReader;
             MemoryCache<uint16_t, ara::diag::OperationOutput> mCache;
@@ -45,14 +48,18 @@ namespace application
             void getAverageFuelConsumption(ara::diag::OperationOutput &response);
             void getEngineCoolantTemperature(ara::diag::OperationOutput &response);
             void getOdometerValue(ara::diag::OperationOutput &response);
+            void getVin(ara::diag::OperationOutput &response);
 
         public:
             /// @brief Constructor
             /// @param curl Configured CURL instance for RESTful communication
             /// @param resourcesUrl Connected vehicle resources access RESTful URL
+            /// @param vin Vehicle Identification Number served via the DID 0xF190
+            /// @note If the VIN is not exactly 17 characters, reading the DID 0xF190 leads to the NRC 0x22.
             ReadDataByIdentifier(
                 CurlWrapper *curl,
-                std::string resourcesUrl);
+                std::string resourcesUrl,
+                std::string vin);
 
             std::future<ara::diag::OperationOutput> HandleMessage(
                 const std::vector<uint8_t> &requestData,

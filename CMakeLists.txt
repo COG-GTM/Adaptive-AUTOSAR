@@ -213,6 +213,12 @@ set(test_ara_phm_dir
 set(test_ara_phm_supervisors_dir
   "${CMAKE_SOURCE_DIR}/test/ara/phm/supervisors")
 
+set(test_application_helper_dir
+  "${CMAKE_SOURCE_DIR}/test/application/helper")
+
+set(test_application_doip_dir
+  "${CMAKE_SOURCE_DIR}/test/application/doip")
+
 ########################################################################
 
 add_library(
@@ -645,7 +651,58 @@ if(build_tests)
     ara_diag
   )
 
+  set(
+    application_doip_sources
+    ${source_application_helper_dir}/curl_wrapper.h
+    ${source_application_helper_dir}/curl_wrapper.cpp
+    ${source_application_helper_dir}/read_data_by_identifier.h
+    ${source_application_helper_dir}/read_data_by_identifier.cpp
+    ${source_application_helper_dir}/memory_cache.h
+    ${source_application_doip_dir}/vehicle_id_request_handler.h
+    ${source_application_doip_dir}/vehicle_id_request_handler.cpp
+    ${source_application_doip_dir}/diag_message_handler.h
+    ${source_application_doip_dir}/diag_message_handler.cpp
+    ${source_application_doip_dir}/doip_server.h
+    ${source_application_doip_dir}/doip_server.cpp
+  )
+
+  add_executable(
+    application_unit_test
+    ${application_doip_sources}
+    ${test_application_helper_dir}/read_data_by_identifier_test.cpp
+    ${test_application_doip_dir}/loopback_doip_server.h
+    ${test_application_doip_dir}/doip_server_test.cpp
+  )
+
+  # Manual loopback harness (not registered in CTest due to using the fixed TCP port 8081)
+  add_executable(
+    doip_loopback_harness
+    ${application_doip_sources}
+    ${test_application_doip_dir}/loopback_doip_server.h
+    ${test_application_doip_dir}/doip_loopback_harness.cpp
+  )
+
+  target_link_libraries(
+    application_unit_test
+    gtest_main
+    libcurl
+    jsoncpp_lib
+    doip_lib
+    async_bsd_socket_lib
+    ara_diag
+  )
+
+  target_link_libraries(
+    doip_loopback_harness
+    libcurl
+    jsoncpp_lib
+    doip_lib
+    async_bsd_socket_lib
+    ara_diag
+  )
+
   include(GoogleTest)
   gtest_discover_tests(arxml_unit_test)
   gtest_discover_tests(ara_unit_test)
+  gtest_discover_tests(application_unit_test)
  endif()

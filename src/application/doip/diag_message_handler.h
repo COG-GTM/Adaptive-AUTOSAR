@@ -24,10 +24,12 @@ namespace application
             /// @brief Constructor
             /// @param curl Configured CURL instance for RESTful communication
             /// @param resourcesUrl Connected vehicle resources access RESTful URL
+            /// @param vin Vehicle Identification Number served via the DID 0xF190
             /// @param protocolVersion DoIP protocol version
             DiagMessageHandler(
                 helper::CurlWrapper *curl,
                 std::string resourcesUrl,
+                std::string vin,
                 uint8_t protocolVersion);
 
             DoipLib::Message *GetMessage() override;
