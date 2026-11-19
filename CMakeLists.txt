@@ -556,6 +556,10 @@ if(build_tests)
     ${test_ara_sm_dir}/trigger_out_test.cpp
     ${test_ara_sm_dir}/trigger_inout_test.cpp
     ${test_ara_sm_dir}/power_mode_test.cpp
+    ${test_ara_sm_dir}/states_test.cpp
+    ${test_ara_sm_dir}/trigger_test.cpp
+    ${test_ara_sm_dir}/notifier_test.cpp
+    ${test_ara_sm_dir}/trigger_wrappers_test.cpp
     ${test_ara_com_e2e_dir}/profile11_test.cpp
     ${test_ara_com_entry_dir}/eventgroup_entry_test.cpp
     ${test_ara_com_entry_dir}/service_entry_test.cpp
