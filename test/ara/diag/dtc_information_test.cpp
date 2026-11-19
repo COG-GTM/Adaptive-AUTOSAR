@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include "../../../src/ara/diag/diag_error_domain.h"
 #include "../../../src/ara/diag/dtc_information.h"
 
 namespace ara
@@ -190,5 +191,111 @@ namespace ara
 
             EXPECT_EQ(cExpectedResult, NotifiedControlDtcStatus);
         };
+
+        TEST_F(DtcInformationTest, CurrentStatusOfUnknownDtc)
+        {
+            const uint32_t cDtc{1};
+            const DiagErrc cExpectedError{DiagErrc::kNoSuchDTC};
+
+            DTCInformation _dtcInformation(Specifier);
+            core::Result<UdsDtcStatusByteType> _result{
+                _dtcInformation.GetCurrentStatus(cDtc)};
+
+            ASSERT_FALSE(_result.HasValue());
+            DiagErrc _actualError{static_cast<DiagErrc>(_result.Error().Value())};
+            EXPECT_EQ(cExpectedError, _actualError);
+        }
+
+        TEST_F(DtcInformationTest, ClearUnknownDtc)
+        {
+            const uint32_t cDtc{1};
+            const DiagErrc cExpectedError{DiagErrc::kWrongDtc};
+
+            DTCInformation _dtcInformation(Specifier);
+            core::Result<void> _result{_dtcInformation.Clear(cDtc)};
+
+            ASSERT_FALSE(_result.HasValue());
+            DiagErrc _actualError{static_cast<DiagErrc>(_result.Error().Value())};
+            EXPECT_EQ(cExpectedError, _actualError);
+        }
+
+        TEST_F(DtcInformationTest, ClearNotifiesNumberOfStoredEntries)
+        {
+            const uint32_t cExpectedAddedResult{1};
+            const uint32_t cExpectedClearedResult{0};
+            const uint32_t cDtc{1};
+            const UdsDtcStatusBitType cMask{UdsDtcStatusBitType::kTestFailed};
+
+            UdsDtcStatusByteType _statusByte;
+            _statusByte.encodedBits = 0x01;
+
+            DTCInformation _dtcInformation(Specifier);
+            _dtcInformation.SetNumberOfStoredEntriesNotifier(
+                std::bind(
+                    &DtcInformationTest::OnNumberOfStoredEntriesChanged,
+                    this, std::placeholders::_1));
+
+            _dtcInformation.SetCurrentStatus(cDtc, cMask, _statusByte);
+            EXPECT_EQ(cExpectedAddedResult, NotifiedNumberOfStoredEntries);
+
+            core::Result<void> _result{_dtcInformation.Clear(cDtc)};
+            EXPECT_TRUE(_result.HasValue());
+            EXPECT_EQ(cExpectedClearedResult, NotifiedNumberOfStoredEntries);
+        }
+
+        TEST_F(DtcInformationTest, MaskedOutStatusChange)
+        {
+            const uint32_t cDtc{1};
+            const uint8_t cInitialStatus{0x01};
+            const uint8_t cNewStatus{0x09};
+            const uint32_t cExpectedCallCount{0};
+
+            UdsDtcStatusByteType _statusByte;
+            _statusByte.encodedBits = cInitialStatus;
+
+            DTCInformation _dtcInformation(Specifier);
+            _dtcInformation.SetCurrentStatus(
+                cDtc, UdsDtcStatusBitType::kTestFailed, _statusByte);
+
+            uint32_t _callCount{0};
+            std::function<void(uint32_t, UdsDtcStatusByteType, UdsDtcStatusByteType)> _notifier{
+                [&_callCount](uint32_t, UdsDtcStatusByteType, UdsDtcStatusByteType)
+                {
+                    ++_callCount;
+                }};
+            _dtcInformation.SetDTCStatusChangedNotifier(_notifier);
+
+            // The changed bit (confirmed DTC) is not part of the mask (test failed)
+            _statusByte.encodedBits = cNewStatus;
+            _dtcInformation.SetCurrentStatus(
+                cDtc, UdsDtcStatusBitType::kTestFailed, _statusByte);
+
+            EXPECT_EQ(cExpectedCallCount, _callCount);
+            EXPECT_EQ(
+                cInitialStatus,
+                _dtcInformation.GetCurrentStatus(cDtc).Value().encodedBits);
+        }
+
+        TEST_F(DtcInformationTest, EnableControlDtcNotifiesOnlyOnce)
+        {
+            const uint32_t cExpectedCallCount{1};
+
+            uint32_t _callCount{0};
+            std::function<void(ControlDtcStatusType)> _notifier{
+                [&_callCount](ControlDtcStatusType)
+                {
+                    ++_callCount;
+                }};
+
+            DTCInformation _dtcInformation(Specifier);
+            _dtcInformation.SetControlDtcStatusNotifier(_notifier);
+            _dtcInformation.EnableControlDtc();
+            _dtcInformation.EnableControlDtc();
+
+            EXPECT_EQ(cExpectedCallCount, _callCount);
+            EXPECT_EQ(
+                ControlDtcStatusType::kDTCSettingOn,
+                _dtcInformation.GetControlDTCStatus().Value());
+        }
     }
 }

@@ -254,6 +254,22 @@ namespace ara
 
                 EXPECT_FALSE(_hasNrc);
             }
+
+            TEST_F(RequestTransferTest, MissingMaxNumberOfBlockLengthScenario)
+            {
+                const std::vector<uint8_t> cExpectedResponse{0x7f, cSid, 0x70};
+
+                MetaInfo _metaInfo(Context::kDoIP);
+                std::vector<uint8_t> _requestData{GetSid(), 0x00, 0x22, 0x00, 0x01, 0x00, 0x01};
+                CancellationHandler _cancellationHandler(false);
+
+                std::future<OperationOutput> _responseFuture{
+                    HandleMessage(
+                        _requestData, _metaInfo, std::move(_cancellationHandler))};
+                OperationOutput _response{_responseFuture.get()};
+
+                EXPECT_EQ(cExpectedResponse, _response.responseData);
+            }
         }
     }
 }
