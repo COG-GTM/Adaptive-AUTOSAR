@@ -49,5 +49,30 @@ namespace ara
 
             EXPECT_TRUE(_functionGroup != _otherFunctionGroup);
         }
+
+        TEST(FunctionGroupTest, MoveAssignmentOperator)
+        {
+            const std::string cShortnamePath{"application"};
+            const std::string cOtherShortnamePath{"otherApplication"};
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cShortnamePath).Value()};
+            FunctionGroup _otherFunctionGroup{
+                FunctionGroup::Create(cOtherShortnamePath).Value()};
+
+            _otherFunctionGroup = std::move(_functionGroup);
+
+            EXPECT_TRUE(_otherFunctionGroup.GetInstance() == cShortnamePath);
+        }
+
+        TEST(FunctionGroupTest, GetInstanceMethod)
+        {
+            const std::string cShortnamePath{"application"};
+            const core::InstanceSpecifier cExpectedResult{cShortnamePath};
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cShortnamePath).Value()};
+
+            EXPECT_TRUE(cExpectedResult == _functionGroup.GetInstance());
+            EXPECT_EQ(cShortnamePath, _functionGroup.GetInstance().ToString());
+        }
     }
 }

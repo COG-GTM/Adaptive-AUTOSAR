@@ -127,5 +127,154 @@ namespace ara
 
             EXPECT_EQ(cExpectedResult, _actualResult);
         }
+
+        static bool tryGetErrorCode(
+            std::shared_future<void> future, ExecErrc &errorCode)
+        {
+            try
+            {
+                future.get();
+                return false;
+            }
+            catch (const ExecException &exception)
+            {
+                errorCode = static_cast<ExecErrc>(exception.GetErrorCode().Value());
+                return true;
+            }
+        }
+
+        TEST_F(StateClientTest, SetStateCancellationScenario)
+        {
+            const ExecErrc cExpectedResult{ExecErrc::kCancelled};
+            const std::string cState{"stateXYZ"};
+
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cInstance.ToString()).Value()};
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+
+            SetBypass(true);
+            std::shared_future<void> _cancelled{Client.SetState(_functionGroupState)};
+
+            SetBypass(false);
+            std::shared_future<void> _succeed{Client.SetState(_functionGroupState)};
+
+            std::future_status _status{_cancelled.wait_for(cTimeout)};
+            EXPECT_NE(_status, cTimeoutStatus);
+            ExecErrc _actualResult;
+            EXPECT_TRUE(tryGetErrorCode(_cancelled, _actualResult));
+            EXPECT_EQ(cExpectedResult, _actualResult);
+
+            _status = _succeed.wait_for(cTimeout);
+            EXPECT_NE(_status, cTimeoutStatus);
+            EXPECT_NO_THROW(_succeed.get());
+        }
+
+        TEST_F(StateClientTest, SetStateAfterCompletionScenario)
+        {
+            const std::string cState{"stateXYZ"};
+
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cInstance.ToString()).Value()};
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+
+            std::shared_future<void> _succeed{Client.SetState(_functionGroupState)};
+            std::shared_future<void> _otherSucceed{
+                Client.SetState(_functionGroupState)};
+
+            // The already completed request should not be cancelled by the new one
+            std::future_status _status{_succeed.wait_for(cTimeout)};
+            EXPECT_NE(_status, cTimeoutStatus);
+            EXPECT_NO_THROW(_succeed.get());
+
+            _status = _otherSucceed.wait_for(cTimeout);
+            EXPECT_NE(_status, cTimeoutStatus);
+            EXPECT_NO_THROW(_otherSucceed.get());
+        }
+
+        TEST_F(StateClientTest, InitialTransitionAfterCompletionScenario)
+        {
+            std::shared_future<void> _succeed{
+                Client.GetInitialMachineStateTransitionResult()};
+            std::shared_future<void> _otherSucceed{
+                Client.GetInitialMachineStateTransitionResult()};
+
+            std::future_status _status{_succeed.wait_for(cTimeout)};
+            EXPECT_NE(_status, cTimeoutStatus);
+            EXPECT_NO_THROW(_succeed.get());
+
+            _status = _otherSucceed.wait_for(cTimeout);
+            EXPECT_NE(_status, cTimeoutStatus);
+            EXPECT_NO_THROW(_otherSucceed.get());
+        }
+
+        TEST_F(StateClientTest, SetStateRequestFailureScenario)
+        {
+            const ExecErrc cExpectedResult{ExecErrc::kInvalidTransition};
+            const std::string cState{"stateXYZ"};
+
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cInstance.ToString()).Value()};
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+
+            std::vector<uint8_t> _rpcPayload;
+            com::helper::Inject(_rpcPayload, static_cast<uint32_t>(cExpectedResult));
+            SetRpcPayload(std::move(_rpcPayload));
+            std::shared_future<void> _failed{Client.SetState(_functionGroupState)};
+
+            std::future_status _status{_failed.wait_for(cTimeout)};
+            EXPECT_NE(_status, cTimeoutStatus);
+            ExecErrc _actualResult;
+            EXPECT_TRUE(tryGetErrorCode(_failed, _actualResult));
+            EXPECT_EQ(cExpectedResult, _actualResult);
+        }
+
+        TEST_F(StateClientTest, SetStateCorruptedResponseScenario)
+        {
+            const ExecErrc cExpectedResult{ExecErrc::kCommunicationError};
+            const std::string cState{"stateXYZ"};
+
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cInstance.ToString()).Value()};
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+
+            SetRpcPayload(std::vector<uint8_t>({0x00, 0x01}));
+            std::shared_future<void> _failed{Client.SetState(_functionGroupState)};
+
+            std::future_status _status{_failed.wait_for(cTimeout)};
+            EXPECT_NE(_status, cTimeoutStatus);
+            ExecErrc _actualResult;
+            EXPECT_TRUE(tryGetErrorCode(_failed, _actualResult));
+            EXPECT_EQ(cExpectedResult, _actualResult);
+        }
+
+        TEST_F(StateClientTest, IndependentRequestsScenario)
+        {
+            const std::string cState{"stateXYZ"};
+
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cInstance.ToString()).Value()};
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+
+            // A pending initial transition request should not block a set state request
+            SetBypass(true);
+            std::shared_future<void> _pending{
+                Client.GetInitialMachineStateTransitionResult()};
+
+            SetBypass(false);
+            std::shared_future<void> _succeed{Client.SetState(_functionGroupState)};
+
+            const std::chrono::milliseconds cPendingTimeout{50};
+            std::future_status _status{_succeed.wait_for(cTimeout)};
+            EXPECT_NE(_status, cTimeoutStatus);
+            EXPECT_NO_THROW(_succeed.get());
+
+            _status = _pending.wait_for(cPendingTimeout);
+            EXPECT_EQ(_status, cTimeoutStatus);
+        }
     }
 }

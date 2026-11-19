@@ -112,5 +112,72 @@ namespace ara
                 helper::MockRpcServer::TryGetErrorCode(_response, _actualResult));
             EXPECT_EQ(cExpectedResult, _actualResult);
         }
+
+        TEST_F(ExecutionServerTest, EmptyIdScenario)
+        {
+            const com::someip::SomeIpReturnCode cExpectedReturnCode{
+                com::someip::SomeIpReturnCode::eOK};
+            const ExecutionState cExpectedState{ExecutionState::kRunning};
+            const std::string cApplicationId{""};
+
+            com::someip::rpc::SomeIpRpcMessage _response{
+                Send(std::vector<uint8_t>({0, 0, 0, 0, 0}))};
+
+            EXPECT_EQ(cExpectedReturnCode, _response.ReturnCode());
+
+            ExecutionState _actualState;
+            EXPECT_TRUE(Server.TryGetExecutionState(cApplicationId, _actualState));
+            EXPECT_EQ(cExpectedState, _actualState);
+        }
+
+        TEST_F(ExecutionServerTest, OversizedIdLengthScenario)
+        {
+            const ExecErrc cExpectedResult{ExecErrc::kInvalidArguments};
+
+            com::someip::rpc::SomeIpRpcMessage _response{
+                Send(std::vector<uint8_t>({0xff, 0xff, 0xff, 0xff, 105, 100, 0}))};
+
+            ExecErrc _actualResult;
+            EXPECT_TRUE(
+                helper::MockRpcServer::TryGetErrorCode(_response, _actualResult));
+            EXPECT_EQ(cExpectedResult, _actualResult);
+        }
+
+        TEST_F(ExecutionServerTest, RejectedReportIsNotStored)
+        {
+            const std::string cApplicationId{"id"};
+
+            Send(std::vector<uint8_t>({0, 0, 0, 2, 105, 100, 255}));
+
+            ExecutionState _executionState;
+            EXPECT_FALSE(Server.TryGetExecutionState(cApplicationId, _executionState));
+        }
+
+        TEST_F(ExecutionServerTest, MultipleInstancesScenario)
+        {
+            const com::someip::SomeIpReturnCode cExpectedReturnCode{
+                com::someip::SomeIpReturnCode::eOK};
+            const ExecutionState cExpectedState{ExecutionState::kRunning};
+            const std::string cApplicationId{"id"};
+            const std::string cOtherApplicationId{"ab"};
+            const std::string cUnreportedApplicationId{"i"};
+
+            com::someip::rpc::SomeIpRpcMessage _response{
+                Send(std::vector<uint8_t>({0, 0, 0, 2, 105, 100, 0}))};
+            EXPECT_EQ(cExpectedReturnCode, _response.ReturnCode());
+
+            // Reporting another instance is not rejected as 'already in state'
+            com::someip::rpc::SomeIpRpcMessage _otherResponse{
+                Send(std::vector<uint8_t>({0, 0, 0, 2, 97, 98, 0}))};
+            EXPECT_EQ(cExpectedReturnCode, _otherResponse.ReturnCode());
+
+            ExecutionState _actualState;
+            EXPECT_TRUE(Server.TryGetExecutionState(cApplicationId, _actualState));
+            EXPECT_EQ(cExpectedState, _actualState);
+            EXPECT_TRUE(Server.TryGetExecutionState(cOtherApplicationId, _actualState));
+            EXPECT_EQ(cExpectedState, _actualState);
+            EXPECT_FALSE(
+                Server.TryGetExecutionState(cUnreportedApplicationId, _actualState));
+        }
     }
 }

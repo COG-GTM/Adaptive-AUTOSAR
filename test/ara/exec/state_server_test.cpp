@@ -227,5 +227,233 @@ namespace ara
 
             EXPECT_TRUE(_notified);
         }
+
+        static std::vector<uint8_t> makeSetStatePayload(
+            const std::string &functionGroup, const std::string &state)
+        {
+            std::vector<uint8_t> _result;
+            com::helper::Inject(
+                _result, static_cast<uint32_t>(functionGroup.length()));
+            _result.insert(_result.end(), functionGroup.cbegin(), functionGroup.cend());
+            com::helper::Inject(
+                _result, static_cast<uint32_t>(state.length()));
+            _result.insert(_result.end(), state.cbegin(), state.cend());
+
+            return _result;
+        }
+
+        TEST(StateServerCtorTest, MultipleFunctionGroupsConstruction)
+        {
+            const std::string cMachineFunctionGroup{"MachineFG"};
+            const std::string cOtherFunctionGroup{"OtherFG"};
+            const std::string cExpectedMachineState{"Off"};
+            const std::string cExpectedOtherState{"Idle"};
+
+            helper::MockRpcServer _rpcServer(
+                StateServerTest::cProtocolVersion,
+                StateServerTest::cInterfaceVersion);
+            StateServer _server(
+                &_rpcServer,
+                {{"MachineFG", "Off"}, {"MachineFG", "StartUp"}, {"OtherFG", "Idle"}},
+                {{"MachineFG", "Off"}, {"OtherFG", "Idle"}});
+
+            std::string _actualState;
+            EXPECT_TRUE(_server.TryGetState(cMachineFunctionGroup, _actualState));
+            EXPECT_EQ(cExpectedMachineState, _actualState);
+            EXPECT_TRUE(_server.TryGetState(cOtherFunctionGroup, _actualState));
+            EXPECT_EQ(cExpectedOtherState, _actualState);
+            EXPECT_FALSE(_server.Initialized());
+        }
+
+        TEST(StateServerCtorTest, MissingOneInitialStateConstruction)
+        {
+            helper::MockRpcServer _rpcServer(
+                StateServerTest::cProtocolVersion,
+                StateServerTest::cInterfaceVersion);
+
+            EXPECT_THROW(
+                StateServer _server(
+                    &_rpcServer,
+                    {{"MachineFG", "Off"}, {"OtherFG", "Idle"}},
+                    {{"MachineFG", "Off"}}),
+                std::logic_error);
+        }
+
+        TEST_F(StateServerTest, InitialStateProperty)
+        {
+            const std::string cFunctionGroup{"MachineFG"};
+            const std::string cExpectedState{"Off"};
+
+            std::string _actualState;
+            EXPECT_TRUE(Server.TryGetState(cFunctionGroup, _actualState));
+            EXPECT_EQ(cExpectedState, _actualState);
+        }
+
+        TEST_F(StateServerTest, BackAndForthTransitionScenario)
+        {
+            const com::someip::SomeIpReturnCode cExpectedReturnCode{
+                com::someip::SomeIpReturnCode::eOK};
+            const std::string cFunctionGroup{"MachineFG"};
+            const std::string cInitialState{"Off"};
+            const std::string cNextState{"StartUp"};
+
+            com::someip::rpc::SomeIpRpcMessage _response{
+                Send(
+                    cSetStateMessageId,
+                    makeSetStatePayload(cFunctionGroup, cNextState))};
+            EXPECT_EQ(cExpectedReturnCode, _response.ReturnCode());
+
+            _response =
+                Send(
+                    cSetStateMessageId,
+                    makeSetStatePayload(cFunctionGroup, cInitialState));
+            EXPECT_EQ(cExpectedReturnCode, _response.ReturnCode());
+
+            std::string _actualState;
+            EXPECT_TRUE(Server.TryGetState(cFunctionGroup, _actualState));
+            EXPECT_EQ(cInitialState, _actualState);
+        }
+
+        TEST_F(StateServerTest, UnknownFunctionGroupScenario)
+        {
+            const ExecErrc cExpectedResult{ExecErrc::kInvalidTransition};
+            const std::string cFunctionGroup{"OtherFG"};
+            const std::string cState{"Off"};
+
+            com::someip::rpc::SomeIpRpcMessage _response{
+                Send(
+                    cSetStateMessageId,
+                    makeSetStatePayload(cFunctionGroup, cState))};
+
+            ExecErrc _actualResult;
+            EXPECT_TRUE(
+                helper::MockRpcServer::TryGetErrorCode(_response, _actualResult));
+            EXPECT_EQ(cExpectedResult, _actualResult);
+
+            std::string _actualState;
+            EXPECT_FALSE(Server.TryGetState(cFunctionGroup, _actualState));
+        }
+
+        TEST_F(StateServerTest, OversizedFunctionGroupLengthScenario)
+        {
+            const ExecErrc cExpectedResult{ExecErrc::kInvalidArguments};
+
+            std::vector<uint8_t> _rpcPayload({0xff, 0xff, 0xff, 0xff,
+                                              77, 97, 99, 104, 105, 110, 101, 70, 71,
+                                              0, 0, 0, 3,
+                                              79, 102, 102});
+            com::someip::rpc::SomeIpRpcMessage _response{
+                Send(cSetStateMessageId, std::move(_rpcPayload))};
+
+            ExecErrc _actualResult;
+            EXPECT_TRUE(
+                helper::MockRpcServer::TryGetErrorCode(_response, _actualResult));
+            EXPECT_EQ(cExpectedResult, _actualResult);
+        }
+
+        TEST_F(StateServerTest, OversizedStateLengthScenario)
+        {
+            const ExecErrc cExpectedResult{ExecErrc::kInvalidArguments};
+
+            std::vector<uint8_t> _rpcPayload({0, 0, 0, 9,
+                                              77, 97, 99, 104, 105, 110, 101, 70, 71,
+                                              0xff, 0xff, 0xff, 0xff,
+                                              83, 116, 97, 114, 116, 85, 112});
+            com::someip::rpc::SomeIpRpcMessage _response{
+                Send(cSetStateMessageId, std::move(_rpcPayload))};
+
+            ExecErrc _actualResult;
+            EXPECT_TRUE(
+                helper::MockRpcServer::TryGetErrorCode(_response, _actualResult));
+            EXPECT_EQ(cExpectedResult, _actualResult);
+        }
+
+        TEST_F(StateServerTest, RejectedTransitionKeepsState)
+        {
+            const std::string cFunctionGroup{"MachineFG"};
+            const std::string cExpectedState{"Off"};
+            const std::string cInvalidState{"Diag"};
+
+            Send(
+                cSetStateMessageId,
+                makeSetStatePayload(cFunctionGroup, cInvalidState));
+
+            std::string _actualState;
+            EXPECT_TRUE(Server.TryGetState(cFunctionGroup, _actualState));
+            EXPECT_EQ(cExpectedState, _actualState);
+        }
+
+        TEST_F(StateServerTest, SetNotifierUnknownFunctionGroup)
+        {
+            const std::string cFunctionGroup{"OtherFG"};
+            std::function<void()> _callback{[]() {}};
+
+            EXPECT_THROW(
+                Server.SetNotifier(cFunctionGroup, _callback), std::out_of_range);
+        }
+
+        TEST_F(StateServerTest, SetNotifierReplacement)
+        {
+            const std::string cFunctionGroup{"MachineFG"};
+            const std::string cState{"StartUp"};
+            const int cExpectedReplacedCount{0};
+            const int cExpectedCount{1};
+
+            int _replacedCount{0};
+            int _count{0};
+            std::function<void()> _replacedCallback{[&]()
+                                                    { ++_replacedCount; }};
+            std::function<void()> _callback{[&]()
+                                            { ++_count; }};
+            Server.SetNotifier(cFunctionGroup, _replacedCallback);
+            Server.SetNotifier(cFunctionGroup, _callback);
+
+            Send(cSetStateMessageId, makeSetStatePayload(cFunctionGroup, cState));
+
+            EXPECT_EQ(cExpectedReplacedCount, _replacedCount);
+            EXPECT_EQ(cExpectedCount, _count);
+        }
+
+        TEST_F(StateServerTest, NotifierOnRejectedTransition)
+        {
+            const std::string cFunctionGroup{"MachineFG"};
+            const std::string cCurrentState{"Off"};
+            const std::string cInvalidState{"Diag"};
+
+            bool _notified{false};
+            std::function<void()> _callback{[&]()
+                                            { _notified = true; }};
+            Server.SetNotifier(cFunctionGroup, _callback);
+
+            Send(
+                cSetStateMessageId,
+                makeSetStatePayload(cFunctionGroup, cCurrentState));
+            Send(
+                cSetStateMessageId,
+                makeSetStatePayload(cFunctionGroup, cInvalidState));
+
+            EXPECT_FALSE(_notified);
+        }
+
+        TEST_F(StateServerTest, NotifierObservesNewState)
+        {
+            const std::string cFunctionGroup{"MachineFG"};
+            const std::string cExpectedState{"StartUp"};
+
+            std::string _observedState;
+            std::function<void()> _callback{
+                [&]()
+                {
+                    // The server lock should be released while notifying
+                    Server.TryGetState(cFunctionGroup, _observedState);
+                }};
+            Server.SetNotifier(cFunctionGroup, _callback);
+
+            Send(
+                cSetStateMessageId,
+                makeSetStatePayload(cFunctionGroup, cExpectedState));
+
+            EXPECT_EQ(cExpectedState, _observedState);
+        }
     }
 }
