@@ -303,6 +303,10 @@ namespace ara
                     makeSetStatePayload(cFunctionGroup, cNextState))};
             EXPECT_EQ(cExpectedReturnCode, _response.ReturnCode());
 
+            std::string _intermediateState;
+            EXPECT_TRUE(Server.TryGetState(cFunctionGroup, _intermediateState));
+            EXPECT_EQ(cNextState, _intermediateState);
+
             _response =
                 Send(
                     cSetStateMessageId,
