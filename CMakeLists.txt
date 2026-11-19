@@ -619,9 +619,11 @@ if(build_tests)
     ${test_ara_diag_debouncing_dir}/counter_based_debouncer_test.cpp
     ${test_ara_diag_debouncing_dir}/timer_based_debouncer_test.cpp
     ${test_ara_phm_dir}/recovery_action_test.cpp
+    ${test_ara_phm_dir}/checkpoint_communicator_test.cpp
     ${test_ara_phm_dir}/mocked_checkpoint_communicator.h
     ${test_ara_phm_dir}/supervised_entity_test.cpp
     ${test_ara_phm_supervisors_dir}/dummy_supervision.h
+    ${test_ara_phm_supervisors_dir}/status_recorder.h
     ${test_ara_phm_supervisors_dir}/elementary_supervision_test.cpp
     ${test_ara_phm_supervisors_dir}/alive_supervision_test.cpp
     ${test_ara_phm_supervisors_dir}/deadline_supervision_test.cpp
