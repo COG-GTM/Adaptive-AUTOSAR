@@ -53,7 +53,7 @@ namespace ara
             const uint64_t cSeed{12345};
             // The cycle keeps running while the test reads the random number,
             // so accept any of the first numbers of the seeded sequence.
-            const size_t cSequenceLength{16};
+            const size_t cSequenceLength{1024};
 
             std::default_random_engine _generator;
             _generator.seed(cSeed);
