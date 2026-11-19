@@ -177,6 +177,32 @@ namespace generated
             EXPECT_FALSE(_successful);
         }
 
+        TEST(TimerComponentServiceLifetimeTest, MethodAfterSkeletonDestruction)
+        {
+            const std::uint16_t cClientId{7};
+            LoopbackRpcServer _rpcServer(cProtocolVersion, cMajorVersion);
+            LoopbackRpcClient _rpcClient(
+                &_rpcServer, cProtocolVersion, cMajorVersion);
+            proxy::TimerComponentServiceProxy _proxy(&_rpcClient, cClientId);
+
+            {
+                TestTimer _skeleton(&_rpcServer);
+                _skeleton.OfferService();
+            }
+
+            bool _invoked{false};
+            bool _successful{true};
+            _proxy.GetTime(
+                [&_invoked, &_successful](bool successful, uint32)
+                {
+                    _invoked = true;
+                    _successful = successful;
+                });
+
+            EXPECT_TRUE(_invoked);
+            EXPECT_FALSE(_successful);
+        }
+
         TEST(TimerComponentServiceSerializationTest, BasicTypesRoundTrip)
         {
             const std::int16_t cSigned{-2};

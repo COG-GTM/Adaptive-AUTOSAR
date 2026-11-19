@@ -110,6 +110,39 @@ namespace generated
                 EventMessage::Deserialize(cTruncatedPayload), std::out_of_range);
         }
 
+        TEST(WheelSpeedSensorServiceMessageTest, DeclaredLength)
+        {
+            const std::vector<std::uint8_t> cShortPayload{
+                0x10, 0x00, 0x80, 0x01,
+                0x00, 0x00, 0x00, 0x0c, // Declares 4 payload bytes
+                0x00, 0x00, 0x00, 0x01,
+                0x01, 0x01, 0x02, 0x00,
+                0x12, 0x34};            // Only 2 payload bytes are present
+            EXPECT_THROW(
+                EventMessage::Deserialize(cShortPayload), std::out_of_range);
+
+            const std::vector<std::uint8_t> cHeaderlessLengthPayload{
+                0x10, 0x00, 0x80, 0x01,
+                0x00, 0x00, 0x00, 0x07, // Shorter than the header remainder
+                0x00, 0x00, 0x00, 0x01,
+                0x01, 0x01, 0x02, 0x00};
+            EXPECT_THROW(
+                EventMessage::Deserialize(cHeaderlessLengthPayload),
+                std::out_of_range);
+
+            const std::vector<std::uint8_t> cPaddedPayload{
+                0x10, 0x00, 0x80, 0x01,
+                0x00, 0x00, 0x00, 0x0a,
+                0x00, 0x00, 0x00, 0x01,
+                0x01, 0x01, 0x02, 0x00,
+                0x12, 0x34,
+                0x00, 0x00, 0x00};      // Transport padding
+            const std::vector<std::uint8_t> cExpectedEventPayload{0x12, 0x34};
+            const EventMessage cPaddedMessage{
+                EventMessage::Deserialize(cPaddedPayload)};
+            EXPECT_EQ(cExpectedEventPayload, cPaddedMessage.EventPayload());
+        }
+
         TEST_F(WheelSpeedSensorServiceTest, SendWithoutOffer)
         {
             const WheelSpeed_T cSample{1500};
@@ -205,6 +238,17 @@ namespace generated
             const EventMessage cShortMessage(
                 cWheelSpeedEventId, cSessionId, std::vector<std::uint8_t>{0x01});
             EXPECT_FALSE(Proxy.WheelSpeed.Process(cShortMessage));
+
+            // Same service and event, but interface (major) version 2
+            const std::vector<std::uint8_t> cOtherVersionPayload{
+                0x10, 0x00, 0x80, 0x01,
+                0x00, 0x00, 0x00, 0x0a,
+                0x00, 0x00, 0x00, 0x01,
+                0x01, 0x02, 0x02, 0x00,
+                0x12, 0x34};
+            const EventMessage cOtherVersionMessage{
+                EventMessage::Deserialize(cOtherVersionPayload)};
+            EXPECT_FALSE(Proxy.WheelSpeed.Process(cOtherVersionMessage));
 
             WheelSpeed_T _sample;
             EXPECT_FALSE(Proxy.WheelSpeed.TryGetLastSample(_sample));

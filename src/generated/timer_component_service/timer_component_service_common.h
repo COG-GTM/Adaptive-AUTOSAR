@@ -8,9 +8,9 @@
 #ifndef TIMER_COMPONENT_SERVICE_COMMON_H
 #define TIMER_COMPONENT_SERVICE_COMMON_H
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
-#include <cstring>
 #include <stdexcept>
 #include <utility>
 #include <vector>
@@ -37,6 +37,7 @@ namespace generated
         /// @brief Big-endian (network byte order) payload serialization of the basic types
         namespace serialization
         {
+            /// @brief Append an unsigned integer in network byte order
             template <typename TUnsigned>
             void AppendBigEndian(std::vector<std::uint8_t> &payload, TUnsigned value)
             {
@@ -47,6 +48,8 @@ namespace generated
                 }
             }
 
+            /// @brief Extract an unsigned integer in network byte order and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             template <typename TUnsigned>
             bool TryExtractBigEndian(
                 const std::vector<std::uint8_t> &payload,
@@ -71,12 +74,15 @@ namespace generated
                 return true;
             }
 
+            /// @brief Append a bool value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, bool value)
             {
                 payload.push_back(value ? 1 : 0);
             }
 
+            /// @brief Extract a bool value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -92,12 +98,15 @@ namespace generated
                 return true;
             }
 
+            /// @brief Append a std::uint8_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::uint8_t value)
             {
                 AppendBigEndian(payload, value);
             }
 
+            /// @brief Extract a std::uint8_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -106,12 +115,15 @@ namespace generated
                 return TryExtractBigEndian(payload, offset, value);
             }
 
+            /// @brief Append a std::uint16_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::uint16_t value)
             {
                 AppendBigEndian(payload, value);
             }
 
+            /// @brief Extract a std::uint16_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -120,12 +132,15 @@ namespace generated
                 return TryExtractBigEndian(payload, offset, value);
             }
 
+            /// @brief Append a std::uint32_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::uint32_t value)
             {
                 AppendBigEndian(payload, value);
             }
 
+            /// @brief Extract a std::uint32_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -134,12 +149,15 @@ namespace generated
                 return TryExtractBigEndian(payload, offset, value);
             }
 
+            /// @brief Append a std::uint64_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::uint64_t value)
             {
                 AppendBigEndian(payload, value);
             }
 
+            /// @brief Extract a std::uint64_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -148,12 +166,15 @@ namespace generated
                 return TryExtractBigEndian(payload, offset, value);
             }
 
+            /// @brief Append a std::int8_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::int8_t value)
             {
                 AppendBigEndian(payload, static_cast<std::uint8_t>(value));
             }
 
+            /// @brief Extract a std::int8_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -169,12 +190,15 @@ namespace generated
                 return true;
             }
 
+            /// @brief Append a std::int16_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::int16_t value)
             {
                 AppendBigEndian(payload, static_cast<std::uint16_t>(value));
             }
 
+            /// @brief Extract a std::int16_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -190,12 +214,15 @@ namespace generated
                 return true;
             }
 
+            /// @brief Append a std::int32_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::int32_t value)
             {
                 AppendBigEndian(payload, static_cast<std::uint32_t>(value));
             }
 
+            /// @brief Extract a std::int32_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -211,12 +238,15 @@ namespace generated
                 return true;
             }
 
+            /// @brief Append a std::int64_t value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, std::int64_t value)
             {
                 AppendBigEndian(payload, static_cast<std::uint64_t>(value));
             }
 
+            /// @brief Extract a std::int64_t value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -232,14 +262,21 @@ namespace generated
                 return true;
             }
 
+            /// @brief Append a float value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, float value)
             {
                 std::uint32_t _raw;
-                std::memcpy(&_raw, &value, sizeof(_raw));
+                const std::uint8_t *cBytes{
+                    reinterpret_cast<const std::uint8_t *>(&value)};
+                std::copy(
+                    cBytes, cBytes + sizeof(_raw),
+                    reinterpret_cast<std::uint8_t *>(&_raw));
                 AppendBigEndian(payload, _raw);
             }
 
+            /// @brief Extract a float value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -251,18 +288,29 @@ namespace generated
                     return false;
                 }
 
-                std::memcpy(&value, &_raw, sizeof(value));
+                const std::uint8_t *cBytes{
+                    reinterpret_cast<const std::uint8_t *>(&_raw)};
+                std::copy(
+                    cBytes, cBytes + sizeof(value),
+                    reinterpret_cast<std::uint8_t *>(&value));
                 return true;
             }
 
+            /// @brief Append a double value to the payload
             inline void Serialize(
                 std::vector<std::uint8_t> &payload, double value)
             {
                 std::uint64_t _raw;
-                std::memcpy(&_raw, &value, sizeof(_raw));
+                const std::uint8_t *cBytes{
+                    reinterpret_cast<const std::uint8_t *>(&value)};
+                std::copy(
+                    cBytes, cBytes + sizeof(_raw),
+                    reinterpret_cast<std::uint8_t *>(&_raw));
                 AppendBigEndian(payload, _raw);
             }
 
+            /// @brief Extract a double value from the payload and advance the offset
+            /// @returns False if the payload is too short, otherwise true
             inline bool TryDeserialize(
                 const std::vector<std::uint8_t> &payload,
                 std::size_t &offset,
@@ -274,7 +322,11 @@ namespace generated
                     return false;
                 }
 
-                std::memcpy(&value, &_raw, sizeof(value));
+                const std::uint8_t *cBytes{
+                    reinterpret_cast<const std::uint8_t *>(&_raw)};
+                std::copy(
+                    cBytes, cBytes + sizeof(value),
+                    reinterpret_cast<std::uint8_t *>(&value));
                 return true;
             }
         }

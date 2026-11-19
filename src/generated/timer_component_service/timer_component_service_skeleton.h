@@ -28,6 +28,7 @@ namespace generated
             {
             private:
                 bool mOffered;
+                ara::com::someip::rpc::RpcServer *const mRpcServer;
 
                 bool handleGetTime(
                     const std::vector<std::uint8_t> &request,
@@ -85,16 +86,17 @@ namespace generated
                 /// @param rpcServer RPC server that dispatches the method requests
                 explicit TimerComponentServiceSkeleton(
                     ara::com::someip::rpc::RpcServer *rpcServer)
-                    : mOffered{false}
+                    : mOffered{false},
+                      mRpcServer{rpcServer}
                 {
-                    rpcServer->SetHandler(
+                    mRpcServer->SetHandler(
                         cServiceId, cGetTimeMethodId,
                         [this](const std::vector<std::uint8_t> &request,
                                std::vector<std::uint8_t> &response)
                         {
                             return handleGetTime(request, response);
                         });
-                    rpcServer->SetHandler(
+                    mRpcServer->SetHandler(
                         cServiceId, cIsTimerElapsedMethodId,
                         [this](const std::vector<std::uint8_t> &request,
                                std::vector<std::uint8_t> &response)
@@ -103,9 +105,28 @@ namespace generated
                         });
                 }
 
+                /// @brief Not copyable: transports keep a pointer to this object
                 TimerComponentServiceSkeleton(const TimerComponentServiceSkeleton &) = delete;
                 TimerComponentServiceSkeleton &operator=(const TimerComponentServiceSkeleton &) = delete;
-                virtual ~TimerComponentServiceSkeleton() noexcept = default;
+
+                virtual ~TimerComponentServiceSkeleton()
+                {
+                    // The RPC server has no handler removal; replace them with rejections.
+                    mRpcServer->SetHandler(
+                        cServiceId, cGetTimeMethodId,
+                        [](const std::vector<std::uint8_t> &,
+                           std::vector<std::uint8_t> &)
+                        {
+                            return false;
+                        });
+                    mRpcServer->SetHandler(
+                        cServiceId, cIsTimerElapsedMethodId,
+                        [](const std::vector<std::uint8_t> &,
+                           std::vector<std::uint8_t> &)
+                        {
+                            return false;
+                        });
+                }
 
                 /// @brief Enable the events and the methods of the service
                 void OfferService() noexcept

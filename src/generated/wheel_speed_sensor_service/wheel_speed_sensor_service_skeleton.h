@@ -31,8 +31,13 @@ namespace generated
                 std::uint16_t mSessionId;
 
             public:
+                /// @brief Event sample type
                 using SampleType = TSample;
 
+                /// @brief Constructor
+                /// @param networkLayer Transport of the event notifications
+                /// @param eventId SOME/IP event ID
+                /// @param offered Offer state of the owning skeleton
                 Event(
                     ara::com::helper::NetworkLayer<EventMessage> *networkLayer,
                     std::uint16_t eventId,
@@ -91,6 +96,7 @@ namespace generated
                 {
                 }
 
+                /// @brief Not copyable: transports keep a pointer to this object
                 WheelSpeedSensorServiceSkeleton(const WheelSpeedSensorServiceSkeleton &) = delete;
                 WheelSpeedSensorServiceSkeleton &operator=(const WheelSpeedSensorServiceSkeleton &) = delete;
                 virtual ~WheelSpeedSensorServiceSkeleton() noexcept = default;

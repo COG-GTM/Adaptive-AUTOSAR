@@ -33,8 +33,11 @@ namespace generated
                 std::function<void(const TSample &)> mReceiveHandler;
 
             public:
+                /// @brief Event sample type
                 using SampleType = TSample;
 
+                /// @brief Constructor
+                /// @param eventId SOME/IP event ID
                 explicit Event(std::uint16_t eventId) : mEventId{eventId},
                                                         mSubscribed{false},
                                                         mHasSample{false},
@@ -56,6 +59,7 @@ namespace generated
                     mHasSample = false;
                 }
 
+                /// @brief Indicate whether the event notifications are accepted
                 bool IsSubscribed() const noexcept
                 {
                     return mSubscribed;
@@ -67,6 +71,7 @@ namespace generated
                     mReceiveHandler = std::move(handler);
                 }
 
+                /// @brief Remove the callback set by SetReceiveHandler
                 void UnsetReceiveHandler()
                 {
                     mReceiveHandler = nullptr;
@@ -91,6 +96,8 @@ namespace generated
                     if (!mSubscribed ||
                         message.ServiceId() != cServiceId ||
                         message.EventId() != mEventId ||
+                        message.ProtocolVersion() != cProtocolVersion ||
+                        message.InterfaceVersion() != cMajorVersion ||
                         message.MessageType() !=
                             ara::com::someip::SomeIpMessageType::Notification)
                     {
@@ -148,6 +155,7 @@ namespace generated
                         });
                 }
 
+                /// @brief Not copyable: transports keep a pointer to this object
                 WheelSpeedSensorServiceProxy(const WheelSpeedSensorServiceProxy &) = delete;
                 WheelSpeedSensorServiceProxy &operator=(const WheelSpeedSensorServiceProxy &) = delete;
 

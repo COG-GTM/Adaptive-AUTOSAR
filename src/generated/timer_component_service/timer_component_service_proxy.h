@@ -46,6 +46,7 @@ namespace generated
                 {
                 }
 
+                /// @brief Not copyable: transports keep a pointer to this object
                 TimerComponentServiceProxy(const TimerComponentServiceProxy &) = delete;
                 TimerComponentServiceProxy &operator=(const TimerComponentServiceProxy &) = delete;
 

@@ -48,6 +48,9 @@ Everything under `test/generated/` is hand-written: the GoogleTests, the in-proc
 - `OfferService`, `Subscribe` and `Unsubscribe` are local switches. The generated code does not drive
   SOME/IP service discovery or eventgroup subscription; the SD test wires `SomeIpSdServer` by hand
   with the generated identifiers.
+- The existing `SomeIpSdServer` always advertises a TCP endpoint option, while the generated
+  deployment declares the events as UDP. The SD test checks the offered service and port, not the
+  transport protocol.
 - The repository has no UDP transport for event notifications, so events are only exercised over the
   in-process `MockupNetworkLayer`. Methods are only exercised over the in-process RPC loopback, not
   over `SocketRpcServer`/`SocketRpcClient`.
