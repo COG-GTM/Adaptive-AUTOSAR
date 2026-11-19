@@ -704,5 +704,8 @@ if(build_tests)
   include(GoogleTest)
   gtest_discover_tests(arxml_unit_test)
   gtest_discover_tests(ara_unit_test)
-  gtest_discover_tests(application_unit_test)
+  # The DoIP loopback cases share one TCP port, so never run them in parallel.
+  gtest_discover_tests(
+    application_unit_test
+    PROPERTIES RESOURCE_LOCK doip_loopback_port)
  endif()
