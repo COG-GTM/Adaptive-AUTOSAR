@@ -645,7 +645,39 @@ if(build_tests)
     ara_diag
   )
 
+  set(test_application_doip_dir
+    "${CMAKE_SOURCE_DIR}/test/application/doip")
+
+  add_executable(
+    application_doip_unit_test
+    ${source_application_helper_dir}/curl_wrapper.cpp
+    ${source_application_helper_dir}/read_data_by_identifier.cpp
+    ${source_application_doip_dir}/vehicle_id_request_handler.cpp
+    ${source_application_doip_dir}/diag_message_handler.cpp
+    ${source_application_doip_dir}/doip_server.cpp
+    ${source_application_doip_dir}/doip_client.cpp
+    ${source_application_doip_dir}/obd_to_doip_converter.cpp
+    ${test_application_doip_dir}/doip_test_helper.h
+    ${test_application_doip_dir}/vehicle_id_request_handler_test.cpp
+    ${test_application_doip_dir}/diag_message_handler_test.cpp
+    ${test_application_doip_dir}/doip_server_test.cpp
+    ${test_application_doip_dir}/doip_client_test.cpp
+    ${test_application_doip_dir}/obd_to_doip_converter_test.cpp
+  )
+
+  target_link_libraries(
+    application_doip_unit_test
+    gtest_main
+    libcurl
+    jsoncpp_lib
+    obd_ii_emulator
+    doip_lib
+    async_bsd_socket_lib
+    ara_diag
+  )
+
   include(GoogleTest)
   gtest_discover_tests(arxml_unit_test)
   gtest_discover_tests(ara_unit_test)
+  gtest_discover_tests(application_doip_unit_test)
  endif()
