@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- GENERATED FILE - DO NOT EDIT. autosar classic-to-adaptive bridge v0 (AE-29 prototype). -->
+<!-- PROTOTYPE OUTPUT - not a certified toolchain, not for production or safety use. Not validated against the AUTOSAR XSD. -->
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00051.xsd">
+  <AR-PACKAGES>
+    <AR-PACKAGE>
+      <SHORT-NAME>WheelSpeedSensorServiceManifest</SHORT-NAME>
+      <ELEMENTS>
+        <STD-CPP-IMPLEMENTATION-DATA-TYPE>
+          <SHORT-NAME>uint16_t</SHORT-NAME>
+          <CATEGORY>VALUE</CATEGORY>
+          <NAMESPACES>
+            <SYMBOL-PROPS>
+              <SHORT-NAME>std</SHORT-NAME>
+              <SYMBOL>std</SYMBOL>
+            </SYMBOL-PROPS>
+          </NAMESPACES>
+        </STD-CPP-IMPLEMENTATION-DATA-TYPE>
+        <STD-CPP-IMPLEMENTATION-DATA-TYPE>
+          <SHORT-NAME>WheelSpeed_T</SHORT-NAME>
+          <DESC>
+            <L-2 L="EN">Generated from Classic ImplementationDataType /DataTypes/ImplementationDataTypes/WheelSpeed_T</L-2>
+          </DESC>
+          <CATEGORY>TYPE_REFERENCE</CATEGORY>
+          <NAMESPACES>
+            <SYMBOL-PROPS>
+              <SHORT-NAME>generated</SHORT-NAME>
+              <SYMBOL>generated</SYMBOL>
+            </SYMBOL-PROPS>
+            <SYMBOL-PROPS>
+              <SHORT-NAME>wheelspeedsensorservice</SHORT-NAME>
+              <SYMBOL>wheelspeedsensorservice</SYMBOL>
+            </SYMBOL-PROPS>
+          </NAMESPACES>
+          <TYPE-REFERENCE-REF DEST="STD-CPP-IMPLEMENTATION-DATA-TYPE">/WheelSpeedSensorServiceManifest/uint16_t</TYPE-REFERENCE-REF>
+        </STD-CPP-IMPLEMENTATION-DATA-TYPE>
+        <SERVICE-INTERFACE>
+          <SHORT-NAME>WheelSpeedSensorService</SHORT-NAME>
+          <DESC>
+            <L-2 L="EN">Generated from Classic SWC /ComponentTypes/WheelSpeedSensor by autosar classic-to-adaptive bridge v0 (AE-29 prototype). PROTOTYPE OUTPUT - not a certified toolchain, not for production or safety use.</L-2>
+          </DESC>
+          <NAMESPACES>
+            <SYMBOL-PROPS>
+              <SHORT-NAME>generated</SHORT-NAME>
+              <SYMBOL>generated</SYMBOL>
+            </SYMBOL-PROPS>
+            <SYMBOL-PROPS>
+              <SHORT-NAME>wheelspeedsensorservice</SHORT-NAME>
+              <SYMBOL>wheelspeedsensorservice</SYMBOL>
+            </SYMBOL-PROPS>
+          </NAMESPACES>
+          <EVENTS>
+            <VARIABLE-DATA-PROTOTYPE>
+              <SHORT-NAME>WheelSpeed</SHORT-NAME>
+              <DESC>
+                <L-2 L="EN">Generated from port /ComponentTypes/WheelSpeedSensor/WheelSpeed, data element /PortInterfaces/WheelSpeed_I/WheelSpeed</L-2>
+              </DESC>
+              <TYPE-TREF DEST="STD-CPP-IMPLEMENTATION-DATA-TYPE">/WheelSpeedSensorServiceManifest/WheelSpeed_T</TYPE-TREF>
+            </VARIABLE-DATA-PROTOTYPE>
+          </EVENTS>
+        </SERVICE-INTERFACE>
+        <SOMEIP-SERVICE-INTERFACE-DEPLOYMENT>
+          <SHORT-NAME>WheelSpeedSensorService_SomeIp</SHORT-NAME>
+          <EVENT-DEPLOYMENTS>
+            <SOMEIP-EVENT-DEPLOYMENT>
+              <SHORT-NAME>WheelSpeed</SHORT-NAME>
+              <EVENT-REF DEST="VARIABLE-DATA-PROTOTYPE">/WheelSpeedSensorServiceManifest/WheelSpeedSensorService/WheelSpeed</EVENT-REF>
+              <EVENT-ID>32769</EVENT-ID>
+              <TRANSPORT-PROTOCOL>UDP</TRANSPORT-PROTOCOL>
+            </SOMEIP-EVENT-DEPLOYMENT>
+          </EVENT-DEPLOYMENTS>
+          <SERVICE-INTERFACE-REF DEST="SERVICE-INTERFACE">/WheelSpeedSensorServiceManifest/WheelSpeedSensorService</SERVICE-INTERFACE-REF>
+          <EVENT-GROUPS>
+            <SOMEIP-EVENT-GROUP>
+              <SHORT-NAME>AllEvents</SHORT-NAME>
+              <EVENT-GROUP-ID>1</EVENT-GROUP-ID>
+              <EVENT-REFS>
+                <EVENT-REF DEST="SOMEIP-EVENT-DEPLOYMENT">/WheelSpeedSensorServiceManifest/WheelSpeedSensorService_SomeIp/WheelSpeed</EVENT-REF>
+              </EVENT-REFS>
+            </SOMEIP-EVENT-GROUP>
+          </EVENT-GROUPS>
+          <SERVICE-INTERFACE-ID>4096</SERVICE-INTERFACE-ID>
+          <SERVICE-INTERFACE-VERSION>
+            <MAJOR-VERSION>1</MAJOR-VERSION>
+            <MINOR-VERSION>0</MINOR-VERSION>
+          </SERVICE-INTERFACE-VERSION>
+        </SOMEIP-SERVICE-INTERFACE-DEPLOYMENT>
+      </ELEMENTS>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

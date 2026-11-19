@@ -153,6 +153,12 @@ set(source_application_platform_dir
 
 # Test Directories:
 
+set(source_generated_dir
+  "${CMAKE_SOURCE_DIR}/src/generated")
+
+set(test_generated_dir
+  "${CMAKE_SOURCE_DIR}/test/generated")
+
 set(test_arxml_dir
   "${CMAKE_SOURCE_DIR}/test/arxml")
 
@@ -626,6 +632,16 @@ if(build_tests)
     ${test_ara_phm_supervisors_dir}/alive_supervision_test.cpp
     ${test_ara_phm_supervisors_dir}/deadline_supervision_test.cpp
     ${test_ara_phm_supervisors_dir}/global_supervision_test.cpp
+    ${test_generated_dir}/loopback_rpc.h
+    ${test_generated_dir}/wheel_speed_sensor_service_test.cpp
+    ${test_generated_dir}/wheel_speed_sensor_service_sd_test.cpp
+    ${test_generated_dir}/timer_component_service_test.cpp
+  )
+
+  # Location of the generated Classic-to-Adaptive bridge output (AE-29)
+  target_compile_definitions(
+    ara_unit_test
+    PRIVATE GENERATED_SOURCE_DIR="${source_generated_dir}"
   )
 
   target_link_libraries(
@@ -639,6 +655,7 @@ if(build_tests)
     gtest_main
     obd_ii_emulator
     doip_lib
+    arxml
     ara_log
     ara_sm
     ara_phm
