@@ -254,6 +254,46 @@ namespace application
             EXPECT_FALSE(
                 TryExchange(
                     _client, _serializedRequest, _serializedResponse, cTimeout));
+
+            // The silence is not due to a broken connection: the server still answers.
+            const DoipLib::VehicleIdRequest cVehicleIdRequest(cProtocolVersion);
+            std::vector<uint8_t> _serializedVehicleIdRequest;
+            cVehicleIdRequest.Serialize(_serializedVehicleIdRequest);
+            EXPECT_TRUE(
+                TryExchange(
+                    _client, _serializedVehicleIdRequest, _serializedResponse));
+        }
+
+        /// @note BUG (production code, not fixed here): 'DoipServer::onSend' copies the
+        ///       response into an uninitialized 64-byte stack buffer and sends the whole
+        ///       buffer, so the octets after the DoIP message are indeterminate stack
+        ///       content. Disabled because the outcome depends on the stack content
+        ///       (it happened to pass locally), i.e., found by code reading, not by a failure.
+        TEST_F(DoipServerTest, DISABLED_BugResponsePaddingIsUninitialized)
+        {
+            std::unique_ptr<DoipServer> _server{CreateServer(cIpAddress)};
+            AsyncBsdSocketLib::TcpClient _client(cIpAddress, cPort);
+            ASSERT_TRUE(_client.TrySetup());
+            ASSERT_TRUE(_client.TryConnect());
+
+            const DoipLib::VehicleIdRequest cRequest(cProtocolVersion);
+            std::vector<uint8_t> _serializedRequest;
+            cRequest.Serialize(_serializedRequest);
+
+            std::vector<uint8_t> _serializedResponse;
+            ASSERT_TRUE(
+                TryExchange(_client, _serializedRequest, _serializedResponse));
+
+            // Header (8 octets) + vehicle ID response payload (32 octets)
+            const size_t cMessageSize{40};
+            ASSERT_EQ(DoipServer::cDoipPacketSize, _serializedResponse.size());
+            const std::vector<uint8_t> cPadding(
+                _serializedResponse.cbegin() + cMessageSize,
+                _serializedResponse.cend());
+            const std::vector<uint8_t> cExpectedPadding(
+                DoipServer::cDoipPacketSize - cMessageSize, 0x00);
+
+            EXPECT_EQ(cExpectedPadding, cPadding);
         }
 
         TEST_F(DoipServerTest, DestructionReleasesPollerAndPort)
