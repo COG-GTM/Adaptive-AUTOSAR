@@ -557,23 +557,32 @@ if(build_tests)
     ${test_ara_sm_dir}/trigger_inout_test.cpp
     ${test_ara_sm_dir}/power_mode_test.cpp
     ${test_ara_com_e2e_dir}/profile11_test.cpp
+    ${test_ara_com_e2e_dir}/profile11_counter_test.cpp
     ${test_ara_com_entry_dir}/eventgroup_entry_test.cpp
     ${test_ara_com_entry_dir}/service_entry_test.cpp
+    ${test_ara_com_entry_dir}/entry_test.cpp
     ${test_ara_com_helper_dir}/ipv4_address_test.cpp
     ${test_ara_com_helper_dir}/mockup_network_layer.h
     ${test_ara_com_helper_dir}/ttl_timer_test.cpp
     ${test_ara_com_helper_dir}/concurrent_queue_test.cpp
     ${test_ara_com_option_dir}/ipv4_endpoint_option_test.cpp
     ${test_ara_com_option_dir}/loadbalancing_option_test.cpp
+    ${test_ara_com_option_dir}/option_test.cpp
     ${test_ara_com_someip_pubsub_dir}/someip_pubsub_test.cpp
     ${test_ara_com_someip_pubsub_fsm_dir}/pubsub_state_test.cpp
+    ${test_ara_com_someip_pubsub_fsm_dir}/subscribed_state_test.cpp
     ${test_ara_com_someip_rpc_dir}/someip_rpc_message_test.cpp
     ${test_ara_com_someip_rpc_dir}/rpc_server_test.cpp
     ${test_ara_com_someip_rpc_dir}/rpc_client_test.cpp
+    ${test_ara_com_someip_rpc_dir}/rpc_client_handler_test.cpp
+    ${test_ara_com_someip_rpc_dir}/socket_rpc_test.cpp
     ${test_ara_com_someip_sd_dir}/someip_sd_message_test.cpp
     ${test_ara_com_someip_sd_dir}/network_abstraction_test.cpp
     ${test_ara_com_someip_sd_dir}/someip_sd_test.cpp
+    ${test_ara_com_someip_sd_dir}/sd_network_layer_test.cpp
+    ${test_ara_com_someip_sd_dir}/someip_sd_client_test.cpp
     ${test_ara_com_someip_sd_fsm_dir}/machine_state_test.cpp
+    ${test_ara_com_someip_sd_fsm_dir}/main_state_test.cpp
     ${test_ara_exec_dir}/worker_thread_test.cpp
     ${test_ara_exec_dir}/worker_runnable_test.cpp
     ${test_ara_exec_dir}/deterministic_client_test.cpp
