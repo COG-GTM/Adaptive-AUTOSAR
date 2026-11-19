@@ -102,12 +102,12 @@ namespace ara
         TEST(SMTriggerWrappersTest, TriggerInOutChainDeliversEveryWrittenState)
         {
             FunctionGroupStates _state = FunctionGroupStates::kOff;
-            TriggerInOut<FunctionGroupStates> *_triggerInOutPtr = nullptr;
-            TriggerHandler _triggerHandler = [&_triggerInOutPtr]()
-            { _triggerInOutPtr->GetNotifier().Notify(); };
+            TriggerInOut<FunctionGroupStates> *_chainedTrigger = nullptr;
+            TriggerHandler _triggerHandler = [&_chainedTrigger]()
+            { _chainedTrigger->GetNotifier().Notify(); };
             TriggerInOut<FunctionGroupStates> _triggerInOut(
                 _state, _triggerHandler);
-            _triggerInOutPtr = &_triggerInOut;
+            _chainedTrigger = &_triggerInOut;
             std::vector<FunctionGroupStates> _receivedStates;
             NotificationHandler<FunctionGroupStates> _handler =
                 [&_receivedStates](FunctionGroupStates newState)

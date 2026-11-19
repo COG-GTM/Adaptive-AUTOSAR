@@ -75,22 +75,22 @@ namespace ara
         {
             FunctionGroupStates _state = FunctionGroupStates::kRunning;
             Notifier<FunctionGroupStates> _notifier(_state);
-            std::vector<int> _invocationOrder;
+            std::vector<int> _invocationIndices;
             for (int i = 0; i < 3; ++i)
             {
                 NotificationHandler<FunctionGroupStates> _handler =
-                    [&_invocationOrder, i](FunctionGroupStates newState)
+                    [&_invocationIndices, i](FunctionGroupStates newState)
                 {
                     EXPECT_EQ(FunctionGroupStates::kRunning, newState);
-                    _invocationOrder.push_back(i);
+                    _invocationIndices.push_back(i);
                 };
                 _notifier.Subscribe(_handler);
             }
 
             _notifier.Notify();
 
-            const std::vector<int> cExpectedOrder{0, 1, 2};
-            EXPECT_EQ(cExpectedOrder, _invocationOrder);
+            const std::vector<int> cExpectedIndices{0, 1, 2};
+            EXPECT_EQ(cExpectedIndices, _invocationIndices);
         }
 
         TEST(SMNotifierTest, SameHandlerSubscribedTwiceIsInvokedTwice)
