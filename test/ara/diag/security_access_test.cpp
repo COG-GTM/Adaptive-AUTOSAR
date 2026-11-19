@@ -264,5 +264,217 @@ namespace ara
 
             EXPECT_EQ(cExpectedResult, _actualResult);
         }
+
+        class SecurityAccessMessageTest : public SecurityAccessTest
+        {
+        protected:
+            const uint8_t cPositiveResponseSid{0x67};
+
+            std::vector<uint8_t> Send(const std::vector<uint8_t> &requestData)
+            {
+                CancellationHandler _cancellationHandler(false);
+                std::future<OperationOutput> _responseFuture{
+                    Service.HandleMessage(
+                        requestData, GeneralMetaInfo, std::move(_cancellationHandler))};
+                OperationOutput _response{_responseFuture.get()};
+
+                return _response.responseData;
+            }
+
+            std::vector<uint8_t> SendValidKey(
+                uint8_t requestSeedSubFunction, uint8_t sendKeySubFunction)
+            {
+                uint16_t _seed{GetSeed(requestSeedSubFunction)};
+                uint16_t _key{static_cast<uint16_t>(_seed ^ cEncryptor)};
+                uint8_t _keyMsb{static_cast<uint8_t>(_key >> 8)};
+                uint8_t _keyLsb{static_cast<uint8_t>(_key)};
+                std::vector<uint8_t> _requestData{
+                    Service.GetSid(), sendKeySubFunction, _keyMsb, _keyLsb};
+
+                return Send(_requestData);
+            }
+        };
+
+        TEST_F(SecurityAccessMessageTest, RequestSeedScenario)
+        {
+            const uint8_t cSubFunction{0x01};
+            const size_t cExpectedSize{3};
+            const uint8_t cExpectedSeedMsb{0x00};
+            const uint8_t cExpectedSeedLsb{0x01};
+            const uint16_t cExpectedSeed{0x0001};
+
+            std::vector<uint8_t> _requestData{Service.GetSid(), cSubFunction};
+            std::vector<uint8_t> _response{Send(_requestData)};
+
+            ASSERT_EQ(cExpectedSize, _response.size());
+            EXPECT_EQ(cExpectedSeedMsb, _response.at(1));
+            EXPECT_EQ(cExpectedSeedLsb, _response.at(2));
+
+            // The same seed is returned as long as the level is locked
+            EXPECT_EQ(cExpectedSeed, GetSeed(cSubFunction));
+        }
+
+        // BUG (AE-30): SecurityAccess::handleRequestSeed prefixes the seed with the request SID (0x27)
+        // and does not echo the sub-function, while ISO 14229-1 expects
+        // the positive response SID (0x67) followed by the sub-function and the seed.
+        TEST_F(SecurityAccessMessageTest, DISABLED_BugRequestSeedPositiveResponseFormat)
+        {
+            const uint8_t cSubFunction{0x01};
+            const std::vector<uint8_t> cExpectedResponse{
+                cPositiveResponseSid, cSubFunction, 0x00, 0x01};
+
+            std::vector<uint8_t> _requestData{Service.GetSid(), cSubFunction};
+            std::vector<uint8_t> _response{Send(_requestData)};
+
+            EXPECT_EQ(cExpectedResponse, _response);
+        }
+
+        TEST_F(SecurityAccessMessageTest, SuppressedRequestSeedScenario)
+        {
+            const uint8_t cSubFunction{0x81};
+            const uint8_t cSendKeySubFunction{0x82};
+            const uint16_t cInitialSeed{1};
+            const uint16_t cUnlockedSeed{0};
+
+            std::vector<uint8_t> _requestData{Service.GetSid(), cSubFunction};
+            std::vector<uint8_t> _response{Send(_requestData)};
+
+            EXPECT_TRUE(_response.empty());
+
+            // The suppressed request should still create the security level,
+            // otherwise the following send key would be rejected due to the request sequence.
+            uint16_t _key{static_cast<uint16_t>(cInitialSeed ^ cEncryptor)};
+            uint8_t _keyMsb{static_cast<uint8_t>(_key >> 8)};
+            uint8_t _keyLsb{static_cast<uint8_t>(_key)};
+            std::vector<uint8_t> _sendKeyRequestData{
+                Service.GetSid(), cSendKeySubFunction, _keyMsb, _keyLsb};
+
+            EXPECT_TRUE(Send(_sendKeyRequestData).empty());
+            EXPECT_EQ(cUnlockedSeed, GetSeed(cSubFunction));
+        }
+
+        TEST_F(SecurityAccessMessageTest, SeedsOfDifferentLevels)
+        {
+            const uint8_t cFirstSubFunction{0x01};
+            const uint8_t cSecondSubFunction{0x03};
+            const uint16_t cExpectedFirstSeed{1};
+            const uint16_t cExpectedSecondSeed{2};
+
+            EXPECT_EQ(cExpectedFirstSeed, GetSeed(cFirstSubFunction));
+            EXPECT_EQ(cExpectedSecondSeed, GetSeed(cSecondSubFunction));
+            EXPECT_EQ(cExpectedFirstSeed, GetSeed(cFirstSubFunction));
+        }
+
+        TEST_F(SecurityAccessMessageTest, SuppressedValidKeyScenario)
+        {
+            const uint8_t cRequestSeedSubFunction{0x81};
+            const uint8_t cSendKeySubFunction{0x82};
+            const uint16_t cUnlockedSeed{0};
+
+            std::vector<uint8_t> _response{
+                SendValidKey(cRequestSeedSubFunction, cSendKeySubFunction)};
+
+            EXPECT_TRUE(_response.empty());
+            // Zero seed shows that the level has been unlocked.
+            EXPECT_EQ(cUnlockedSeed, GetSeed(cRequestSeedSubFunction));
+        }
+
+        // BUG (AE-30): The suppressPosRspMsgIndicationBit is not masked out of the security level,
+        // so a suppressed send key (0x82) does not match the seed requested without suppression (0x01)
+        // and it is rejected by the request sequence error NRC (0x24).
+        TEST_F(SecurityAccessMessageTest, DISABLED_BugSuppressedSendKeyAfterUnsuppressedRequestSeed)
+        {
+            const uint8_t cRequestSeedSubFunction{0x01};
+            const uint8_t cSendKeySubFunction{0x82};
+            const uint16_t cUnlockedSeed{0};
+
+            std::vector<uint8_t> _response{
+                SendValidKey(cRequestSeedSubFunction, cSendKeySubFunction)};
+
+            EXPECT_TRUE(_response.empty());
+            EXPECT_EQ(cUnlockedSeed, GetSeed(cRequestSeedSubFunction));
+        }
+
+        // BUG (AE-30): SecurityAccess::handlePassedAttempt iterates the security levels by value,
+        // so the previously unlocked levels are never locked again
+        // while the code comment (and ISO 14229-1) expects only one unlocked level at a time.
+        TEST_F(SecurityAccessMessageTest, DISABLED_BugUnlockingAnotherLevelLocksPreviousLevel)
+        {
+            const uint8_t cFirstRequestSeedSubFunction{0x01};
+            const uint8_t cFirstSendKeySubFunction{0x02};
+            const uint8_t cSecondRequestSeedSubFunction{0x03};
+            const uint8_t cSecondSendKeySubFunction{0x04};
+            const uint16_t cUnlockedSeed{0};
+
+            SendValidKey(cFirstRequestSeedSubFunction, cFirstSendKeySubFunction);
+            EXPECT_EQ(cUnlockedSeed, GetSeed(cFirstRequestSeedSubFunction));
+
+            SendValidKey(cSecondRequestSeedSubFunction, cSecondSendKeySubFunction);
+            EXPECT_EQ(cUnlockedSeed, GetSeed(cSecondRequestSeedSubFunction));
+
+            // The first level should be locked again, i.e., its seed should not be zero.
+            EXPECT_NE(cUnlockedSeed, GetSeed(cFirstRequestSeedSubFunction));
+        }
+
+        TEST_F(SecurityAccessMessageTest, RequestSeedWhileDelayTimerIsActive)
+        {
+            const uint8_t cExpectedNrc{0x36};
+            const uint8_t cRequestSeedSubFunction{0x01};
+            const uint8_t cSendKeySubFunction{0x02};
+            const uint8_t cKeyMsb{0x00};
+            const uint8_t cKeyLsb{0x00};
+
+            GetSeed(cRequestSeedSubFunction);
+
+            // Exceed the attempt threshold to activate the delay timer
+            std::vector<uint8_t> _invalidKeyRequestData{
+                Service.GetSid(), cSendKeySubFunction, cKeyMsb, cKeyLsb};
+            Send(_invalidKeyRequestData);
+            Send(_invalidKeyRequestData);
+
+            uint8_t _actualNrc;
+            std::vector<uint8_t> _requestData{Service.GetSid(), cRequestSeedSubFunction};
+            bool _hasNrc{TryGetNrc(&Service, _requestData, _actualNrc)};
+
+            EXPECT_TRUE(_hasNrc);
+            EXPECT_EQ(cExpectedNrc, _actualNrc);
+        }
+
+        TEST_F(SecurityAccessMessageTest, CanceledInvalidRequestScenario)
+        {
+            const std::vector<uint8_t> cExpectedResponse{0x7f, 0x27, 0x10};
+
+            std::vector<uint8_t> _requestData{Service.GetSid()};
+            CancellationHandler _cancellationHandler(true);
+
+            std::future<OperationOutput> _responseFuture{
+                Service.HandleMessage(
+                    _requestData, GeneralMetaInfo, std::move(_cancellationHandler))};
+            OperationOutput _response{_responseFuture.get()};
+
+            EXPECT_EQ(cExpectedResponse, _response.responseData);
+        }
+
+        TEST_F(SecurityAccessMessageTest, CompareKeyWithoutEncryptor)
+        {
+            const uint8_t cSubFunction{0x01};
+            const KeyCompareResultType cExpectedResult{KeyCompareResultType::kKeyInvalid};
+
+            GetSeed(cSubFunction);
+
+            MetaInfo _metaInfo(Context::kDoIP);
+            std::vector<uint8_t> _keyByteArr{0x12, 0x35};
+            CancellationHandler _cancellationHandler(false);
+
+            std::future<KeyCompareResultType> _actualResultFuture{
+                Service.CompareKey(
+                    cSubFunction,
+                    _keyByteArr,
+                    _metaInfo,
+                    std::move(_cancellationHandler))};
+            KeyCompareResultType _actualResult{_actualResultFuture.get()};
+
+            EXPECT_EQ(cExpectedResult, _actualResult);
+        }
     }
 }

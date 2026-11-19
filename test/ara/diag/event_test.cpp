@@ -127,5 +127,70 @@ namespace ara
             _event.SetFaultDetectionCounter(cFdcMax);
             EXPECT_TRUE(_event.GetTestComplete().Value());
         }
+
+        TEST_F(EventTest, EventStatusBitsEncoding)
+        {
+            const uint8_t cFailedThisCycleStatus{0x42};
+            const uint8_t cCompletedThisCycleStatus{0x40};
+
+            Event _event(Specifier);
+
+            _event.SetEventStatusBits(
+                {{EventStatusBit::kTestFailedThisOperationCycle, true}});
+            EXPECT_EQ(
+                cFailedThisCycleStatus, _event.GetEventStatus().Value().encodedBits);
+
+            _event.SetEventStatusBits(
+                {{EventStatusBit::kTestNotCompletedThisOperationCycle, false}});
+            EXPECT_EQ(
+                cCompletedThisCycleStatus, _event.GetEventStatus().Value().encodedBits);
+        }
+
+        TEST_F(EventTest, UnchangedEventStatusIsNotNotified)
+        {
+            const uint32_t cExpectedCallCount{0};
+
+            uint32_t _callCount{0};
+            std::function<void(EventStatusByte)> _notifier{
+                [&_callCount](EventStatusByte)
+                {
+                    ++_callCount;
+                }};
+
+            Event _event(Specifier);
+            _event.SetEventStatusChangedNotifier(_notifier);
+
+            std::map<EventStatusBit, bool> _emptyStatusBits;
+            _event.SetEventStatusBits(_emptyStatusBits);
+            // The bit is already set within the default event status
+            _event.SetEventStatusBits(
+                {{EventStatusBit::kTestNotCompletedThisOperationCycle, true}});
+
+            EXPECT_EQ(cExpectedCallCount, _callCount);
+            EXPECT_EQ(cInitialEventState, _event.GetEventStatus().Value().encodedBits);
+        }
+
+        TEST_F(EventTest, InvalidEventStatusBit)
+        {
+            const EventStatusBit cInvalidBit{static_cast<EventStatusBit>(0x7f)};
+
+            Event _event(Specifier);
+
+            EXPECT_THROW(
+                _event.SetEventStatusBits({{cInvalidBit, true}}), std::out_of_range);
+            EXPECT_EQ(cInitialEventState, _event.GetEventStatus().Value().encodedBits);
+        }
+
+        TEST_F(EventTest, UnsupportedDtcFormat)
+        {
+            Event _event(Specifier);
+
+            EXPECT_THROW(
+                _event.GetDTCNumber(DTCFormatType::kDTCFormatOBD),
+                std::invalid_argument);
+            EXPECT_THROW(
+                _event.GetDTCNumber(DTCFormatType::kDTCFormatJ1939),
+                std::invalid_argument);
+        }
     }
 }

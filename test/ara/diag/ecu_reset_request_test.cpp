@@ -171,5 +171,88 @@ namespace ara
             uint8_t _actualPowerDownTime{_payload.at(cPowerDownTimeOffset)};
             EXPECT_EQ(cPowerDownTime, _actualPowerDownTime);
         }
+
+        TEST_F(EcuResetRequestTest, KeyOffOnResetScenario)
+        {
+            const uint8_t cSubFunction{0x02};
+
+            std::vector<uint8_t> _payload;
+
+            EXPECT_TRUE(TryGetResponsePayload(cSubFunction, _payload));
+            EXPECT_TRUE(_payload.empty());
+        }
+
+        TEST_F(EcuResetRequestTest, SoftResetScenario)
+        {
+            const uint8_t cSubFunction{0x03};
+
+            std::vector<uint8_t> _payload;
+
+            EXPECT_TRUE(TryGetResponsePayload(cSubFunction, _payload));
+            EXPECT_TRUE(_payload.empty());
+        }
+
+        TEST_F(EcuResetRequestTest, DisableRapidShutdownScenario)
+        {
+            const uint8_t cSubFunction{0x05};
+
+            std::vector<uint8_t> _payload;
+
+            EXPECT_TRUE(TryGetResponsePayload(cSubFunction, _payload));
+            // No power down time is reported while disabling the rapid shutdown
+            EXPECT_TRUE(_payload.empty());
+        }
+
+        TEST_F(EcuResetRequestTest, RepeatedResetRequestScenario)
+        {
+            const uint8_t cExpectedNrc{0x12};
+            const uint8_t cHardResetSubFunction{0x01};
+            const uint8_t cSoftResetSubFunction{0x03};
+
+            std::vector<uint8_t> _payload;
+            EXPECT_TRUE(TryGetResponsePayload(cHardResetSubFunction, _payload));
+
+            // A reset type can be requested only once
+            uint8_t _actualNrc;
+            std::vector<uint8_t> _requestData{Service.GetSid(), cSoftResetSubFunction};
+            bool _hasNrc{TryGetNrc(&Service, _requestData, _actualNrc)};
+
+            EXPECT_TRUE(_hasNrc);
+            EXPECT_EQ(cExpectedNrc, _actualNrc);
+        }
+
+        TEST_F(EcuResetRequestTest, EnableRapidShutdownWithoutPowerDownTime)
+        {
+            const std::vector<uint8_t> cExpectedResponse{0x7f, 0x11, 0x12};
+            const uint8_t cSubFunction{0x04};
+
+            MetaInfo _metaInfo(Context::kDoIP);
+            std::vector<uint8_t> _requestData{Service.GetSid(), cSubFunction};
+            CancellationHandler _cancellationHandler(false);
+
+            std::future<OperationOutput> _responseFuture{
+                Service.HandleMessage(
+                    _requestData, _metaInfo, std::move(_cancellationHandler))};
+            OperationOutput _response{_responseFuture.get()};
+
+            EXPECT_EQ(cExpectedResponse, _response.responseData);
+        }
+
+        TEST_F(EcuResetRequestTest, ExecuteRequestedReset)
+        {
+            core::Optional<uint8_t> _id;
+            CancellationHandler _cancellationHander(false);
+
+            std::future<void> _succeedFuture{
+                Service.RequestReset(
+                    ResetRequestType::kSoftReset,
+                    _id,
+                    GeneralMetaInfo,
+                    std::move(_cancellationHander))};
+            EXPECT_TRUE(_succeedFuture.valid());
+
+            // Executing the reset is not supported even after requesting a reset type.
+            EXPECT_THROW(Service.ExecuteReset(GeneralMetaInfo), std::logic_error);
+        }
     }
 }

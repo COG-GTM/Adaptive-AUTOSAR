@@ -186,6 +186,34 @@ namespace ara
                 _debouncer.ReportPrepassed(); // FDC: -50
                 EXPECT_EQ(cExpectedResult, Status);
             }
+
+            TEST_F(CounterBasedDebouncerTest, FreezeMethod)
+            {
+                const EventStatus cExpectedResult{EventStatus::kFailed};
+
+                CounterBased _defaultValues;
+                _defaultValues.failedStepsize = 25;
+                _defaultValues.failedThreshold = 50;
+                _defaultValues.useJumpToFailed = false;
+
+                std::function<void(bool)> _callback{
+                    std::bind(
+                        &CounterBasedDebouncerTest::OnStatusChanged,
+                        this, std::placeholders::_1)};
+
+                CounterBasedDebouncer _debouncer(_callback, _defaultValues);
+
+                _debouncer.ReportPrefailed(); // FDC: 25
+                EXPECT_NE(cExpectedResult, Status);
+
+                _debouncer.Freeze(); // FDC: 0
+
+                _debouncer.ReportPrefailed(); // FDC: 25
+                EXPECT_NE(cExpectedResult, Status);
+
+                _debouncer.ReportPrefailed(); // FDC: 50
+                EXPECT_EQ(cExpectedResult, Status);
+            }
         }
     }
 }
