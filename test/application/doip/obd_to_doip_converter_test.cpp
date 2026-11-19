@@ -9,9 +9,9 @@ namespace application
     {
         struct ObdResponse
         {
-            std::vector<uint8_t> pid;
-            std::vector<uint8_t> data;
-            uint8_t service;
+            std::vector<uint8_t> Pid;
+            std::vector<uint8_t> Data;
+            uint8_t Service;
         };
 
         class ObdToDoipConverterFixture
@@ -63,9 +63,9 @@ namespace application
                         uint8_t service)
                     {
                         ObdResponse _response;
-                        _response.pid = pid;
-                        _response.data = std::move(data);
-                        _response.service = service;
+                        _response.Pid = pid;
+                        _response.Data = std::move(data);
+                        _response.Service = service;
                         Responses.push_back(std::move(_response));
                     }};
                 Converter->SetCallback(std::move(_callback));
@@ -149,8 +149,8 @@ namespace application
             ASSERT_TRUE(Converter->TryGetResponseAsync(cPid));
 
             ASSERT_EQ(1u, Responses.size());
-            EXPECT_EQ(cPid, Responses.at(0).pid);
-            EXPECT_EQ(cExpectedData, Responses.at(0).data);
+            EXPECT_EQ(cPid, Responses.at(0).Pid);
+            EXPECT_EQ(cExpectedData, Responses.at(0).Data);
         }
 
         TEST_F(ObdToDoipConverterTest, DoipPidBeforeVehicleIdentification)
@@ -218,7 +218,7 @@ namespace application
                 Responses.clear();
                 ASSERT_TRUE(Converter->TryGetResponseAsync({cBitmapPid}));
                 ASSERT_EQ(1u, Responses.size());
-                const std::vector<uint8_t> cBitmap{Responses.at(0).data};
+                const std::vector<uint8_t> cBitmap{Responses.at(0).Data};
                 ASSERT_EQ(cBitmapSize, cBitmap.size());
 
                 for (uint8_t i = 0; i < cRangeSize; ++i)
@@ -235,8 +235,8 @@ namespace application
 
         struct StaticPidCase
         {
-            uint8_t pid;
-            std::vector<uint8_t> data;
+            uint8_t Pid;
+            std::vector<uint8_t> Data;
         };
 
         class ObdToDoipConverterStaticPidTest : public ObdToDoipConverterFixture,
@@ -247,15 +247,15 @@ namespace application
         TEST_P(ObdToDoipConverterStaticPidTest, EmulatedValue)
         {
             const StaticPidCase cCase{GetParam()};
-            const std::vector<uint8_t> cPid{cCase.pid};
+            const std::vector<uint8_t> cPid{cCase.Pid};
             const uint8_t cExpectedService{0x01};
 
             EXPECT_TRUE(Converter->TryGetResponseAsync(cPid));
 
             ASSERT_EQ(1u, Responses.size());
-            EXPECT_EQ(cPid, Responses.at(0).pid);
-            EXPECT_EQ(cCase.data, Responses.at(0).data);
-            EXPECT_EQ(cExpectedService, Responses.at(0).service);
+            EXPECT_EQ(cPid, Responses.at(0).Pid);
+            EXPECT_EQ(cCase.Data, Responses.at(0).Data);
+            EXPECT_EQ(cExpectedService, Responses.at(0).Service);
             // The emulated values are served locally without any RESTful request.
             EXPECT_EQ(0, HttpServer.GetRequestCount());
         }
@@ -321,15 +321,15 @@ namespace application
         TEST_P(ObdToDoipConverterDoipPidTest, ValueFetchedViaDoip)
         {
             const StaticPidCase cCase{GetParam()};
-            const std::vector<uint8_t> cPid{cCase.pid};
+            const std::vector<uint8_t> cPid{cCase.Pid};
             const uint8_t cExpectedService{0x01};
 
-            ASSERT_TRUE(TryQueryViaDoip(cCase.pid));
+            ASSERT_TRUE(TryQueryViaDoip(cCase.Pid));
             ASSERT_TRUE(WaitForResponses(1));
 
-            EXPECT_EQ(cPid, Responses.at(0).pid);
-            EXPECT_EQ(cCase.data, Responses.at(0).data);
-            EXPECT_EQ(cExpectedService, Responses.at(0).service);
+            EXPECT_EQ(cPid, Responses.at(0).Pid);
+            EXPECT_EQ(cCase.Data, Responses.at(0).Data);
+            EXPECT_EQ(cExpectedService, Responses.at(0).Service);
             EXPECT_EQ(1, HttpServer.GetRequestCount());
         }
 

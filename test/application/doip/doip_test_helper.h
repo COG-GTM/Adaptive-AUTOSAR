@@ -5,9 +5,11 @@
 #include <netinet/in.h>
 #include <poll.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <unistd.h>
 #include <atomic>
 #include <chrono>
+#include <cstdlib>
 #include <functional>
 #include <stdexcept>
 #include <string>
@@ -53,6 +55,17 @@ namespace application
                     {
                         continue;
                     }
+
+                    // An idle peer should not block the stub (and its teardown).
+                    struct timeval _receiveTimeout;
+                    _receiveTimeout.tv_sec = 1;
+                    _receiveTimeout.tv_usec = 0;
+                    setsockopt(
+                        cConnection,
+                        SOL_SOCKET,
+                        SO_RCVTIMEO,
+                        &_receiveTimeout,
+                        sizeof(_receiveTimeout));
 
                     char _buffer[2048];
                     const ssize_t cReceived{
@@ -102,13 +115,24 @@ namespace application
 
                 if (!cSuccessful)
                 {
+                    if (mSocket >= 0)
+                    {
+                        close(mSocket);
+                    }
+
                     throw std::runtime_error("HTTP stub setup failed.");
                 }
+
+                // libcurl should reach the stub directly even if a proxy is configured.
+                setenv("no_proxy", "127.0.0.1", 1);
+                setenv("NO_PROXY", "127.0.0.1", 1);
 
                 mPort = ntohs(_address.sin_port);
                 mThread = std::thread(&StubHttpServer::serve, this);
             }
 
+            /// @brief Stop the stub
+            /// @note The destruction waits for the serving thread to finish.
             ~StubHttpServer()
             {
                 mRunning = false;
