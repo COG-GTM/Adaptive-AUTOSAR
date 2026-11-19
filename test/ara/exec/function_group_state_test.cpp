@@ -93,5 +93,63 @@ namespace ara
 
             EXPECT_EQ(cExpectedResult, _actualResult);
         }
+
+        TEST(FunctionGroupStateTest, MoveAssignmentOperator)
+        {
+            const std::string cShortnamePath{"application"};
+            const std::string cOtherShortnamePath{"otherApplication"};
+            const std::string cState{"stateXYZ"};
+            const std::string cOtherState{"stateABC"};
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cShortnamePath).Value()};
+            FunctionGroup _otherFunctionGroup{
+                FunctionGroup::Create(cOtherShortnamePath).Value()};
+
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+            FunctionGroupState _otherFunctionGroupState{
+                FunctionGroupState::Create(_otherFunctionGroup, cOtherState).Value()};
+
+            _otherFunctionGroupState = std::move(_functionGroupState);
+
+            EXPECT_TRUE(_otherFunctionGroupState.GetFunctionGroup() == _functionGroup);
+            EXPECT_TRUE(_otherFunctionGroupState.GetState() == cState);
+        }
+
+        TEST(FunctionGroupStateTest, InequalityOfFunctionGroups)
+        {
+            const std::string cShortnamePath{"application"};
+            const std::string cOtherShortnamePath{"otherApplication"};
+            const std::string cState{"stateXYZ"};
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cShortnamePath).Value()};
+            FunctionGroup _otherFunctionGroup{
+                FunctionGroup::Create(cOtherShortnamePath).Value()};
+
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+            FunctionGroupState _otherFunctionGroupState{
+                FunctionGroupState::Create(_otherFunctionGroup, cState).Value()};
+
+            EXPECT_TRUE(_functionGroupState != _otherFunctionGroupState);
+            EXPECT_FALSE(_functionGroupState == _otherFunctionGroupState);
+        }
+
+        TEST(FunctionGroupStateTest, SerializeAppendsToBuffer)
+        {
+            const std::string cShortnamePath{"fg"};
+            const std::string cState{""};
+            const std::vector<uint8_t> cExpectedResult{
+                0xaa, 0, 0, 0, 2, 102, 103, 0, 0, 0, 0};
+            FunctionGroup _functionGroup{
+                FunctionGroup::Create(cShortnamePath).Value()};
+            FunctionGroupState _functionGroupState{
+                FunctionGroupState::Create(_functionGroup, cState).Value()};
+
+            std::vector<uint8_t> _actualResult{0xaa};
+            _functionGroupState.Serialize(_actualResult);
+
+            EXPECT_EQ(cExpectedResult, _actualResult);
+        }
     }
 }

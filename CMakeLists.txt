@@ -581,6 +581,7 @@ if(build_tests)
     ${test_ara_exec_dir}/execution_server_test.cpp
     ${test_ara_exec_dir}/function_group_test.cpp
     ${test_ara_exec_dir}/function_group_state_test.cpp
+    ${test_ara_exec_dir}/exec_error_domain_test.cpp
     ${test_ara_exec_dir}/exec_exception_test.cpp
     ${test_ara_exec_dir}/state_client_test.cpp
     ${test_ara_exec_dir}/state_server_test.cpp
