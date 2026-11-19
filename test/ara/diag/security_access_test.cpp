@@ -332,11 +332,25 @@ namespace ara
         TEST_F(SecurityAccessMessageTest, SuppressedRequestSeedScenario)
         {
             const uint8_t cSubFunction{0x81};
+            const uint8_t cSendKeySubFunction{0x82};
+            const uint16_t cInitialSeed{1};
+            const uint16_t cUnlockedSeed{0};
 
             std::vector<uint8_t> _requestData{Service.GetSid(), cSubFunction};
             std::vector<uint8_t> _response{Send(_requestData)};
 
             EXPECT_TRUE(_response.empty());
+
+            // The suppressed request should still create the security level,
+            // otherwise the following send key would be rejected due to the request sequence.
+            uint16_t _key{static_cast<uint16_t>(cInitialSeed ^ cEncryptor)};
+            uint8_t _keyMsb{static_cast<uint8_t>(_key >> 8)};
+            uint8_t _keyLsb{static_cast<uint8_t>(_key)};
+            std::vector<uint8_t> _sendKeyRequestData{
+                Service.GetSid(), cSendKeySubFunction, _keyMsb, _keyLsb};
+
+            EXPECT_TRUE(Send(_sendKeyRequestData).empty());
+            EXPECT_EQ(cUnlockedSeed, GetSeed(cSubFunction));
         }
 
         TEST_F(SecurityAccessMessageTest, SeedsOfDifferentLevels)
