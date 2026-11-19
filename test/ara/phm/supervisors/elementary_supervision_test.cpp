@@ -142,9 +142,9 @@ namespace ara
                     [&_actualResults](SupervisionStatus status)
                     { _actualResults.push_back(status); });
 
-                for (SupervisionStatus expectedResult : cExpectedResults)
+                for (SupervisionStatus _expectedResult : cExpectedResults)
                 {
-                    _supervision.ReportStatus(expectedResult);
+                    _supervision.ReportStatus(_expectedResult);
                 }
 
                 EXPECT_EQ(cExpectedResults, _actualResults);

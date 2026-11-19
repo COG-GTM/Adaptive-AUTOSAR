@@ -26,9 +26,9 @@ namespace ara
                 [&_actualResults](uint32_t checkpoint)
                 { _actualResults.push_back(checkpoint); });
 
-            for (uint32_t expectedResult : cExpectedResults)
+            for (uint32_t _expectedResult : cExpectedResults)
             {
-                const bool cSent{_communicator.TrySend(expectedResult)};
+                const bool cSent{_communicator.TrySend(_expectedResult)};
                 EXPECT_TRUE(cSent);
             }
 

@@ -241,7 +241,7 @@ namespace ara
                     [&_recorder](SupervisionStatus status)
                     { _recorder.Record(status); });
 
-                for (uint16_t i = 0; i < cIndications; ++i)
+                for (uint16_t _i = 0; _i < cIndications; ++_i)
                 {
                     _supervision.ReportAliveness();
                 }
@@ -348,7 +348,7 @@ namespace ara
                     { _recorder.Record(status); });
 
                 // The indication counter should saturate at 65535 instead of wrapping to zero.
-                for (uint32_t i = 0; i < cIndications; ++i)
+                for (uint32_t _i = 0; _i < cIndications; ++_i)
                 {
                     _supervision.ReportAliveness();
                 }
@@ -407,7 +407,7 @@ namespace ara
                     [&_recorder](SupervisionStatus status)
                     { _recorder.Record(status); });
 
-                for (uint32_t i = 0; i < cExpectedAliveIndications; ++i)
+                for (uint32_t _i = 0; _i < cExpectedAliveIndications; ++_i)
                 {
                     _supervision.ReportAliveness();
                 }

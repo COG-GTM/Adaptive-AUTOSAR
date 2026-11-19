@@ -30,7 +30,7 @@ namespace ara
 
         TEST_F(RecoveryActionTest, OfferMethod)
         {
-            const auto cResult{Offer()};
+            const core::Result<void> cResult{Offer()};
             EXPECT_TRUE(cResult.HasValue());
             EXPECT_TRUE(IsOffered());
         }
