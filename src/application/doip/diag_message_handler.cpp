@@ -8,7 +8,8 @@ namespace application
         DiagMessageHandler::DiagMessageHandler(
             helper::CurlWrapper *curl,
             std::string resourcesUrl,
-            uint8_t protocolVersion) : mService(curl, resourcesUrl),
+            std::string vin,
+            uint8_t protocolVersion) : mService(curl, resourcesUrl, vin),
                                        cProtocolVersion{protocolVersion}
         {
             mRouter.AddService(&mService);

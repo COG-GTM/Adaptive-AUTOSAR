@@ -19,8 +19,8 @@ namespace application
             uint16_t logicalAddress,
             uint64_t eid,
             uint64_t gid) : mPoller{poller},
-                            mVehicleIdRequestHandler(config.protocolVersion, std::move(vin), logicalAddress, eid, gid),
-                            mDiagMessageHandler(curl, resourcesUrl, config.protocolVersion),
+                            mVehicleIdRequestHandler(config.protocolVersion, std::string(vin), logicalAddress, eid, gid),
+                            mDiagMessageHandler(curl, resourcesUrl, vin, config.protocolVersion),
                             mListener(ipAddress, port),
                             mController(std::move(config))
         {

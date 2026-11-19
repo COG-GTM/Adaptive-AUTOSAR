@@ -13,14 +13,18 @@ namespace application
         const uint16_t ReadDataByIdentifier::cAverageFuelConsumptionDid;
         const uint16_t ReadDataByIdentifier::cEngineCoolantTemperatureDid;
         const uint16_t ReadDataByIdentifier::cOdometerValueDid;
+        const uint16_t ReadDataByIdentifier::cVinDid;
+        const size_t ReadDataByIdentifier::cVinLength;
         const std::chrono::seconds ReadDataByIdentifier::cCacheLifetime{60};
         const ara::core::InstanceSpecifier ReadDataByIdentifier::cSpecifer("ReadDataByIdentifier");
 
         ReadDataByIdentifier::ReadDataByIdentifier(
             CurlWrapper *curl,
-            std::string resourcesUrl) : ara::diag::routing::RoutableUdsService(cSpecifer, cSid),
-                                        mCurl{curl},
-                                        cResourcesUrl{resourcesUrl},
+            std::string resourcesUrl,
+            std::string vin) : ara::diag::routing::RoutableUdsService(cSpecifer, cSid),
+                               mCurl{curl},
+                               cResourcesUrl{resourcesUrl},
+                               cVin{vin},
                                         mCache(cCacheLifetime)
         {
         }
@@ -252,6 +256,21 @@ namespace application
             }
         }
 
+        void ReadDataByIdentifier::getVin(
+            ara::diag::OperationOutput &response)
+        {
+            if (cVin.size() == cVinLength)
+            {
+                generateResponse(cVinDid, response);
+                response.responseData.insert(
+                    response.responseData.end(), cVin.cbegin(), cVin.cend());
+            }
+            else
+            {
+                GenerateNegativeResponse(response, cConditionsNotCorrectNrc);
+            }
+        }
+
         std::future<ara::diag::OperationOutput> ReadDataByIdentifier::HandleMessage(
             const std::vector<uint8_t> &requestData,
             ara::diag::MetaInfo &metaInfo,
@@ -286,6 +305,9 @@ namespace application
                     break;
                 case cOdometerValueDid:
                     getOdometerValue(_response);
+                    break;
+                case cVinDid:
+                    getVin(_response);
                     break;
                 default:
                     GenerateNegativeResponse(_response, cRequestOutOfRangeNrc);
