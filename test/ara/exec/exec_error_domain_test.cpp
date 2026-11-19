@@ -64,13 +64,13 @@ namespace ara
                  "Exceeding theoritical cycle time"}};
             ExecErrorDomain _errorDomain;
 
-            for (const std::pair<ExecErrc, std::string> &expectedMessage : cExpectedMessages)
+            for (const std::pair<ExecErrc, std::string> &_expectedMessage : cExpectedMessages)
             {
                 core::ErrorDomain::CodeType _errorCode{
-                    static_cast<core::ErrorDomain::CodeType>(expectedMessage.first)};
+                    static_cast<core::ErrorDomain::CodeType>(_expectedMessage.first)};
                 std::string _actualResult{_errorDomain.Message(_errorCode)};
 
-                EXPECT_EQ(expectedMessage.second, _actualResult);
+                EXPECT_EQ(_expectedMessage.second, _actualResult);
             }
         }
 
